@@ -1,0 +1,13 @@
+node_modules/
+dist/
+coverage/
+.DS_Store
+*.onnx
+.env*
+playwright-report/
+test-results/
+# Third-party photos from routemake: local manual checks only, never committed
+tests/fixtures/real/
+
+# Third-party hold datasets (Roboflow, Kaggle): local training/testing only, never committed
+tests/fixtures/hold-data/

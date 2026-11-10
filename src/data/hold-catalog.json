@@ -1,0 +1,249 @@
+[
+  {
+    "id": "jug",
+    "name": "Jug",
+    "grip": "Wrap the whole hand over the deep lip. Relax your grip: jugs are for resting and clipping.",
+    "learn": {
+      "mistake": "Over-gripping and pulling on bent arms. Hang on straight arms and shake out: jugs are where you rest.",
+      "footUse": "A great foothold: room for your toe, or a heel hook over the lip.",
+      "examples": [
+        {
+          "src": "/learn/jug-1.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        },
+        {
+          "src": "/learn/jug-2.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        },
+        {
+          "src": "/learn/jug-3.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        }
+      ]
+    }
+  },
+  {
+    "id": "crimp",
+    "name": "Crimp",
+    "grip": "Half-crimp by default: fingertips on the edge, middle joints bent ~90°, thumb free. A full crimp (thumb over the index) adds power but loads finger pulleys most; save it for hard moves.",
+    "learn": {
+      "mistake": "Full-crimping everything, which loads the finger pulleys. Half-crimp unless you need the extra power.",
+      "footUse": "Place the tip of your shoe and keep your heel still so it doesn’t roll off.",
+      "examples": [
+        {
+          "src": "/learn/crimp-1.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        },
+        {
+          "src": "/learn/crimp-2.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        },
+        {
+          "src": "/learn/crimp-3.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        }
+      ]
+    }
+  },
+  {
+    "id": "edge",
+    "name": "Edge",
+    "grip": "Flat rail: use an open hand or half-crimp, and keep your weight under the edge.",
+    "learn": {
+      "mistake": "Letting your hips drift away from the wall, which peels you off the edge.",
+      "footUse": "Stand on it with the inside edge of your big toe and press straight down.",
+      "examples": [
+        {
+          "src": "/learn/edge-1.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        },
+        {
+          "src": "/learn/edge-2.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        },
+        {
+          "src": "/learn/edge-3.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        }
+      ]
+    }
+  },
+  {
+    "id": "sloper",
+    "name": "Sloper",
+    "grip": "No edge to pull: open the hand, maximise skin contact, keep hips low and arms straight.",
+    "learn": {
+      "mistake": "Pulling with bent arms and high hips. Friction needs your weight below the hold.",
+      "footUse": "Smear: press the sole flat on it, heel low, and trust the rubber.",
+      "examples": [
+        {
+          "src": "/learn/sloper-1.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        },
+        {
+          "src": "/learn/sloper-2.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        },
+        {
+          "src": "/learn/sloper-3.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        }
+      ]
+    }
+  },
+  {
+    "id": "pinch",
+    "name": "Pinch",
+    "grip": "Squeeze between thumb and fingers; the thumb does half the work.",
+    "learn": {
+      "mistake": "Forgetting the thumb. Without the squeeze, a pinch feels like a bad sloper.",
+      "footUse": "Toe on its top, or hook it with your heel or toe.",
+      "examples": [
+        {
+          "src": "/learn/pinch-1.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        },
+        {
+          "src": "/learn/pinch-2.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        },
+        {
+          "src": "/learn/pinch-3.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        }
+      ]
+    }
+  },
+  {
+    "id": "pocket",
+    "name": "Pocket",
+    "grip": "Fit one to three fingers in the hole, strongest fingers first; pull straight, not sideways.",
+    "learn": {
+      "mistake": "Twisting your fingers sideways in the hole, which strains them. Pull in line with the pocket.",
+      "footUse": "Put your toe in the hole and keep the foot still.",
+      "examples": [
+        {
+          "src": "/learn/pocket-1.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        },
+        {
+          "src": "/learn/pocket-2.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        },
+        {
+          "src": "/learn/pocket-3.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        }
+      ]
+    }
+  },
+  {
+    "id": "volume",
+    "name": "Volume",
+    "grip": "Big shape bolted to the wall: use its edges and faces as holds and smear your feet on it.",
+    "learn": {
+      "mistake": "Ignoring it. A volume adds many edges and smears: look at all its faces before you climb.",
+      "footUse": "Smear on any face or stand on its edges; often the best foothold around.",
+      "examples": [
+        {
+          "src": "/learn/volume-1.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        },
+        {
+          "src": "/learn/volume-2.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        },
+        {
+          "src": "/learn/volume-3.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        }
+      ]
+    }
+  },
+  {
+    "id": "foot-chip",
+    "name": "Foot chip",
+    "grip": "A tiny chip for your feet, not your hands. Place the tip of your shoe precisely and keep your weight on it.",
+    "learn": {
+      "mistake": "Looking away while you place your foot. Watch the toe land, then shift your weight onto it.",
+      "footUse": "Made for feet: stand on it with the tip of your shoe, heel slightly raised.",
+      "examples": [
+        {
+          "src": "/learn/foot-chip-1.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        },
+        {
+          "src": "/learn/foot-chip-2.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        },
+        {
+          "src": "/learn/foot-chip-3.webp",
+          "credit": "Sample wall photo (this project)",
+          "license": "project",
+          "sourceUrl": "https://bouldering-vis.pages.dev/samples/t-up-d2.jpg"
+        }
+      ]
+    }
+  },
+  {
+    "id": "standard",
+    "name": "Standard",
+    "grip": "The hold faces up: pull down on it with your arm straight below it."
+  },
+  {
+    "id": "sidepull",
+    "name": "Sidepull",
+    "grip": "The hold faces sideways: lean away from it and pull sideways, with the opposite foot pushing."
+  },
+  {
+    "id": "undercling",
+    "name": "Undercling",
+    "grip": "The hold faces down: palm up, pull upward, and get your feet high to load it."
+  }
+]

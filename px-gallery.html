@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Dev-only gallery of the Bloc Hall pixel layer (pixel-kit)." />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>pixel-kit gallery (dev only)</title>
+    <style>
+      .px-gallery-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin: 8px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- Dev only: `vite build` builds index.html alone, and scripts/check-dist.ts fails the build if
+         this gallery ever leaks into dist/ (SPEC-pixel-kit AC 45). -->
+    <script type="module" src="/src/modules/pixel-kit/gallery.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+# castle-banners-0 12x24 P=1
+.1111111111.
+1dddddddddd1
+1dddddddddd1
+1dddddddddd1
+1dddddddddd1
+1dddddddddd1
+1dddddddddd1
+1dddddddddd1
+1ddddaadddd1
+1dddaaaaddd1
+1ddaaddaadd1
+1daaddddaad1
+1aaddddddaa1
+1adddddddda1
+1dddddddddd1
+1dddddddddd1
+1dddddddddd1
+1dddddddddd1
+1dddddddddd1
+1dddddddddd1
+1dddd11dddd1
+1ddd1..1ddd1
+1dd1....1dd1
+.11......11.

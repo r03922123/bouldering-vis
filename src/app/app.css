@@ -1,0 +1,2116 @@
+:root {
+  --stage-max-h: 70dvh;
+  --bg: #121212;
+  --fg: #f2f2f2;
+  --muted: #9a9a9a;
+  color-scheme: dark;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  overflow-x: clip; /* not hidden: that makes body a scroll container and breaks sticky */
+}
+
+/* viewport-fit=cover (for the Play bar's safe area): every page stays clear of a landscape notch.
+   The insets are 0 everywhere else, so no layout changes there. */
+body {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+.app {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* In the empty right end of the Studio header row: the bar adds no height, so the wall still
+   starts in the top third of a phone screen (e2e/layout.spec.ts). */
+.room-bar {
+  position: absolute;
+  top: 2px;
+  right: 16px;
+  z-index: 1;
+  display: flex;
+  gap: 16px;
+}
+
+/* A 44 px tap target back to the gym (SPEC-game › Boundaries › Always). */
+.room-bar a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  min-height: 44px;
+  color: var(--fg);
+}
+
+.app-header,
+.app-main {
+  padding: 12px 16px;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.app-main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.button,
+button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background: #222;
+  color: var(--fg);
+  font: inherit;
+  cursor: pointer;
+}
+
+.button:focus-within,
+button:focus-visible {
+  outline: 2px solid #6ea8fe;
+  outline-offset: 2px;
+}
+
+/* File inputs stay keyboard-focusable inside their label but invisible. */
+.button input[type='file'] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.drop-zone {
+  border: 2px dashed #555;
+  border-radius: 12px;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.drop-zone.compact {
+  padding: 8px;
+  border-style: solid;
+}
+
+.drop-zone.dragging {
+  border-color: #6ea8fe;
+  background: #1a2233;
+}
+
+.drop-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.error {
+  margin: 0;
+  color: #ff8a80;
+}
+
+.confirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #2a2420;
+}
+
+.confirm p {
+  flex-basis: 100%;
+  margin: 0;
+}
+
+.photo {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.selection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.selection-box {
+  position: relative;
+  width: 100%;
+  max-height: var(--stage-max-h);
+  overflow: hidden;
+  border-radius: 8px;
+  background: #000;
+}
+
+.selection-box canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none; /* gestures are handled in code */
+  cursor: crosshair;
+}
+
+.selection-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  min-height: 44px;
+  color: var(--muted);
+}
+
+.selection-status.hint {
+  color: #ffd27d;
+}
+
+.hold-list ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hold-list fieldset {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 6px 8px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  min-width: 0;
+}
+
+.hold-index {
+  width: 1.5em;
+  text-align: right;
+  color: var(--muted);
+}
+
+.hold-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  background: #000;
+  flex: none;
+}
+
+.role-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.role-picker label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 32px;
+}
+
+.route-status {
+  margin: 0;
+  color: var(--muted);
+}
+
+.route-status.ready {
+  color: #4ade80;
+  font-weight: 600;
+}
+
+.view-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.segmented {
+  display: inline-flex;
+  border: 1px solid #444;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.segmented label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 14px;
+  cursor: pointer;
+}
+
+.segmented label.active {
+  background: #3a3a3a;
+  font-weight: 600;
+}
+
+.segmented input,
+.switch input[type='checkbox'] {
+  accent-color: #6ea8fe;
+}
+
+/* The (invisible) radio fills its whole segment, so every tap or click lands on the radio itself.
+   A 1×1 px radio made hits depend on sub-pixel layout (CI run 40924616582). */
+.segmented input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  /* Native radios hit-test only their drawn circle; a plain box hit-tests its whole area. */
+  appearance: none;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.segmented label:focus-within {
+  outline: 2px solid #6ea8fe;
+  outline-offset: -2px;
+}
+
+button.primary {
+  background: #2563eb;
+  border-color: #2563eb;
+  font-weight: 600;
+}
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+}
+
+.hold-extra {
+  flex-basis: 100%;
+  min-width: 0; /* a flex item's default min-width is its content's; the Learn card must shrink */
+  order: 10;
+  padding-left: calc(1.5em + 48px + 16px);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.hold-list fieldset {
+  flex-wrap: wrap;
+}
+
+.depth-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.depth-ramp {
+  flex: 1;
+  min-width: 120px;
+  max-width: 320px;
+  height: 12px;
+  border-radius: 6px;
+  /* viridis, near (yellow) → far (purple) */
+  background: linear-gradient(
+    to right,
+    #fde725,
+    #6ece58,
+    #35b779,
+    #1f9e89,
+    #26828e,
+    #31688e,
+    #3e4989,
+    #482878,
+    #440154
+  );
+}
+
+.depth-legend small {
+  flex-basis: 100%;
+  color: var(--muted);
+}
+
+.depth-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--muted);
+}
+
+.hold-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hold-type-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.hold-type {
+  color: var(--fg);
+  font-size: 0.95rem;
+}
+
+.hold-type.unsure,
+.hold-type.pending {
+  color: #ffd27d;
+  margin: 0;
+}
+
+.hold-prob {
+  color: var(--muted);
+}
+
+.hold-override select {
+  min-height: 32px;
+  border-radius: 6px;
+  background: #222;
+  color: var(--fg);
+  border: 1px solid #444;
+  font: inherit;
+  font-size: 0.85rem;
+}
+
+.hold-details {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.app-footer {
+  padding: 24px 16px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.cloud {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cloud-box {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  max-height: var(--stage-max-h);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #000;
+}
+
+.cloud-box canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+.cloud-wait {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  color: var(--muted);
+}
+
+.cloud-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+
+.relief {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cloud-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.sample-picker {
+  display: inline-flex;
+  gap: 8px;
+}
+
+.sample-picker select {
+  min-height: 44px;
+  border-radius: 8px;
+  background: #222;
+  color: var(--fg);
+  border: 1px solid #444;
+  font: inherit;
+}
+
+.cloud-box canvas.cloud-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.confidence {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.confidence .pip {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: #3a3a3a;
+}
+
+.confidence .pip.on {
+  background: #94a3b8;
+}
+
+.hold-warning {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #d6c08a;
+}
+
+.hold-explain {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.direction {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+
+.direction-text::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+  vertical-align: -1px;
+}
+
+.direction select {
+  min-height: 32px;
+  border-radius: 6px;
+  background: #222;
+  color: var(--fg);
+  border: 1px solid #444;
+  font: inherit;
+}
+
+/* Viewport + inspector: the wall never scrolls away while editing holds. On phones the workspace
+   is a plain block (a sticky grid item can only stick inside its own cell). */
+.workspace > * + * {
+  margin-top: 12px;
+}
+
+.toolbar-area {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.inspector {
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .workspace {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    grid-template-areas:
+      'toolbar inspector'
+      'stage inspector';
+    /* The toolbar row hugs its content: a tall inspector grows the stage row, not the toolbar's,
+       so the photo doesn't slide down after Show route. */
+    grid-template-rows: auto 1fr;
+    align-items: start;
+  }
+
+  .workspace > * + * {
+    margin-top: 0;
+  }
+
+  .toolbar-area {
+    grid-area: toolbar;
+  }
+
+  .stage {
+    grid-area: stage;
+  }
+
+  .inspector {
+    grid-area: inspector;
+    position: sticky;
+    top: 12px;
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --stage-max-h: 45dvh;
+  }
+
+  .stage {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    padding: 6px 0 8px;
+    background: var(--bg);
+    box-shadow: 0 6px 12px -8px rgb(0 0 0 / 0.8);
+  }
+}
+
+.drop-zone.collapsed {
+  display: flex;
+  justify-content: flex-start;
+  padding: 0;
+  border: 0;
+}
+
+button.link {
+  min-height: 32px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  text-decoration: underline;
+}
+
+.layers {
+  position: relative;
+}
+
+.layers summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.layers summary::-webkit-details-marker {
+  display: none;
+}
+
+.layers summary::after {
+  content: '▾';
+  margin-left: 6px;
+  color: var(--muted);
+}
+
+.layers-menu {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 4px);
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 190px;
+  padding: 8px 12px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background: #1b1b1b;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.5);
+}
+
+.hold-list li[data-focused='true'] fieldset {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 1px #38bdf8;
+}
+
+.tap-toast {
+  position: absolute;
+  z-index: 4;
+  max-width: 220px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgb(20 20 20 / 0.92);
+  border: 1px solid #555;
+  color: #ffd27d;
+  font-size: 0.8rem;
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% - 14px));
+}
+
+/* Near the top edge the bubble goes below the tap so the wall box doesn't clip it. */
+.tap-toast.below {
+  transform: translate(-50%, 14px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tap-toast {
+    animation: toast-in 160ms ease-out;
+  }
+
+  /* Animate `translate`, which adds to the placement `transform` (above or .below) instead of
+     replacing it; animating `transform` showed a flipped bubble on the wrong side while it played. */
+  @keyframes toast-in {
+    from {
+      opacity: 0;
+      translate: 0 4px;
+    }
+  }
+}
+
+.loading-status p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.loading-status progress {
+  width: 140px;
+  height: 6px;
+  accent-color: #6ea8fe;
+}
+
+.learn-button {
+  padding: 2px 8px;
+  min-height: 28px;
+  border: 1px solid #555;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.learn-button[aria-expanded='true'] {
+  border-color: #6ea8fe;
+  color: #cfe0ff;
+}
+
+.learn-card {
+  min-width: 0;
+  max-width: 100%;
+  margin: 8px 0;
+  padding: 10px 12px;
+  border: 1px solid #3a3a3a;
+  border-radius: 8px;
+  background: #1d1d1d;
+}
+
+.learn-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.learn-head h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.learn-examples {
+  display: flex;
+  gap: 8px;
+  margin: 8px 0 4px;
+  padding: 0;
+  list-style: none;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.learn-examples li {
+  flex: 0 0 auto;
+}
+
+.learn-credit {
+  display: block;
+  color: var(--muted);
+  font-size: 0.72rem;
+  overflow-wrap: anywhere;
+}
+
+.learn-examples img {
+  width: 96px;
+  height: 96px;
+  border-radius: 6px;
+  background: #808080;
+  object-fit: cover;
+}
+
+.learn-text {
+  margin: 6px 0 0;
+}
+
+.learn-text dt {
+  margin-top: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.learn-text dd {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* Route progress strip (hold-segmentation › RouteSteps): one row per step, the current one lit. */
+.route-steps ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.route-steps li {
+  display: grid;
+  grid-template-columns: 20px auto minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+  padding: 5px 8px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.route-steps li[data-state='current'] {
+  color: var(--fg);
+  border-color: #2563eb;
+  background: rgba(37, 99, 235, 0.12);
+}
+
+.route-steps li[data-state='done'] {
+  color: #4ade80;
+}
+
+.route-steps .step-num {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.route-steps .step-label {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.route-steps .step-detail {
+  font-size: 0.78rem;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.route-steps li[data-state='done'] .step-detail {
+  color: var(--muted);
+}
+
+.route-moment {
+  margin: 4px 0 0;
+  min-height: 1.2em;
+  color: #4ade80;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .route-steps.celebrate li[data-state='done']:nth-child(2) {
+    animation: step-glow 0.9s ease-out;
+  }
+  @keyframes step-glow {
+    0% {
+      box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
+    }
+    100% {
+      box-shadow: 0 0 0 10px rgba(74, 222, 128, 0);
+    }
+  }
+}
+
+/* Climber stance (climber-stance › StancePanel). Left limbs cyan, right orange, as on the wall. */
+.stance {
+  margin: 10px 0;
+  padding: 8px 10px;
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+
+.stance-title {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+}
+
+.stance-intro,
+.stance-hint,
+.stance-note {
+  margin: 0 0 6px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.stance-note {
+  margin: 6px 0 0;
+}
+
+.stance-status {
+  margin: 0 0 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fbbf24;
+}
+
+.stance-status[data-ok='true'] {
+  color: #4ade80;
+}
+
+.stance-limbs {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.stance-limbs th {
+  text-align: left;
+  font-weight: 500;
+  white-space: nowrap;
+  padding: 3px 6px 3px 0;
+}
+
+.stance-limbs tr[data-limb^='l'] th {
+  color: #22d3ee;
+}
+
+.stance-limbs tr[data-limb^='r'] th {
+  color: #fb923c;
+}
+
+.stance-limbs td {
+  padding: 3px 0;
+}
+
+.stance-limbs select {
+  max-width: 100%;
+}
+
+.stance-share {
+  position: relative;
+  width: 40%;
+  text-align: right;
+}
+
+.stance-bar {
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  height: 6px;
+  margin-top: -3px;
+  max-width: calc(100% - 44px);
+  border-radius: 3px;
+  background: #facc15;
+  opacity: 0.7;
+}
+
+.stance-pct {
+  position: relative;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Feet: Any feet / Follow hands (Amendment 2026-10-31 (b), rule 15): a tap target per option. */
+.stance-feet {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 0.82rem;
+}
+
+.stance-feet .segmented label {
+  min-height: 44px;
+}
+
+.stance-controls {
+  display: grid;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 0.82rem;
+}
+
+.stance-controls label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stance-controls input[type='range'] {
+  flex: 1;
+  min-width: 0;
+}
+
+.stance-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* Status lines float over the top of the photo (pro review: they used to push it down mid-tap).
+   .stage is position: relative (sticky on phones), so it anchors them. */
+.stage-status {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.stage-status > * {
+  margin: 0;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(18, 18, 18, 0.82);
+}
+
+.stage-status button {
+  pointer-events: auto;
+}
+
+/* ── Bloc Hall: the gym (SPEC-gym-hub) ── */
+
+.hub {
+  min-height: 100dvh;
+  padding: 12px 16px;
+}
+
+.hub-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.hub-title {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+/* The pixel gym (G2): full screen width, its box min(60dvh, 108 art px × 3 CSS px) tall. The
+   sizer is that box; HubScreen measures it and sets the canvas to a whole number of device px per
+   art px, which can be up to one art px wider than the screen, so the stage clips. */
+.hub-stage {
+  position: relative;
+  overflow: hidden;
+  margin: 0 -16px;
+  background: #1b1325;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+.hub-stage:focus-visible {
+  outline: 2px solid #6ea8fe;
+  outline-offset: -2px;
+}
+
+.hub-sizer {
+  position: absolute;
+  inset: 0 0 auto;
+  height: min(60dvh, 324px);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.hub-canvas {
+  display: block;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+}
+
+/* The place you are at (G6): one button, in a row that keeps its height so the strip never jumps. */
+.hub-prompt {
+  display: flex;
+  align-items: center;
+  min-height: 60px;
+}
+
+/* Hold-to-walk buttons under the floor (Amendment 2026-11-02 W2): ≥ 44 px touch targets, one at
+   each side under the thumbs. A press-and-hold never selects text, scrolls or opens a callout. */
+.hub-pad {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.hub-walk {
+  min-width: 72px;
+  min-height: 48px;
+  font-size: 1.25rem;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* A mouse or trackpad that can hover has the arrow keys and the floor: no on-screen pad. */
+@media (hover: hover) and (pointer: fine) {
+  .hub-pad {
+    display: none;
+  }
+}
+
+/* A place with nothing to do yet (Amendment 2026-11-02 W4): its name, and no button. */
+.hub-prompt-name {
+  font-weight: 600;
+}
+
+/* The quick-travel strip (G7): real buttons, ≥ 44 px, wrapping on a phone. */
+.hub-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* The front desk's question (G8): a sheet at the bottom of the screen, within the 16 px gutter. */
+.level-dialog {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 2;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px;
+  border: 1px solid #444;
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.level-dialog h2 {
+  margin: 4px 0 12px;
+  font-size: 1.1rem;
+}
+
+.level-speaker {
+  margin: 0;
+  color: var(--muted);
+}
+
+.level-answers {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.level-answers button[aria-pressed='true'] {
+  border-color: var(--fg);
+}
+
+.level-later {
+  background: none;
+}
+
+/* ── pixel-kit (SPEC-pixel-kit) ── */
+
+/* The 8-bit layer over the photo (Decisions P3). Its bitmap is the art grid; PixelLayer sets the
+   CSS size to bitmap·P/dpr inline, which can be up to P/dpr px wider than the box, so the parent
+   must be positioned with overflow: hidden (e.g. .selection-box). It never takes taps or layout. */
+canvas.px-layer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+}
+
+/* HUD art (PixelText, icons, meter, stars): one art px is round(scale·dpr)/dpr CSS px, set inline. */
+.px-canvas {
+  display: block;
+  flex: none;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+}
+
+.px-text,
+.px-moves,
+.px-meter,
+.px-stars {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* One-thumb taps: at least 44 × 44 CSS px (SPEC-game › Boundaries). Square corners for the 8-bit
+   look; the app's button colours otherwise. */
+.px-button {
+  min-width: 44px;
+  min-height: 44px;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 10px;
+  border-width: 2px;
+  border-radius: 0;
+}
+
+.px-button[aria-pressed='true'] {
+  border-color: var(--fg);
+}
+
+.px-button:disabled {
+  opacity: 0.5;
+}
+
+/* ── play-shell (SPEC-play-shell) ── */
+
+.play {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* S13: "◀ Gym" in the header row, as in the Setting Room; a 44 px tap target. */
+.play-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  min-height: 44px;
+}
+
+.play-header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.play-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  min-height: 44px;
+  min-width: 44px;
+  color: var(--fg);
+}
+
+.play-main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 16px 16px;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* The wall stays in view while the tray and the target list scroll (phone first, S13). */
+.play-stage {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  padding: 4px 0 8px;
+  background: var(--bg);
+}
+
+/* S1: the pixel layer's positioned, overflow-hidden parent; its top-left is the photo box's. */
+.play-photo {
+  position: relative;
+  overflow: hidden;
+}
+
+/* In Plan, taps go to the move tray, so the canvas's hold-adding status line has nothing to say. */
+.play-plan .selection-status {
+  display: none;
+}
+
+.play-verdict {
+  margin: 0;
+  min-height: 1.5em;
+  font-weight: 600;
+}
+
+.play-verdict[data-ok='false'] {
+  color: #ffd27d;
+}
+
+.play-tag {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.play-kept {
+  padding: 0 16px;
+}
+
+/* S6: taps on the photo go to the move tray. Sits over the canvas and both pixel layers. */
+.play-taps {
+  position: absolute;
+  left: 0;
+  top: 0;
+  touch-action: manipulation;
+  cursor: crosshair;
+}
+
+/* The fall preview's ghost climber: see-through, so the real stance still shows under it. */
+.play-ghost canvas.px-layer {
+  opacity: 0.6;
+}
+
+.play-tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.play-limbs,
+.play-history {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.play-limb {
+  min-width: 52px;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.play-limb[aria-pressed='true'] {
+  border-color: #ffd27d;
+  background: #3a3220;
+}
+
+.play-hint {
+  margin: 0;
+  min-height: 1.25em;
+  color: var(--muted);
+}
+
+.play-targets h2 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+/* The keyboard path (S12): a wrapping grid of target buttons that scrolls under the pinned wall. */
+.play-targets ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.play-targets button {
+  min-width: 44px;
+  justify-content: center;
+}
+
+/* S10: Numbers mode, the referee's own values in two columns. */
+.play-numbers dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  gap: 4px 24px;
+  margin: 0;
+}
+
+.play-numbers dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.play-numbers dt {
+  color: var(--muted);
+}
+
+.play-numbers dd {
+  margin: 0;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.play-route-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.play-tag > button {
+  align-self: flex-start;
+}
+
+/* ── play-shell, play-feel amendment 2026-11-02 (K1, K2, H1–H3, D1, E1) ── */
+
+/* K1: each limb button shows its key in a corner chip. */
+.play-limb {
+  position: relative;
+}
+
+.play-key {
+  position: absolute;
+  right: 3px;
+  bottom: 2px;
+  font:
+    600 0.65rem/1 ui-monospace,
+    monospace;
+  color: var(--muted);
+}
+
+/* K2: the name of the target a click would pick, above it; never in the pointer's way. */
+.play-hover-label {
+  position: absolute;
+  z-index: 1;
+  transform: translate(-50%, calc(-100% - 14px));
+  padding: 1px 6px;
+  border: 1px solid #ffa3d6;
+  background: #1b1325;
+  color: #f7f3e8;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* H1, H3, E1 (Amendment (b) T1): the hold annotations, thin SVG in CSS px over the photo. */
+svg.play-arrows {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* H3: the plausible holds count line, and each target's verdict in words on its button. */
+.play-plausible {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  color: var(--muted);
+}
+
+.play-mark {
+  font-weight: normal;
+  color: var(--muted);
+}
+
+/* D1: the coach window, an original bolted-tape text box under the wall. The frame is a nine-slice
+   of FRAME_GRID (coach.ts) at 2 CSS px a cell; the body is the system font (pixel-kit's rule). */
+.play-coach {
+  position: relative;
+  min-height: 72px;
+  margin-top: 10px;
+  padding: 10px 52px 8px 12px;
+  border: 8px solid transparent;
+  border-image-width: 8px;
+  border-image-repeat: repeat;
+  background: #1b1325;
+  color: #f7f3e8;
+  cursor: pointer;
+}
+
+.play-coach-tag {
+  position: absolute;
+  top: -15px;
+  left: 6px;
+  padding: 2px 4px;
+  background: #1b1325;
+  line-height: 0;
+}
+
+.play-coach-text {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.play-coach-text .play-coach-hidden {
+  visibility: hidden;
+}
+
+.play-coach-next {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.play-coach-next img {
+  width: 10px;
+  height: 12px;
+  image-rendering: pixelated;
+  animation: play-coach-bob 0.9s steps(2, jump-none) infinite;
+}
+
+@keyframes play-coach-bob {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .play-coach-next img {
+    animation: none;
+  }
+}
+
+.play-coach[data-ok='false'] .play-coach-text {
+  color: #ffd27d;
+}
+
+/* E1: the direction map. Handles over the photo: 44 px grab targets at each arrow's base dot (the
+   grip point) and head (the pull), pointer only; the hold list below is the keyboard path. */
+.play-dir-handles {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.play-dir-handle {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+  border-radius: 50%;
+  pointer-events: auto;
+  touch-action: none;
+  cursor: grab;
+}
+
+.play-dir-head {
+  border: 2px dashed rgb(255 163 214 / 0.7);
+}
+
+.play-dir-base {
+  cursor: move;
+}
+
+.play-dir-handle[data-selected] {
+  border: 2px solid #ffa3d6;
+}
+
+.play-directions h2 {
+  margin: 0 0 4px;
+  font-size: 1rem;
+}
+
+.play-directions-note {
+  margin: 0 0 8px;
+  color: var(--muted);
+}
+
+.play-directions-list {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.play-directions-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.play-directions-list li[data-selected] .play-directions-label {
+  color: #ffa3d6;
+}
+
+.play-directions-label {
+  min-width: 2.5em;
+  font-weight: 700;
+}
+
+.play-directions-pull {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 2px solid #444;
+  background: #222;
+  cursor: ew-resize;
+}
+
+.play-directions-pull:focus-visible {
+  outline: 2px solid #ffa3d6;
+}
+
+.play-directions-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* H2: the 3D view in a panel under the wall (the Studio's PointCloudView, unchanged). */
+.play-3d-toggle {
+  min-width: 44px;
+}
+
+.play-3d-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.play-3d-head h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.play-3d-notice,
+.play-3d-progress {
+  margin: 4px 0;
+  color: var(--muted);
+}
+
+/* E1: the grip's four nudge buttons, side by side, each a 44 px target. */
+.play-directions-nudge {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.play-directions-nudge button {
+  min-width: 44px;
+  justify-content: center;
+  padding: 0;
+}
+
+/* E1 check mode: the pulls the badges leave no room to draw, in words (quiet, under the note). */
+.play-directions-dropped {
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ── play-shell, Amendment 2026-11-02 (b): the one-screen Play HUD (U1–U5) ── */
+
+/* U2, wide (≥ 900 px): the photo left, as large as the viewport height allows; the header and
+   every control in a side panel on the right, so nothing below the photo needs scrolling. */
+.play-hud.play-wide {
+  --stage-max-h: calc(100dvh - 24px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
+  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-areas:
+    'main header'
+    'main panel';
+  column-gap: 16px;
+  height: 100dvh;
+  min-height: 0;
+  padding: 0 16px;
+}
+
+.play-wide > .play-header {
+  grid-area: header;
+  flex-wrap: wrap;
+  padding: 0;
+}
+
+.play-wide > .play-main {
+  grid-area: main;
+  max-width: none;
+  min-height: 0;
+  margin: 0;
+  padding: 12px 0;
+}
+
+.play-wide .play-stage {
+  position: relative;
+  top: auto;
+  padding: 0;
+}
+
+.play-hud .play-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* The panel scrolls; its children keep their own height (a squeezed COACH box spilled its text
+   onto the next control). */
+.play-wide > .play-panel > * {
+  flex-shrink: 0;
+}
+
+.play-wide > .play-panel {
+  grid-area: panel;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 4px 16px 0;
+}
+
+.play-wide .play-coach {
+  margin-top: 14px;
+}
+
+/* The 2×2 limb pad, shaped like the body: hands over feet, left limbs on the left (K1). */
+.play-hud .play-tray {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  justify-content: flex-start;
+}
+
+.play-hud .play-limbs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(52px, 64px));
+  gap: 6px;
+}
+
+.play-hud .play-history {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+/* U2: the hint row, labelled icon toggles. */
+.play-aids {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.play-aid {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background: #222;
+  color: var(--fg);
+  font: inherit;
+  cursor: pointer;
+}
+
+.play-aid input {
+  margin: 0;
+}
+
+.play-aid[data-on],
+.play-aid[aria-expanded='true'] {
+  border-color: #ffd27d;
+  background: #3a3220;
+}
+
+.play-aid-icon {
+  font-weight: 700;
+}
+
+/* U4: the direction check as a banner on the photo, where the arrows are. The sticky stage (and
+   the wide layout's relative one) is its containing block. */
+
+.play-banner {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  /* At the photo's bottom edge (usually the mat), so the holds and their arrows stay in view. */
+  bottom: 8px;
+  z-index: 3;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgb(18 18 18 / 0.88);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.5);
+}
+
+.play-banner .play-directions h2 {
+  margin: 0 0 2px;
+}
+
+.play-banner .play-directions-note {
+  margin: 0 0 6px;
+  font-size: 0.9rem;
+}
+
+/* U5: the target list behind "List targets". */
+.play-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.play-list-toggle[aria-expanded='true'] {
+  border-color: #ffd27d;
+}
+
+.play-targets-empty {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* U3, phone (< 900 px): the photo full width at the top, the COACH as a one-line strip under it,
+   and a sticky bottom bar in the thumb zone; the hints and tools in a drawer above the bar. */
+/* The bar's height is measured into --play-bar-h (PlayScreen); the page's padding and scroll
+   padding keep everything clear of it (WCAG 2.4.11). */
+/* Amendment 2026-11-04 L2: an upright tablet (an iPad Air, 820 × 1106) is narrow too, but tall. The
+   photo may take the height the header (~60 px), the COACH (~100 px) and gaps leave above the bar,
+   never less than the phone's 45dvh (on a phone the photo's width binds first, so nothing changes). */
+.play-hud.play-narrow {
+  --stage-max-h: max(45dvh, calc(100dvh - var(--play-bar-h, 132px) - 200px));
+  padding-bottom: calc(var(--play-bar-h, 132px) + env(safe-area-inset-bottom));
+}
+
+html {
+  scroll-padding-bottom: var(--play-bar-h, 0px);
+}
+
+.play-narrow .play-coach {
+  margin-top: 4px;
+}
+
+.play-coach-strip {
+  min-height: 0;
+  padding-top: 6px;
+  padding-bottom: 4px;
+}
+
+/* PR #17 review 9: a folded strip never cuts a word off (it cut the goal's last letter, "…on 7",
+   with a phone's larger text): it wraps to a second line before it clips, and only a longer
+   reason is clamped, its whole text one tap away. */
+.play-coach-strip .play-coach-text {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+/* PR #17 review 2: the fold control has the box's right-hand column to itself (the 52 px the
+   text never takes), at the top; the advance arrow moves to the column's foot below it, so
+   neither ever covers a word. */
+.play-coach-fold {
+  position: absolute;
+  top: -8px;
+  right: 0;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #f7f3e8;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  justify-content: center;
+}
+
+.play-coach:has(.play-coach-fold) .play-coach-next {
+  bottom: -8px;
+}
+
+.play-narrow > .play-panel {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  gap: 0;
+  /* The drawer follows the bar in the DOM (Tab order, review 5) but shows above it. */
+  flex-direction: column-reverse;
+}
+
+.play-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 16px calc(8px + env(safe-area-inset-bottom));
+  border-top: 1px solid #333;
+  background: #161616;
+}
+
+.play-bar .play-hint {
+  min-height: 0;
+  font-size: 0.85rem;
+}
+
+.play-bar .play-hint:empty {
+  display: none;
+}
+
+.play-drawer {
+  max-height: 55dvh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 16px;
+  border-top: 1px solid #333;
+  background: #1b1b1b;
+}
+
+.play-drawer[hidden] {
+  display: none;
+}
+
+.play-drawer-toggle {
+  min-width: 44px;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.play-drawer-toggle[aria-expanded='true'] {
+  border-color: #ffd27d;
+  background: #3a3220;
+}
+
+/* U4 on a phone: the banner is one heading, the pulls not drawn, and the two buttons; the note is
+   still read by screen readers. */
+@media (width < 900px) {
+  .play-banner {
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    padding: 4px 8px 6px;
+  }
+
+  .play-banner .play-directions h2 {
+    font-size: 0.95rem;
+  }
+
+  .play-banner .play-directions-note {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .play-banner .play-directions-dropped {
+    margin: 0 0 4px;
+    font-size: 0.85rem;
+  }
+}
+
+.play-bar-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* E1 edit mode on a phone: the banner's actions in the bar, compact. */
+.play-bar-edit .play-directions h2 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.play-bar-edit .play-directions-note {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.play-bar .play-plausible {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.play-directions-dropped-toggle {
+  margin: 0 0 4px;
+  font-size: 0.85rem;
+}
+
+/* ── play-shell R0-1 (2026-11-03): "+ limb", a second limb on purpose ── */
+.play-limb-add {
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+.play-limb-add[aria-pressed='true'] {
+  border-color: #ffd27d;
+  background: #3a3220;
+}
+
+/* R0-3 (c): a start that can't be held, on the photo's banner: why, then what to do. */
+.play-start-fall-text {
+  margin: 0 0 6px;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 899px) {
+  .play-start-fall-text {
+    font-size: 0.85rem;
+  }
+}
+
+/* R0-3 (b): the Down preset in the hold list. */
+.play-directions-down {
+  min-height: 44px;
+}
+
+/* R0-4: the goal line in the header, at every width; it wraps under the title on a phone rather
+   than pushing the page sideways. */
+.play-header:has(.play-goal) {
+  flex-wrap: wrap;
+  row-gap: 0;
+}
+
+.play-goal {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ffd27d;
+}
+
+/* PR #17 review 1: "Smear here", after a bare-wall foot miss, in the hint line. */
+.play-smear-here {
+  min-height: 44px;
+  margin-left: 4px;
+}
+
+/* PR #17 review 11: the direction check's answer to a limb key or a wall tap. Always in the page
+   (a live region must exist before its words), no room taken while empty. */
+.play-directions-nudge-line {
+  margin: 0;
+  font-weight: 600;
+  color: #ffd27d;
+}
+
+.play-directions-nudge-line:not(:empty) {
+  margin: 0 0 6px;
+}
+
+/* Re-review 4: the hint line and "Smear here" side by side; the button is outside the live line. */
+.play-hint-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+}
+
+/* Amendment 2026-11-04 L1: a phone on its side (useWide's short-landscape query) is wide but only
+   ~340 px tall. The panel takes its 320 px minimum so the photo gets the width, and the header and
+   gaps tighten so the COACH, the pad and Undo fit above the fold. Touch targets stay 44 px. */
+@media (orientation: landscape) and (max-height: 500px) and (max-width: 899px) {
+  .play-hud.play-wide {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    column-gap: 12px;
+    padding: 0 12px;
+  }
+
+  .play-wide > .play-header {
+    column-gap: 8px;
+  }
+
+  .play-wide > .play-header h1 {
+    font-size: 1.05rem;
+  }
+
+  .play-wide .play-goal {
+    font-size: 0.8rem;
+  }
+
+  .play-hud.play-wide .play-panel {
+    gap: 6px;
+  }
+
+  .play-wide .play-coach {
+    margin-top: 4px;
+  }
+}

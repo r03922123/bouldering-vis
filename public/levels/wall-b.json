@@ -1,0 +1,267 @@
+{
+  "about": "SPEC-launch-wall-2: Wall 2's orange route on the owner's photo (working image 816 x 1536), recorded with the real models (SlimSAM, CLIP, Depth Anything) through spike/beta-level.html on 2026-11-06. Holds tapped lowest first; 3S and 4S are the start hands, 11F the finish. start pins the setter's start: hands on 3S and 4S, feet on holds 2 and 1. height is the 170 cm climber at the owner's scale, 2.15 px/cm (ADR-0002 amendment 2026-11-06). wallFeet: the wall mask's footholds not claimed by a route hold.",
+  "sample": "wall-b",
+  "recorded": "2026-11-06",
+  "photo": {
+    "width": 816,
+    "height": 1536
+  },
+  "height": 365.5,
+  "wallAngleDeg": 0,
+  "rules": {
+    "feet": "any",
+    "dynamic": true
+  },
+  "start": {
+    "lh": "wall-b-3",
+    "rh": "wall-b-4",
+    "lf": "wall-b-2",
+    "rf": "wall-b-1"
+  },
+  "holds": [
+    {
+      "id": "wall-b-1",
+      "order": 0,
+      "label": "1",
+      "role": "route",
+      "centroid": {
+        "x": 521,
+        "y": 901.4
+      },
+      "type": "sloper",
+      "dir": [-0.0218, 0.4351, -0.9001],
+      "wallNormal": [0.0241, 0.0901, 0.9956],
+      "forceSource": "type"
+    },
+    {
+      "id": "wall-b-2",
+      "order": 1,
+      "label": "2",
+      "role": "route",
+      "centroid": {
+        "x": 329.3,
+        "y": 813.2
+      },
+      "type": "crimp",
+      "dir": [0.0015, 0.9986, -0.0529],
+      "wallNormal": [-0.0282, 0.0529, 0.9982],
+      "forceSource": "type"
+    },
+    {
+      "id": "wall-b-3",
+      "order": 2,
+      "label": "3S",
+      "role": "start",
+      "centroid": {
+        "x": 342.6,
+        "y": 746.8
+      },
+      "type": "sloper",
+      "dir": [0.0298, 0.4561, -0.8894],
+      "wallNormal": [-0.0334, 0.0668, 0.9972],
+      "forceSource": "type"
+    },
+    {
+      "id": "wall-b-4",
+      "order": 3,
+      "label": "4S",
+      "role": "start",
+      "centroid": {
+        "x": 539.8,
+        "y": 827.1
+      },
+      "type": "crimp",
+      "dir": [-0.0025, 0.9966, -0.0826],
+      "wallNormal": [0.0301, 0.0826, 0.9961],
+      "forceSource": "type"
+    },
+    {
+      "id": "wall-b-5",
+      "order": 4,
+      "label": "5",
+      "role": "route",
+      "centroid": {
+        "x": 588.1,
+        "y": 692
+      },
+      "type": "pinch",
+      "dir": null,
+      "wallNormal": [0.0749, 0.0358, 0.9965],
+      "forceSource": "none"
+    },
+    {
+      "id": "wall-b-6",
+      "order": 5,
+      "label": "6",
+      "role": "route",
+      "centroid": {
+        "x": 231.7,
+        "y": 640.1
+      },
+      "type": "pinch",
+      "dir": null,
+      "wallNormal": [-0.0473, 0.0182, 0.9987],
+      "forceSource": "none"
+    },
+    {
+      "id": "wall-b-7",
+      "order": 6,
+      "label": "7",
+      "role": "route",
+      "centroid": {
+        "x": 495.8,
+        "y": 567.7
+      },
+      "type": "sloper",
+      "dir": [0.0712, 0.3951, -0.9159],
+      "wallNormal": [-0.0768, 0.1339, 0.988],
+      "forceSource": "type"
+    },
+    {
+      "id": "wall-b-8",
+      "order": 7,
+      "label": "8",
+      "role": "route",
+      "centroid": {
+        "x": 439.2,
+        "y": 546.3
+      },
+      "type": "sloper",
+      "dir": [0.0596, 0.3949, -0.9168],
+      "wallNormal": [-0.0643, 0.1341, 0.9889],
+      "forceSource": "type"
+    },
+    {
+      "id": "wall-b-9",
+      "order": 8,
+      "label": "9",
+      "role": "route",
+      "centroid": {
+        "x": 278.1,
+        "y": 478.7
+      },
+      "type": "sloper",
+      "dir": [0.0896, 0.4378, -0.8946],
+      "wallNormal": [-0.0993, 0.0871, 0.9912],
+      "forceSource": "type"
+    },
+    {
+      "id": "wall-b-10",
+      "order": 9,
+      "label": "10",
+      "role": "route",
+      "centroid": {
+        "x": 267.6,
+        "y": 362.7
+      },
+      "type": "sloper",
+      "dir": [0.2057, 0.236, -0.9497],
+      "wallNormal": [-0.2021, 0.2976, 0.9331],
+      "forceSource": "type"
+    },
+    {
+      "id": "wall-b-11",
+      "order": 10,
+      "label": "11F",
+      "role": "finish",
+      "centroid": {
+        "x": 214.1,
+        "y": 254.8
+      },
+      "type": "sloper",
+      "dir": [0.1654, 0.4465, -0.8794],
+      "wallNormal": [-0.1842, 0.0775, 0.9798],
+      "forceSource": "type"
+    }
+  ],
+  "wallFeet": [
+    {
+      "id": "wf:115:53",
+      "point": [115, 53]
+    },
+    {
+      "id": "wf:90:69",
+      "point": [90, 69]
+    },
+    {
+      "id": "wf:398:319",
+      "point": [398, 319]
+    },
+    {
+      "id": "wf:391:448",
+      "point": [391, 448]
+    },
+    {
+      "id": "wf:13:549",
+      "point": [13, 549]
+    },
+    {
+      "id": "wf:88:613",
+      "point": [88, 613]
+    },
+    {
+      "id": "wf:201:667",
+      "point": [201, 667]
+    },
+    {
+      "id": "wf:289:705",
+      "point": [289, 705]
+    },
+    {
+      "id": "wf:261:730",
+      "point": [261, 730]
+    },
+    {
+      "id": "wf:164:751",
+      "point": [164, 751]
+    },
+    {
+      "id": "wf:259:753",
+      "point": [259, 753]
+    },
+    {
+      "id": "wf:151:798",
+      "point": [151, 798]
+    },
+    {
+      "id": "wf:787:806",
+      "point": [787, 806]
+    },
+    {
+      "id": "wf:208:831",
+      "point": [208, 831]
+    },
+    {
+      "id": "wf:334:857",
+      "point": [334, 857]
+    },
+    {
+      "id": "wf:112:888",
+      "point": [112, 888]
+    },
+    {
+      "id": "wf:406:893",
+      "point": [406, 893]
+    },
+    {
+      "id": "wf:223:896",
+      "point": [223, 896]
+    },
+    {
+      "id": "wf:10:904",
+      "point": [10, 904]
+    },
+    {
+      "id": "wf:351:922",
+      "point": [351, 922]
+    },
+    {
+      "id": "wf:791:928",
+      "point": [791, 928]
+    },
+    {
+      "id": "wf:773:977",
+      "point": [773, 977]
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# A new push to a PR cancels that PR's older run; runs on main always finish.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# onnxruntime-node (a transformers.js dependency) downloads CUDA binaries from nuget on Linux in its
+# postinstall, and that download has broken `npm ci`. Nothing in CI loads it, and its CPU binaries
+# ship in the npm package. `skip` is its documented switch (onnxruntime-node 1.30.0,
+# script/install.js:31-47); the postinstall then exits at install.js:67-69, before any download.
+env:
+  ONNXRUNTIME_NODE_INSTALL: skip
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+
+  # One job per Playwright project, in parallel. 352 tests on a 2-vCPU runner run on 1 worker,
+  # so splitting by project cuts wall time to the slowest project (phone, ~42% of the suite).
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    # Playwright's image has the browsers and their system packages, so no step installs them
+    # (the install step stalled on apt downloads). Recipe from playwright.dev/docs/ci › Via Containers.
+    # The tag must equal @playwright/test in package.json; scripts/ci-config.test.ts checks it.
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      options: --user 1001
+    strategy:
+      fail-fast: false
+      matrix:
+        # `browser` only names the job, e.g. "e2e (iphone, webkit)"; the project picks the browser.
+        include:
+          - project: desktop
+            browser: chromium
+          - project: phone
+            browser: chromium
+          - project: iphone
+            browser: webkit
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: npm
+      - run: npm ci
+      # E2E uses the fake ML worker (VITE_FAKE_ML=1 in playwright.config.ts); real models never run in CI.
+      - run: npx playwright test --project=${{ matrix.project }}
+        timeout-minutes: 15
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report-${{ matrix.project }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

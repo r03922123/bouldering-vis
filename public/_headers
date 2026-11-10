@@ -1,0 +1,5 @@
+# Cloudflare Pages: cross-origin isolation, so onnxruntime-web can use multithreaded WASM.
+# `credentialless` (not `require-corp`) keeps model downloads from the Hugging Face Hub working.
+/*
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: credentialless

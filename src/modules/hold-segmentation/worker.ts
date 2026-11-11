@@ -2,6 +2,9 @@
 import type { DecodedHold, Point } from '../../workers/protocol';
 import { cleanMask, maskStats, pickMask } from './mask';
 
+// The hold-embedding page (scripts/hold-data/probe-data.ts) runs the app's tap steps itself.
+export { cleanMask, maskStats, pickMask };
+
 /**
  * Hold sequence numbers rise across every ledger in the worker, so a `seen` value can never refer
  * to a number a newer ledger hands out again.

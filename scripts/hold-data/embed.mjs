@@ -1,7 +1,7 @@
 // Dev-only (T38). Embeds labeled holds through the app's own pipeline (the hold-embedding page) and appends
 // one JSON line per hold to tests/fixtures/hold-data/<set>.jsonl (gitignored). Resumable: photos already
-// in the output are skipped. Needs `npx vite --port 5175` running and the page at scripts/hold-data/
-// (ADR-0003 (h); follow-up 25 in docs/ARCHITECTURE.md).
+// in the output are skipped. Needs `npx vite --port 5175` running; the page is
+// scripts/hold-data/probe-data.html (ADR-0003 (h)).
 // Usage: node scripts/hold-data/embed.mjs <clinb|kaggle|heldout|beta-guide|capstone> [maxPerClass]
 import { appendFileSync, existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';

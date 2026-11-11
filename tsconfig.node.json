@@ -6,5 +6,9 @@
     "allowImportingTsExtensions": true
   },
   "include": ["*.config.ts", "e2e", "scripts"],
-  "exclude": ["scripts/clip-text.ts"]
+  "exclude": [
+    "scripts/clip-text.ts",
+    "scripts/level-recorder.ts",
+    "scripts/hold-data/probe-data.ts"
+  ]
 }

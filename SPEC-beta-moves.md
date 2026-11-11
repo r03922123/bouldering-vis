@@ -558,7 +558,7 @@ The level uses the earlier sample photo: 1600 × 1200 source, working image 1536
 - **Recording:** in the real-model session on the sample, tap the earlier sample route's holds in order (checked against its video frames, private), then export the `RouteHold`s and wall feet as JSON.
 - **Review:** the pro-climber persona writes and reviews the betas, and the review is recorded in Check Results. Confirm the wall angle (Open Question 6).
 - **Verify:** the recorded-level suite (private), and the recorded real-model session script
-- **Files:** the level recorder page, the recorded level, the recorded betas and the recorded-level suite (the last three private)
+- **Files:** the level recorder page (`scripts/level-recorder.html`), the recorded level, the recorded betas and the recorded-level suite (the last three private)
 
 **Task 9: timing and Check Results**
 - **Acceptance:** AC 39–41 and AC 36 (Chromium), measured and written into this spec's Check Results. If AC 39 fails, stop and ask (B15).

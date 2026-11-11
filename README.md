@@ -25,8 +25,10 @@ Dev-only tools:
 
 - `node scripts/make-synthetic-fixtures.ts` regenerates the committed synthetic fixtures.
 - `node scripts/build-clip-text-embeddings.ts` rebuilds `src/data/clip-text-embeddings.json`.
-- Most real-model check pages and their runner stay private; the level recorder and the
-  hold-embedding page move to `scripts/` ([ADR-0003](docs/adr/0003-public-repo.md) (h), follow-up 25).
+- With `npx vite --port 5175` running, `/scripts/level-recorder.html` records a level on the
+  photo loaded in the Studio, and `node scripts/hold-data/embed.mjs <set>` embeds labeled holds
+  through `scripts/hold-data/probe-data.html`. Most other real-model check pages and their runner
+  stay private ([ADR-0003](docs/adr/0003-public-repo.md) (h)).
 
 ## Deploying
 

@@ -1,6 +1,6 @@
 import { annotateHolds, EDIT_TIP, handlesOf, type Annotation } from './annotate';
 
-// PR #15 review 3: in E1 edit mode the 44 px head handle sits on the drawn arrow's tip, wherever
+// Private PR #15 review 3: in E1 edit mode the 44 px head handle sits on the drawn arrow's tip, wherever
 // the box or the badges put it, and the base handle on the grip point.
 
 const view = { scale: 1, tx: 0, ty: 0 };

@@ -1867,7 +1867,7 @@ html {
   padding-bottom: 4px;
 }
 
-/* PR #17 review 9: a folded strip never cuts a word off (it cut the goal's last letter, "…on 7",
+/* Private PR #17 review 9: a folded strip never cuts a word off (it cut the goal's last letter, "…on 7",
    with a phone's larger text): it wraps to a second line before it clips, and only a longer
    reason is clamped, its whole text one tap away. */
 .play-coach-strip .play-coach-text {
@@ -1878,7 +1878,7 @@ html {
   line-clamp: 2;
 }
 
-/* PR #17 review 2: the fold control has the box's right-hand column to itself (the 52 px the
+/* Private PR #17 review 2: the fold control has the box's right-hand column to itself (the 52 px the
    text never takes), at the top; the advance arrow moves to the column's foot below it, so
    neither ever covers a word. */
 .play-coach-fold {
@@ -2058,13 +2058,13 @@ html {
   color: #ffd27d;
 }
 
-/* PR #17 review 1: "Smear here", after a bare-wall foot miss, in the hint line. */
+/* Private PR #17 review 1: "Smear here", after a bare-wall foot miss, in the hint line. */
 .play-smear-here {
   min-height: 44px;
   margin-left: 4px;
 }
 
-/* PR #17 review 11: the direction check's answer to a limb key or a wall tap. Always in the page
+/* Private PR #17 review 11: the direction check's answer to a limb key or a wall tap. Always in the page
    (a live region must exist before its words), no room taken while empty. */
 .play-directions-nudge-line {
   margin: 0;

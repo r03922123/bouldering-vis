@@ -203,7 +203,7 @@ export function DirectionBanner({
 }: DirectionProps & {
   /** A phone (review suggestion): one line and the buttons; "Pulls not drawn" behind a toggle. */
   compact?: boolean;
-  /** PR #17 review 11: the answer to a limb key or a wall tap while the check is open. */
+  /** Private PR #17 review 11: the answer to a limb key or a wall tap while the check is open. */
   nudge?: string | null;
 }) {
   const [showDropped, setShowDropped] = useState(false);

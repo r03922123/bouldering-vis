@@ -223,28 +223,25 @@ says Done in its title, with its PR, or its date when the PR was in the private 
     PRs #3, #5 and #6). Public text says "the earlier sample wall / route / photo", `real-N` or
     `heldout` for the private real photos, and names private tools by what they do; no Markdown
     link points to a missing file or anchor, and no link points at a private-repo PR. Plain-text
-    private PR numbers remain: follow-up 26.
+    private PR numbers were follow-up 26.
 25. **Ship the two pages ADR-0003 (h) moves to `scripts/`** ([ADR-0003](adr/0003-public-repo.md)
     (h)). The hand cut left out the level recorder and the hold-embedding page, so
     `scripts/hold-data/embed.mjs` opens `scripts/hold-data/probe-data.html`, which this repo
     lacks, and Wall 1's level has no public recorder.
     - *Done when:* both pages are in `scripts/`, hold none of the data ADR-0003 (d) keeps private,
       and `embed.mjs` reaches its page on `npx vite --port 5175`.
-26. **Say which repo a PR number belongs to.** About 60 plain-text mentions such as "PR #32" in
-    SPECs, docs and code comments name private-repo PRs. This repo's own numbering reaches them
-    soon, so a reader will open the wrong PR; this file already mixes the public PR #1 with
-    private ones.
-    - *Done when:* every PR number from the private repo reads "private PR #N" (or gives a date
-      instead), and a PR number without "private" is this repo's.
+26. **Done (2026-11-11): a PR number says which repo it belongs to** (PR #16). Every PR number
+    from the private repo reads "private PR #N" in SPECs, docs, code comments and
+    `scripts/retired-files.json`; a PR number without "private" is this repo's.
 
 ### Carried over from earlier PRs
 
 1. **Prove the pulse fires only once.** The test passes on the first check that reads `on,off`, so
-   a second pulse would go unnoticed (`e2e/feedback.spec.ts:35`; PR #32 review).
+   a second pulse would go unnoticed (`e2e/feedback.spec.ts:35`; private PR #32 review).
    - *Done when:* after `on,off` the test waits ~650 ms (`PULSE_MS` + 200), the log still reads
      exactly `on,off`, and CI is green.
-2. **Check the CI-split lead.** All 3 pulse failures came after PR #28 split CI by project: p ≈ 0.11
-   counted per job, p ≈ 0.03 per test run (PR #32). A lead, not evidence.
+2. **Check the CI-split lead.** All 3 pulse failures came after private PR #28 split CI by project: p ≈ 0.11
+   counted per job, p ≈ 0.03 per test run (private PR #32). A lead, not evidence.
    - *Done when:* a PR names the counting unit and why, and 30 new desktop + phone job logs,
      from CI runs on any branch, show no first-try `feedback.spec` failure. A failure makes this
      a debugging task.
@@ -266,7 +263,7 @@ says Done in its title, with its PR, or its date when the PR was in the private 
 5. **Done (2026-11-11, moot): make the hub paint test reload.** The hub spec left with the
    Play E2E specs (follow-up 23), so its rewrite there should time a real load. The old note: `goto('/#/')` after `goto('/')` changes only the hash, so the
    page never reloads: the throttled paint is never measured and the "no Studio bundle" check sees
-   no requests (`e2e/hub.spec.ts:137-146`; PR #31 review).
+   no requests (`e2e/hub.spec.ts:137-146`; private PR #31 review).
    - *Done when:* the test times a real 4×-throttled load against SPEC-gym-hub's 2 s.
 
 ### Likely bugs (tidy writes the failing test first)
@@ -378,7 +375,7 @@ says Done in its title, with its PR, or its date when the PR was in the private 
     - pixel-kit: poses are "recorded once" by `scripts/record-pixel-poses.ts`
       (`SPEC-pixel-kit.md:547`), but since the 2026-11-04 solver changes a re-run rewrites
       `campus-48`, `hang-24` and `reach-left-48`, and the new poses fail 3 climber goldens
-      (PR #39). Re-record them in their own PR, each golden change reviewed
+      (private PR #39). Re-record them in their own PR, each golden change reviewed
       (`SPEC-pixel-kit.md:549`), so a re-run leaves `tests/fixtures/pixel-kit` unchanged.
     - README: E2E runs desktop and phone only (`README.md:19`).
     - *Done when:* each SPEC says what the code does, or the code changes after a decision.

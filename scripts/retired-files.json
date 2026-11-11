@@ -1,5 +1,5 @@
 {
-  "about": "SHA-256 of the files taken off the site: 27 by PRs #36 and #37 (follow-up 21 in docs/ARCHITECTURE.md), and Wall 1's photo by PR #45 (SPEC-launch-wall-2 R1). scripts/check-dist.ts fails the build if a file in dist/ has one of these hashes, whatever its name. The list holds hashes only, so it names none of the files.",
+  "about": "SHA-256 of the files taken off the site: 27 by private PRs #36 and #37 (follow-up 21 in docs/ARCHITECTURE.md), and Wall 1's photo by private PR #45 (SPEC-launch-wall-2 R1). scripts/check-dist.ts fails the build if a file in dist/ has one of these hashes, whatever its name. The list holds hashes only, so it names none of the files.",
   "sha256": [
     "89b980540c4afb3e0c394a1b1016069011c37e3db31c279b776bb9754173594a",
     "7049b10fe3ff1dda0940ebbbe91a9b3b24d0316289afe08c3a310cfed13a6557",

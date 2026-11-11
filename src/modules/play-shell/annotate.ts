@@ -196,7 +196,7 @@ const distToSeg = (p: Point, a: Point, c: Point) => {
 const MARK_CLEAR = MARK_R + 1 + STROKE / 2 + 1;
 
 /**
- * Review 6 and PR #15 review 4: a plausible-holds mark at `at` moves to the nearest spot that
+ * Review 6 and private PR #15 review 4: a plausible-holds mark at `at` moves to the nearest spot that
  * touches no arrow and no step badge (so it is never half hidden by the badge mask). It stays on
  * its point when that is clear; otherwise it tries directions away from what it touches first,
  * then all around, a little further each time.
@@ -252,7 +252,7 @@ export const MARK_FILL: Readonly<Record<MarkKind, string>> = {
 };
 
 /**
- * PR #15 review 3, E1 edit mode: a hold's two 44 px handles, from the same annotation the layer
+ * Private PR #15 review 3, E1 edit mode: a hold's two 44 px handles, from the same annotation the layer
  * draws. The base handle is on the grip point; the head handle on the drawn arrow's tip, wherever
  * the box or the badges put it. A hold with no arrow drawn (no pull, a ⊙ / ⊗, or no room) keeps
  * its head handle EDIT_TIP from the grip, along its pull (straight down when it has none).

@@ -674,7 +674,7 @@ describe('solveStance › hooks (M3)', () => {
   });
 });
 
-// PR #18 review: regressions found by random stances (H = 1000, jug hands pulled down).
+// Private PR #18 review: regressions found by random stances (H = 1000, jug hands pulled down).
 describe('solveStance › R1 review regressions', () => {
   const H = 1000;
   const mk = (o: Partial<Record<'lh' | 'rh' | 'lf' | 'rf', [number, number]>>): StanceContacts =>

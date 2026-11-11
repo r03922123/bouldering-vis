@@ -156,20 +156,21 @@ flowchart LR
 
 ## 5. Tests and CI
 
-**Unit and component tests** run in Vitest with jsdom (`vite.config.ts:30-36`): 131 test files:
-127 next to the code and 4 in `scripts/`. **Browser (E2E) tests** run whole flows in
-Playwright (23 spec files in `e2e/`) against a fake ML worker: `playwright.config.ts:50` sets
+**Unit and component tests** run in Vitest with jsdom (`vite.config.ts:30-36`): 158 test files:
+154 next to the code and 4 in `scripts/`. **Browser (E2E) tests** run whole flows in
+Playwright (28 spec files in `e2e/`) against a fake ML worker: `playwright.config.ts:50` sets
 `VITE_FAKE_ML=1`, and the client then starts `fake.worker.ts` (`src/workers/client.ts:54-57`),
 which makes up masks and depth. Real models never run in CI
 ([why](ml-runtime.md#ci-and-e2e-never-run-real-models)).
 
 **Three E2E projects** (`playwright.config.ts:31-43`) each run as their own CI job. Test counts are
-from the first public CI run (2026-11-11).
+from main's CI run on 6f920a9, once the Play tests were back (follow-up 23, 2026-11-11). Each
+Chromium project has 150 tests; `desktop` skips 9 and `phone` skips 1 (phone-only or desktop-only).
 
 | Project | Browser | Device | Specs | Tests |
 |---|---|---|---|---|
-| `desktop` | Chromium | Desktop Chrome | all 23 | 81 passed |
-| `phone` | Chromium | Pixel 7, 375 px wide | all 23 | 81 passed |
+| `desktop` | Chromium | Desktop Chrome | all 28 | 141 passed |
+| `phone` | Chromium | Pixel 7, 375 px wide | all 28 | 149 passed |
 | `iphone` | WebKit (Safari's engine) | iPhone 15 | the 17 in `playwright.config.ts:5-23` | 52 passed |
 
 - **`budgetMs` gives only the iPhone extra time** (`e2e/helpers.ts:14-15`): a SPEC time set "on a
@@ -208,17 +209,18 @@ says Done in its title, with its PR, or its date when the PR was in the private 
 
 ### Left by the release
 
-23. **Bring the Play tests back on the synthetic route** ([ADR-0003](adr/0003-public-repo.md) (e)).
-    The release dropped the 32 test files and 3 test helpers that read the earlier sample route's
-    data (ADR-0004). Until they return, the cases they pinned have no public check; Wall 2's
-    shipped level is still checked by `src/app/wall2Level.test.ts` and `e2e/wall2-top.spec.ts`.
-    - Two climber-stance test files still copy the earlier route's start contact points inline
-      (4 tests: `src/modules/climber-stance/stance.test.ts:339, 346, 350`,
-      `src/modules/climber-stance/StancePanel.test.tsx:239`).
-    - *Done when:* these run in CI on the synthetic route or on invented points: the beta-moves
-      canonical suite, the play-shell suites, `src/app/Root.test.tsx`, `src/app/playWall.test.ts`,
-      the climber-stance foot-band check and the five Play E2E specs; and the inline points
-      above are invented ones.
+23. **Done (2026-11-11): the Play tests run again, on a synthetic route** ([ADR-0003](adr/0003-public-repo.md) (e)).
+    The route (`tests/fixtures/synthetic-route.{level,betas}.json`) is 7 of the synthetic wall's
+    painted holds, with invented types and pulls; its other 33 holds are the wall feet.
+    `src/modules/beta-moves/synthetic-route.test.ts` pins it and its betas. Back in CI: the
+    beta-moves canonical suite (#4), the play-shell suites (#8–#13, #15, #18–#20, #24),
+    `Root.test.tsx` and `playWall.test.ts` (#22) and the five Play E2E specs (#21); the foot-band
+    check runs on drawn blobs (#7), and the inline start points are invented (#2).
+    - Not ported, because they need a real wall mask or a setter's session: the shape gates on
+      merged wall regions and an edge strip, the route sign kept as a foothold, two noise blobs
+      no gate rejects, and the setter's corrections. They can return once Wall 1's level is
+      recorded on the owner's photo (ADR-0003 (e)).
+    - Seen while porting: two holds' edit handles can overlap on a phone (follow-up 27).
 24. **Done (2026-11-11): neutral names and dead links** ([ADR-0003](adr/0003-public-repo.md) (g);
     PRs #3, #5 and #6). Public text says "the earlier sample wall / route / photo", `real-N` or
     `heldout` for the private real photos, and names private tools by what they do; no Markdown
@@ -259,10 +261,10 @@ says Done in its title, with its PR, or its date when the PR was in the private 
      (`.github/workflows/ci.yml:17-18`), the package's documented switch (`onnxruntime-node`
      1.30.0, `script/install.js:31-47`), so its postinstall exits before downloading. Only the
      CUDA binaries were downloaded; the CPU ones ship in the npm package.
-5. **Done (2026-11-11, moot): make the hub paint test reload.** The hub spec left with the
-   Play E2E specs (follow-up 23), so its rewrite there should time a real load. The old note: `goto('/#/')` after `goto('/')` changes only the hash, so the
+5. **Done (2026-11-11, #21): make the hub paint test reload.** The hub spec came back with the
+   Play E2E specs (follow-up 23), and now leaves the page before the throttled load. The old note: `goto('/#/')` after `goto('/')` changes only the hash, so the
    page never reloads: the throttled paint is never measured and the "no Studio bundle" check sees
-   no requests (`e2e/hub.spec.ts:137-146`; private PR #31 review).
+   no requests (the private repo's `e2e/hub.spec.ts`; private PR #31 review).
    - *Done when:* the test times a real 4×-throttled load against SPEC-gym-hub's 2 s.
 
 ### Likely bugs (tidy writes the failing test first)
@@ -316,6 +318,14 @@ says Done in its title, with its PR, or its date when the PR was in the private 
     - *Done when:* a beta-moves test gets a different stance for a move with a heel hook than for
       the same move without it, and `canHook` reads both prefixes from constants (so `'wf:'` moves
       into climber-stance), checked by a test whose ids are built from those constants.
+
+27. **Two holds' edit handles can overlap on a phone.** On a 375 px phone, each hold's head handle
+    sits a fixed distance in CSS px from its grip point, however far apart the holds are on screen,
+    so on the synthetic route 1S's base dot lies under hold 4's head handle, and a drag there moved
+    hold 4's pull instead. Seen in a Playwright run while porting `e2e/play.spec.ts`, which now
+    drags hold 5's (follow-up 23).
+    - *Done when:* at 375 px, dragging 1S's base dot on the synthetic route moves 1S's grip, in a
+      test that fails today.
 
 ### Needs the owner's decision
 

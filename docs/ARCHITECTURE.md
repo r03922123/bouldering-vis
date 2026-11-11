@@ -322,8 +322,8 @@ says Done in its title, with its PR, or its date when the PR was in the private 
 27. **Two holds' edit handles can overlap on a phone.** On a 375 px phone, each hold's head handle
     sits a fixed distance in CSS px from its grip point, however far apart the holds are on screen,
     so on the synthetic route 1S's base dot lies under hold 4's head handle, and a drag there moved
-    hold 4's pull instead (seen in a Playwright run) (found while
-    porting `e2e/play.spec.ts`, which now drags hold 5's; follow-up 23).
+    hold 4's pull instead. Seen in a Playwright run while porting `e2e/play.spec.ts`, which now
+    drags hold 5's (follow-up 23).
     - *Done when:* at 375 px, dragging 1S's base dot on the synthetic route moves 1S's grip, in a
       test that fails today.
 

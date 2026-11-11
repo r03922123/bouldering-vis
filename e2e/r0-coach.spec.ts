@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test';
 import { expect, openTestWallMap, test } from './testLevel';
 
-// Reviews 2 and 9: on a phone the COACH's fold control never covers its words. Measured in
+// Private PR #17 reviews 2 and 9: on a phone the COACH's fold control never covers its words. Measured in
 // the browser: the fold button's box against the boxes of the text's own letters.
 
 const coach = (page: Page) => page.getByRole('region', { name: 'Coach' });

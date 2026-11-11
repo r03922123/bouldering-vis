@@ -20,7 +20,7 @@ const limb = (page: Page, short: string) =>
  * Presses Tab, and only Tab, until the focused element's name (aria-label, else its text) starts
  * with `name`. Fails if focus leaves the page on the way (to the body, as a headless browser
  * wraps round; a real one goes to its own toolbar): the control must come next in the page's
- * order, not round the back of it (review 5). (Tab from the body always lands on an
+ * order, not round the back of it (private PR #15 review 5). (Tab from the body always lands on an
  * element, so landing on the body means the page was left.)
  */
 async function tabTo(page: Page, name: string, max = 250) {
@@ -112,7 +112,7 @@ for (const size of SIZES) {
     test('acceptance 4: List targets opens the full list, and a keyboard-only move works', async ({
       page,
     }) => {
-      // From load, Tab presses only, never a programmatic focus (review 5). A baked level
+      // From load, Tab presses only, never a programmatic focus (private PR #15 review 5). A baked level
       // opens on the tray (R7).
       await openTestWall(page);
       // K1: A picks the left foot. Then by Tab: the drawer's ☰ (a phone) and List targets.
@@ -134,8 +134,9 @@ for (const size of SIZES) {
       );
       const list = page.getByRole('region', { name: 'Targets for the left foot' });
       await expect(list).toBeVisible();
-      // The full list: every route hold a foot may take, the wall feet, a smear and Let go.
-      expect(await list.getByRole('button').count()).toBeGreaterThan(40);
+      // The full list: every route hold a foot may take, the wall feet, a smear and Let go. On the
+      // synthetic route that is at least 7 route holds + 33 wall feet + Let go.
+      expect(await list.getByRole('button').count()).toBeGreaterThanOrEqual(7 + 33 + 1);
       let found = false;
       for (let i = 0; i < 150 && !found; i++) {
         await page.keyboard.press('Tab');

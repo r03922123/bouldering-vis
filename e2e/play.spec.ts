@@ -30,7 +30,7 @@ async function openTargets(page: Page) {
  * Presses Tab, and only Tab, until the focused element's name (aria-label, else its text) starts
  * with `name`. Fails if focus leaves the page on the way (to the body, as a headless browser
  * wraps round; a real one goes to its own toolbar): the control must come next in the page's
- * order, not round the back of it (review 5). (Tab from the body always lands on an
+ * order, not round the back of it (private PR #15 review 5). (Tab from the body always lands on an
  * element, so landing on the body means the page was left.)
  */
 async function tabTo(page: Page, name: string, max = 250) {
@@ -188,7 +188,7 @@ test('AC 11: a whole move by keyboard, limb button then target list, with the ve
   page,
 }) => {
   await openTestWall(page);
-  // Tab presses only, never a programmatic focus (review 5).
+  // Tab presses only, never a programmatic focus (private PR #15 review 5).
   await tabTo(page, 'LF');
   await page.keyboard.press('Enter');
   await expect(limb(page, 'LF')).toHaveAttribute('aria-pressed', 'true');
@@ -449,6 +449,7 @@ test('E1 re-review 1: at 375 px, the map words the pull of a hold whose arrow ha
   const words = page.getByRole('list', { name: 'Pulls not drawn on the photo' });
   await expect(words).toContainText('Hold 7F: pulls down (180°)');
   // 5's arrow is drawn, so it isn't listed.
+  await expect(layer.locator('[data-kind="arrow"][data-hold="synthetic-5"]')).toHaveCount(1);
   await expect(words).not.toContainText('Hold 5');
 });
 

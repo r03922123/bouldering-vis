@@ -135,13 +135,13 @@ test('the gym paints within 2 s at 4× CPU throttle, without the Studio bundle (
   await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
   const requested: string[] = [];
   page.on('request', (r) => requested.push(new URL(r.url()).pathname));
+  // Off the page first: a goto that changes only the hash wouldn't reload it.
+  await page.goto('about:blank');
   await page.goto('/#/gym');
   await expect(hubCanvas(page)).toHaveAttribute('data-painted-at', /\d+/);
   const paintedAt = Number(await hubCanvas(page).getAttribute('data-painted-at'));
   // SPEC-gym-hub AC 2 sets 2 s on the Pixel 7 profile, so 2 s is already the phone number: no
-  // budgetMs here. Known gap (2026-11-05): the second goto('/#/gym') is the same URL, so the page
-  // doesn't reload and data-painted-at is the first, unthrottled paint (and nothing is
-  // requested). Until that is fixed, this check is weaker than its title.
+  // budgetMs here.
   expect(paintedAt).toBeLessThanOrEqual(2000);
   await expect(strip(page).getByRole('button', { name: 'Wall 2' })).toBeEnabled();
   expect(requested.filter((p) => p.endsWith('/src/app/App.tsx'))).toEqual([]);

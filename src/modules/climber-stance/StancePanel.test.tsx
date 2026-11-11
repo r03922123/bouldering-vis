@@ -238,19 +238,19 @@ describe('StancePanel hands-pull-in note', () => {
 
   it('shows on an invented start on Vertical (the solver’s own numbers)', () => {
     const start: StanceContacts = {
-      lh: { holdId: 'a', point: [880, 560], type: 'crimp', dir: unit([1, 0, -0.3]) },
+      lh: { holdId: 'a', point: [-100, 0], type: 'crimp', dir: unit([1, 0, -0.3]) },
       rh: {
         holdId: 'b',
-        point: [1080, 600],
+        point: [100, 100],
         type: 'sloper',
         dir: unit([0, 0.6, -1]),
         surface: { normal: unit([0, -0.6, 1]), source: 'assumed' },
       },
-      lf: { holdId: 'c', point: [930, 815], type: null, dir: null },
-      rf: { holdId: 'd', point: [1110, 825], type: null, dir: null },
+      lf: { holdId: 'c', point: [-50, 600], type: null, dir: null },
+      rf: { holdId: 'd', point: [150, 600], type: null, dir: null },
     };
-    const stance = solveStance(start, { height: 420, wallAngleDeg: 0 });
-    render(<StancePanel state={{ ...solved, contacts: start, height: 420, stance }} />);
+    const stance = solveStance(start, { height: 1000, wallAngleDeg: 0 });
+    render(<StancePanel state={{ ...solved, contacts: start, height: 1000, stance }} />);
     expect(screen.getByText(NOTE)).toBeInTheDocument();
   });
 

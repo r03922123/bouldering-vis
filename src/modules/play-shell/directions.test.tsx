@@ -210,7 +210,14 @@ describe('PlayScreen: the direction map (E1)', () => {
     useAppStore.setState({ image: ROUTE_FULL });
     const hz = canvasHarness();
     const id = hold('5').id;
-    render(<PlayScreen {...routeProps({ photo: ROUTE_FULL })} />);
+    // An invented pull with an out-of-wall part (the synthetic route's pulls are all in the wall's
+    // plane), so the drag has a z to keep.
+    const was: [number, number, number] = [0, 0.8, -0.6];
+    const level = {
+      ...SYNTHETIC,
+      holds: SYNTHETIC.holds.map((h) => (h.id === id ? { ...h, dir: was } : h)),
+    };
+    render(<PlayScreen {...routeProps({ photo: ROUTE_FULL, level })} />);
     openMap();
     act(() => hz.flush());
     fireEvent.click(screen.getByRole('button', { name: 'Edit directions' }));
@@ -226,7 +233,6 @@ describe('PlayScreen: the direction map (E1)', () => {
     expect(stage()).not.toHaveAttribute('data-edits');
     fireEvent.pointerUp(head, { clientX: b.x - 30, clientY: b.y, pointerId: 1 });
     const d = edits()[id]!.custom!;
-    const was = hold('5').dir!;
     expect(d[2]).toBeCloseTo(was[2], 3);
     expect(Math.atan2(d[1], d[0])).toBeCloseTo(Math.PI, 3);
     expect(slider('5')).toHaveAttribute('aria-valuenow', '270');

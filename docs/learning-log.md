@@ -1,5 +1,24 @@
 # Learning log
 
+## 2026-11-11 · tidy: the Play tests on a synthetic route
+
+- **A test's data must be ours to publish, just like its code.** The removed suites were our own
+  code, but they ran on points recorded on a photo we have no license for. So the code came back
+  and the data didn't: a route of 7 holds on the synthetic wall the repo already paints, with the
+  other 33 holds as footholds. It is like rehearsing a play on a bare stage with taped marks: the
+  blocking is the same, nobody needs the theatre's permission.
+- **Copy the shape, re-record the numbers.** The synthetic route mirrors the old one's structure
+  (1S…7F, one start, a deadpoint from 3 to 4, the same failing betas), so most suites came back
+  by swapping a fixture. Every number tied to the old geometry (a height, a foothold, a move count)
+  was re-read from the referee on the new route, never edited to make a test pass. The trade-off:
+  a few checks need a real wall mask and stay out, named in the suite and in follow-up 23.
+- **A clean fixture can make a test pass for the wrong reason.** Fresh reviews found eight tests
+  that still passed but no longer tested their titles: a smear test that only reached its fall
+  branch, hover points left from the old photo, a carry check with nothing before the drop, and an
+  out-of-wall part that compared 0 with 0 because every synthetic pull lies flat in the wall. The
+  fix each time was to pin the branch or add an input with the missing feature (an invented pull
+  with a z part), and to assert that the loop really saw each kind of case.
+
 ## 2026-11-11 · tidy: neutral names and dead links
 
 - **Old names describe what we removed, so they stay out of public text.** The earlier sample

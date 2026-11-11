@@ -221,6 +221,8 @@ describe('badges and marks (review 5, 6, re-review 1, ported to CSS px)', () => 
 
   it('names the arrows the badges leave no room for (re-review 1), and draws them as nothing', () => {
     const all = annotateHolds(holdArrows(ctx), view, { boxes: boxOf, badges, edit: false });
+    // On the synthetic route at the phone scale: 7F's down arrow runs into hold 6's badge.
+    expect(all.dropped).toEqual(['synthetic-7']);
     for (const id of all.dropped) {
       const a = all.annotations.find((x) => x.id === id)!;
       expect(a.kind, id).toBe('none');
@@ -267,7 +269,10 @@ describe('badges and marks (review 5, 6, re-review 1, ported to CSS px)', () => 
     it('edit mode: past its own badge, the arrow still ends at its head handle', () => {
       const f = at(true).annotations.find((a) => a.id === 'top')!;
       expect(f.kind).toBe('arrow');
-      if (f.kind === 'arrow') expect(f.tip.y).toBeCloseTo(20 + EDIT_TIP, 5);
+      if (f.kind === 'arrow') {
+        expect(f.from.y).toBeGreaterThan(badges[0]!.y + badges[0]!.r);
+        expect(f.tip.y).toBeCloseTo(20 + EDIT_TIP, 5);
+      }
     });
   });
 

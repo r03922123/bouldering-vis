@@ -506,13 +506,15 @@ describe('determinism', () => {
 
 // Rule 4's Task 4 check, on drawn blobs (ADR-0003 (e)): the earlier version read a pinned summary
 // of a real wall mask's foot band, which stays private. Hands as in a recorded start: a crimp up
-// and left, a sloper lower and right; two footholds about 0.5 H below, a sign and a far blob.
+// and left, a sloper lower and right; two footholds about 0.5 H below, plus two decoys that win if
+// the gates or the ranking break: a solid sign on the ideal right-foot spot, and a blob inside the
+// gates but far from either ideal spot.
 describe('a start with its feet just 0.5 H below the hands (drawn blobs)', () => {
   const mask = blank();
   blobAt(mask, 940, 840, 60, 40);
   blobAt(mask, 1120, 850, 60, 40);
-  rect(mask, 980, 1000, 120, 80); // a solid sign: the shape gates drop it
-  blobAt(mask, 500, 1250); // 0.5 H off the ideal: a worse candidate than either foothold
+  rect(mask, 1150, 915, 120, 80); // a solid sign on the ideal spot: only the solid gate drops it
+  blobAt(mask, 1500, 700); // inside the gates, far from the ideal: only the ranking drops it
   const footholds = foot(mask);
   const holds = [hold('1', 1100, 340, 'start'), hold('2', 900, 300)];
   const LEFT = blobId(footholds, 940, 845)!;
@@ -520,7 +522,7 @@ describe('a start with its feet just 0.5 H below the hands (drawn blobs)', () =>
 
   it('draws the blobs this check is about', () => {
     expect(
-      new Set([LEFT, RIGHT, blobId(footholds, 1000, 1010), blobId(footholds, 500, 1250)]).size,
+      new Set([LEFT, RIGHT, blobId(footholds, 1200, 950), blobId(footholds, 1500, 700)]).size,
     ).toBe(4);
   });
 

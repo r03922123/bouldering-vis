@@ -141,12 +141,12 @@ history (deselecting is the undo), saving routes.
 
 ## Model Check Results (2026-10-28, M1, WebGPU fp16)
 
-Harness: `spike/sam-check.html` (real photos) and `spike/sam-iou.html` (synthetic), run with `node spike/run-check.mjs`.
+Harness: two real-model check pages, one for real photos and one for the synthetic wall, run by the check-page runner (all private).
 
 | Check | Result | Target |
 |---|---|---|
 | Synthetic wall, 10 holds vs exact golden masks | mean IoU **0.98** (min 0.955) | ≥ 0.75 ✓ (easy case: clean ellipses) |
-| Real spray wall `mingde-S` (very dense), 52 community taps | **52/52** taps produce a hold mask; median area grows with size class (0.14 → 0.21 → 0.40% of image) | — |
+| Real spray wall `heldout` (very dense), 52 community taps | **52/52** taps produce a hold mask; median area grows with size class (0.14 → 0.21 → 0.40% of image) | — |
 | Decode latency on the real photo | median **109 ms**, p95 117 ms | ≤ 1 s ✓ |
 | Real-photo IoU | **not measured**: no hand-drawn golden masks yet | ≥ 0.75 |
 
@@ -189,12 +189,12 @@ was replaced while its model loaded is dropped without running. The main thread 
 (before any inference), dropped if the gesture becomes a pan or pinch.
 
 **Acceptance.** 11. No main-thread task over 150 ms while adding holds (E2E, fake worker; the
-real-model harness `spike/loop-timing.mjs` records the tap-phase long tasks). 12. A press shows the
+real-model timing runner (private) records the tap-phase long tasks). 12. A press shows the
 ring before the model answers. 13. Two taps sent without waiting both add holds. 14. Masks still
 never overlap (criterion 6), including a hold added while another tap was decoding, and a deselected
 hold's pixels are available again.
 
-**Measured (M1, WebGPU, `spike/loop-timing.mjs`).**
+**Measured (M1, WebGPU, the real-model timing runner).**
 
 | | Before | After |
 |---|---|---|

@@ -89,7 +89,7 @@ Metric angles, hand/foot pull suggestions, multiple normals per hold (e.g. pinch
 ## Check Results (2026-10-28, M1)
 
 **Normal gain.** With the spec's fixed gain 40, real holds read almost entirely "Faces you". Real depth-gradient
-percentiles (|∇d| per px) were p75 ≈ 0.0016–0.0025 and p90 ≈ 0.0032–0.0053 across `mingde-A1`, `mingde-S` and `g2-A`,
+percentiles (|∇d| per px) were p75 ≈ 0.0016–0.0025 and p90 ≈ 0.0032–0.0053 across `real-1`, `heldout` and `real-2`,
 so gain 40 gives hold tilts of only 5–11°. `computeNormals` now uses **gain = 1 / p90(|∇d|)** (clamped to 40–2000) in
 the workers. The steepest 10% of each photo reads as ≥ 45° and flat wall stays under 20°.
 
@@ -150,7 +150,7 @@ arrow; the diagram has an accessible label.
 
 ## Amendment 2026-10-31: Sidepulls From the Hold Shape (pro-climber review)
 
-A pro-climber review of route B1-03 found thin vertical edges labelled "pull down". You can't pull down on a vertical edge; climbers use it as a sidepull.
+A pro-climber review of the earlier sample route found thin vertical edges labelled "pull down". You can't pull down on a vertical edge; climbers use it as a sidepull.
 
 - `HoldGeometry.shape` holds the mask's second-moment shape: `elongation` (long axis over short axis), `tiltDeg` (long axis from vertical, 0–90°) and centroid `x`.
 - A crimp, edge, pocket or jug with elongation ≥ 2 and tilt ≤ 30° is a sidepull. Its force points sideways toward the climber's body, which is taken as the mean x of the route's holds, slightly into the wall. The cue reads "Sidepull: pull sideways toward your body and lean away".

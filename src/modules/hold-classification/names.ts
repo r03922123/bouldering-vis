@@ -15,7 +15,7 @@ export interface CatalogEntry {
 
 /**
  * Learn cards show their catalog example photos only while this is on. The old crops came from a
- * photo the site no longer serves (ADR-0002), so it is off; the owner's own crops turn it back on.
+ * photo the site no longer serves (ADR-0003 (d)), so it is off; the owner's own crops turn it back on.
  */
 export const LEARN_PHOTOS = false;
 

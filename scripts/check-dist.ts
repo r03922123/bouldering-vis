@@ -1,7 +1,7 @@
 // Fails the build when a file in dist/ is over the Cloudflare Pages per-file limit, when the
 // dev-only pixel-kit gallery leaked into the build (SPEC-pixel-kit AC 45), when a file taken off
 // the site comes back (follow-up 21), or when a photo carries EXIF, XMP or IPTC metadata
-// (docs/adr/0001-open-source-release.md:98).
+// (ADR-0003 (c), docs/adr/0003-public-repo.md).
 // Usage (runs after `vite build`): node scripts/check-dist.ts
 import { createHash } from 'node:crypto';
 import { readdirSync, readFileSync, statSync } from 'node:fs';

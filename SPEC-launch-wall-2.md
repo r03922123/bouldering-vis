@@ -8,11 +8,11 @@ A player opens the app, sees the climber on the setter's start (two hands, two f
 moves from there to the top. Wall 1 and the steps that only served choosing between walls are gone.
 
 Today: Wall 2 has no baked level, so Play opens in **Tag** (the player taps holds); after Tag the
-climber stands but the next move fails. Wall 1 has no level at all since PR #36.
+climber stands but the next move fails. Wall 1 has no level at all since 2026-11-06.
 
 ## Assumptions (correct me now)
 1. "Setter's tagged start" = a baked level file for Wall 2, like the private `tests/fixtures/e2e/wall-1.level.json`,
-   recorded with the real models (`spike/beta-level.html`) and shipped as static data.
+   recorded with the real models (the level recorder page) and shipped as static data.
 2. The level format marks start *hands* (`role: 'start'`) but not start *feet*; feet come from `wallFeet`
    under `rules.feet: 'any'`. If "two start feet" must be pinned, the format gets a start-foot field (plan step).
 3. Root cause of "can't make the next move" is unknown until reproduced (debug step); follow-up 19
@@ -53,4 +53,4 @@ Kept: Plan, referee, coach, undo/redo, aids, Numbers, 3D, sounds, the top-out.
 1. The setter's route is the orange line, tagged from the photo by the agent; the owner confirms it on a screenshot.
 2. R3/R4: unlink first (no visible entry; dev URLs `#/gym`, `#/studio` remain), delete their code in follow-up PRs.
 3. Root cause (debug step): Wall 2 had no measured scale, so the climber was 212 px and its start a fall.
-   The owner's estimate (grey section about 1.7 m) gives 2.15 px/cm, a 365 px climber (ADR-0002 amendment).
+   The owner's estimate (grey section about 1.7 m) gives 2.15 px/cm, a 365 px climber (the owner's call, 2026-11-06).

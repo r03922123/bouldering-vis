@@ -47,7 +47,7 @@ describe('sample wall pool', () => {
     // Through the normal image path (AC S4), named and tagged as the sample.
     expect(fetch).toHaveBeenCalledWith('/samples/wall-b.jpg');
     expect(onLoad.mock.calls[0]![0]).toMatchObject({ sourceName: 'Wall 2', sampleId: 'wall-b' });
-    // ADR-0002 (f) as amended 2026-11-06: 2.15 px/cm at its 816 px width (a 365 px climber),
+    // The owner's estimate (SPEC-launch-wall-2): 2.15 px/cm at its 816 px width (a 365 px climber),
     // scaled to the working width (the fake photo here is wider than the real one).
     const img = onLoad.mock.calls[0]![0] as WorkingImage;
     expect(img.pxPerCm).toBeCloseTo((2.15 * img.width) / 816, 6);

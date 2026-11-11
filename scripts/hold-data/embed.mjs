@@ -1,6 +1,7 @@
-// Dev-only (T38). Embeds labeled holds through the app's own pipeline (spike/probe-data.ts) and appends
+// Dev-only (T38). Embeds labeled holds through the app's own pipeline (the hold-embedding page) and appends
 // one JSON line per hold to tests/fixtures/hold-data/<set>.jsonl (gitignored). Resumable: photos already
-// in the output are skipped. Needs `npx vite --port 5175` running.
+// in the output are skipped. Needs `npx vite --port 5175` running and the page at scripts/hold-data/
+// (ADR-0003 (h); follow-up 25 in docs/ARCHITECTURE.md).
 // Usage: node scripts/hold-data/embed.mjs <clinb|kaggle|heldout|beta-guide|capstone> [maxPerClass]
 import { appendFileSync, existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -121,7 +122,7 @@ const open = async () => {
   // The dev server may be reloading the page at the same moment: let that navigation win.
   for (let attempt = 0; ; attempt++) {
     try {
-      await page.goto('http://localhost:5175/spike/probe-data.html');
+      await page.goto('http://localhost:5175/scripts/hold-data/probe-data.html');
       break;
     } catch (e) {
       if (attempt >= 5) throw e;

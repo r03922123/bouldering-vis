@@ -4,6 +4,11 @@ Module id: `image-input` · Depends on: — · Used by: `hold-segmentation`, `de
 Status: **APPROVED (2026-10-26)**
 Parent: [SPEC.md](SPEC.md)
 
+Results dated before 2026-11-06 that mention the earlier sample wall or the earlier sample route
+were measured on an earlier sample photo that the project no longer ships
+([ADR-0003](docs/adr/0003-public-repo.md)). Their verdicts, timings and ratios stand as recorded;
+points, foothold ids and heights measured on that photo are given as labels.
+
 ## Objective
 
 Get a wall photo into the app from any input path and turn it into the one
@@ -11,7 +16,7 @@ Get a wall photo into the app from any input path and turn it into the one
 it has no ML and no route state.
 
 User stories:
-- On a laptop, I copy a wall photo (e.g. from routemake) and **paste** it into the page.
+- On a laptop, I copy a wall photo (e.g. from a gym's website) and **paste** it into the page.
 - On a laptop, I **drag and drop** an image file, or use **Choose file**.
 - On my phone at the gym, I tap **Take photo**; the rear camera opens and the shot loads straight in.
 
@@ -99,38 +104,38 @@ Cropping or rotation tools, HEIC conversion, multiple images, live camera previe
 ## Amendment 2026-10-29: Sample Wall Pool (T30)
 
 A small built-in pool of sample wall photos the user can pick from (`public/samples/`, listed in
-`samples.ts`). The default selection is **T-UP D2** (the human's test file `D2-1793184628535.jpg`). Picking a
+`samples.ts`). The default selection is **an earlier test photo from the human** (later the earlier second sample). Picking a
 sample and pressing **Load sample** runs the same `loadImage` path as a file, including the replace
 confirmation when a route exists. Note: files in `public/` are served publicly.
 
 
 ## Amendment 2026-10-31: Default Sample With Climbing Videos
 
-The default sample becomes **Wanhua gym B1** (routemake zone `f6606326-4ebf-4c36-98c9-971f73e86dac`,
-gym g2 萬華館): a wall photo (no people in it) whose routes have 24 climbing videos on routemake.
-T-UP D2 stays in the pool as the second sample.
+The default sample becomes **the earlier sample wall**: a wall photo (no people in it) whose routes
+have 24 climbing videos on the photo's source site. The earlier second sample stays in the pool as
+the second sample.
 
-- **Publishing:** routemake photos were local-only (tests/fixtures/real/, gitignored). The human approved
-  publishing **this one photo** as a public sample on 2026-10-31, credited to routemake. Every other
-  routemake photo stays local-only.
-- **Videos stay on routemake.** They show identifiable climbers, so the app never bundles or embeds
-  them. It links to the zone page instead: "Watch 24 climbs on routemake ↗" (opens in a new tab,
+- **Publishing:** photos from the source site were local-only (`tests/fixtures/real/`, gitignored).
+  The human approved publishing **this one photo** as a public sample on 2026-10-31, credited to the
+  source site. Every other photo from that site stays local-only.
+- **Videos stay on the source site.** They show identifiable climbers, so the app never bundles or
+  embeds them. It links to the wall's page there instead: "Watch 24 climbs ↗" (opens in a new tab,
   `rel="noopener noreferrer"`).
 - **Known scale:** a sample may carry `scale: { pxPerCm, refWidth }`, the wall's photo pixels per cm
   measured from its videos (SPEC-climber-stance › Amendment: Default Climber Size). Loading the sample
-  sets `WorkingImage.pxPerCm` (working-image pixels per cm). For Wanhua B1: **2.6 px/cm at 1600 px**,
+  sets `WorkingImage.pxPerCm` (working-image pixels per cm). For the earlier sample wall: **2.6 px/cm at 1600 px**,
   the median of 6 verified climbs (2.40–2.85 across the wall).
 - **Credit:** the picker shows the selected sample's credit and video link; once a sample is loaded,
   the same line shows under the Change photo bar, and the footer Credits name the source.
 
-AC S1: the picker preselects `routemake-g2-b1`; loading it sets `pxPerCm` = 2.6 × width / 1600.
-AC S2: the credit line links to the routemake zone in a new tab; no video file is fetched or bundled.
-AC S3: T-UP D2 still loads, with no `pxPerCm`.
+AC S1: the picker preselects the earlier sample wall; loading it sets `pxPerCm` = 2.6 × width / 1600.
+AC S2: the credit line links to the wall's page on the source site in a new tab; no video file is fetched or bundled.
+AC S3: the earlier second sample still loads, with no `pxPerCm`.
 
 ## Amendment 2026-11-06: no video link
 
-[ADR-0002](docs/adr/0002-replacement-photos.md) (c) retires the climbing videos: the photo that had
-them is being replaced, and the owner's video shows a different wall. `Sample` loses its `videos`
+The release drops the photo the videos belonged to ([ADR-0003](docs/adr/0003-public-repo.md) (d)), so the
+climbing videos retire: the photo that had them is being replaced, and the owner's video shows a different wall. `Sample` loses its `videos`
 field, and the credit line shows only the photo's source. The credit text and the measured scale
 stay while the current default photo is still served.
 
@@ -141,7 +146,7 @@ URL is a video; `e2e/samples.spec.ts` checks that no video is requested while Wa
 
 ## Amendment 2026-11-06: the owner's photos
 
-[ADR-0002](docs/adr/0002-replacement-photos.md) replaces the pool with the owner's two photos, in the
+[ADR-0003](docs/adr/0003-public-repo.md) (c) replaces the pool with the owner's two photos, in the
 gym's bay order (Wall 1, then Wall 2):
 
 | id | Name | Bay | Size (portrait) |
@@ -152,7 +157,7 @@ gym's bay order (Wall 1, then Wall 2):
 - **Source:** both are cut from the owner's screenshots and saved with no metadata (no EXIF, XMP or
   ICC data).
 - **No credit, video or scale:** the picker shows no credit line, and without a scale the climber
-  starts at its default size (ADR-0002 (f)).
+  starts at its default size.
 - **E2E:** the Play specs (`e2e/wall1Level.ts`) serve their private test photo in place of
   `wall-a`, because the test level's points are in that photo's 1536 × 1152 frame.
 

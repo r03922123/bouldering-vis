@@ -2,6 +2,12 @@
 
 Module id: `pixel-kit` · Depends on: — · Used by: `play-shell`, `move-animation`, `gym-hub`
 Status: **DRAFT (2026-10-31), revised after the skeptical review below; awaiting the user's approval**
+
+Results dated before 2026-11-06 that mention the earlier sample wall or the earlier sample route
+were measured on an earlier sample photo that the project no longer ships
+([ADR-0003](docs/adr/0003-public-repo.md)). Their verdicts, timings and ratios stand as recorded;
+points, foothold ids and heights measured on that photo are given as labels.
+
 Parent: [SPEC-game.md](SPEC-game.md) (capability map approved 2026-10-31) · App conventions: [SPEC.md](SPEC.md)
 
 ## Objective
@@ -444,7 +450,7 @@ There is one module-level player behind `useSfx`, exposed through `useSyncExtern
 11. **Thickness:** `limbThickness(48)` = arm 2, thigh 4, shank 3. `limbThickness(60)` = 3, 5, 4. `limbThickness(36)` = 2, 3, 2. `limbThickness(30)` gives `compact: true` with every limb at 1.
 12. **Outline:** after `rasterClimber` with mood `'ok'` or `'strain'`, no fill pixel is 4-adjacent to a clear pixel.
 13. **Mirror:** take the symmetric `hang-48` pose on a grid where `toArt` is the identity, with an odd-width buffer, the pelvis on the centre column, and every joint's x at an art-pixel centre (k + 0.5), so no x lies on a pixel boundary. Its left-right mirror (with the left foot sprite mirrored, anchor (2,2)) gives exactly the column-reversed buffer.
-14. **Draw order:** in `cross-48`, swapping the `z` of the two arms changes which arm's outline crosses the other. Without `z`, the order is `lf, rf, lh, rh`. Every hand and foot sprite is fully visible, never under the trunk or the head. The `b1-03-start` pose is the regression case: its right hand lies inside the shoulder–hip quad, and it shows in full with an ink outline.
+14. **Draw order:** in `cross-48`, swapping the `z` of the two arms changes which arm's outline crosses the other. Without `z`, the order is `lf, rf, lh, rh`. Every hand and foot sprite is fully visible, never under the trunk or the head. The old start pose is the regression case: its right hand lies inside the shoulder–hip quad, and it shows in full with an ink outline.
 15. **Selected limb:** `selected: 'rf'` changes only the outline pixels 4-adjacent to the right foot sprite's fill, from ink to sun. Every other pixel matches `hang-48`.
 16. **Mood:** with `'fail'`, every fill pixel where `(x + y)` is odd is clear, and the ink outline matches `'ok'` exactly. With `'strain'`, exactly 6 tide pixels and their ink outline are added next to `'ok'`, and nothing else changes.
 17. **Goldens:** each of these matches its `.txt` golden exactly:
@@ -457,7 +463,7 @@ There is one module-level player behind `useSfx`, exposed through `useSyncExtern
 **Markers, gaps, puffs (unit, exact goldens)**
 18. **Frame:** `markerFrame` gives 7×7 for a 3×3 art bbox and 40×24 for a 50×20 bbox, centred on the bbox (the extra pixel goes right or below).
 19. **Goldens:** each role matches its golden at frames 7×7, 12×8 and 30×30. A `planned` marker with `step: 12` shows "12", one with `step: 140` shows "99", and one with `step: 0` shows "1".
-20. **Overlap:** a hold that is both start and planned shows the ring, the number and the brackets. A target drawn over the climber stays fully visible. Two planned markers for the same `holdId` draw only the last one. The start brackets are drawn over the climber: on the `b1-03-start` pose, all four corner brackets of hold 1's start marker show, and both hands stay fully visible (`scene.test.ts`).
+20. **Overlap:** a hold that is both start and planned shows the ring, the number and the brackets. A target drawn over the climber stays fully visible. Two planned markers for the same `holdId` draw only the last one. The start brackets are drawn over the climber: on the old start pose, all four corner brackets of hold 1's start marker show, and both hands stay fully visible (`scene.test.ts`).
 21. **Target breathing:** the ticks sit 1 px in for `timeMs` 0–299 and 2 px in for 300–599, repeating. That is one phase change every 300 ms (≈ 1.7 on/off cycles a second), within the "Never flash more than 3 times a second" rule. With `reducedMotion`, they sit 1 px in at every time.
 22. **Reach gap:** pixels alternate between the limb colour and ink, starting with the limb colour at the limb's end.
 23. **RNG:** `createRng(1)` returns `0.6270739406`, `0.0027357212` and `0.5274470400` (to 1e-10). `noiseSamples(2)` = `[0.420064, -0.427327]` (to 1e-6). Both were recomputed during the review.
@@ -522,7 +528,7 @@ There is one module-level player behind `useSfx`, exposed through `useSyncExtern
 45. `npm run build` output contains no gallery code: `scripts/check-dist.ts` fails if any file in `dist/` contains the string `px-gallery`, and `check-dist.test.ts` covers that check.
 
 **Performance**
-46. **Frame cost:** median of 200 frames after 20 warm-up frames, for `renderScene` + `blit` + `putImageData`, measured in Chromium on the gallery's bench page by `spike/pixel-timing.mjs`:
+46. **Frame cost:** median of 200 frames after 20 warm-up frames, for `renderScene` + `blit` + `putImageData`, measured in Chromium on the gallery's bench page by the frame-cost runner (private):
     - `busy` fixture (260 × 260 grid, larger than the 181 × 175 phone grid; a climber at art height 60, 20 markers, 6 puffs): **≤ 1.5 ms** on the dev laptop, and **≤ 4 ms** under 4× CPU throttling.
     - `busy-desktop` fixture (700 × 500 grid): **≤ 3 ms** unthrottled.
 
@@ -531,7 +537,7 @@ There is one module-level player behind `useSfx`, exposed through `useSyncExtern
 
 **Originality and real use (manual, recorded in Check Results)**
 48. **Originality review:** a reviewer agent with a pixel-art and games-history persona compares the climber (against the silhouette rules above), markers, star, font and the 5 effects with well-known games, and lists any likeness it finds. The user decides on any flagged item. This review is a check, not a legal clearance.
-49. **Real-photo check:** on the sample wall B1-03 on a phone (Pixel 7 emulation, and a physical phone if one is available), at the default climber size:
+49. **Real-photo check:** on the earlier sample route on a phone (Pixel 7 emulation, and a physical phone if one is available), at the default climber size:
     - the climber's hands read as on their holds;
     - every role marker can be told apart;
     - under Chrome DevTools "Emulate vision deficiencies" (protanopia, deuteranopia, tritanopia, achromatopsia), the roles are still clear by shape.
@@ -542,7 +548,7 @@ There is one module-level player behind `useSfx`, exposed through `useSyncExtern
 - **Component (Vitest + Testing Library):** `PixelLayer`, `PixelButton`, `Stars`, `GripMeter`, `MoveCounter`, `SoundToggle`, and `useSfx` with a fake `AudioContext` and fake storage, covering AC 34–40 and 47.
   - The `PixelLayer` test installs its own 2D context stub over the `tests/setup.ts` null stub. The stub records `createImageData` and `putImageData`, and rAF and timeouts are counted with fake timers, in the test only.
 - **E2E (Playwright, fake ML, both projects):** `e2e/pixel-kit.spec.ts` against the dev-only gallery page `px-gallery.html` at the repo root. Vite serves it in dev, and `vite build` leaves it out because the build input is only `index.html`, so no config change is needed. Covers AC 41–45.
-- **Timing:** `spike/pixel-timing.mjs` runs against the gallery's bench page on the fake-ML dev server (AC 46). `spike/loop-timing.mjs` is not used, because it needs real models and drives the Studio.
+- **Timing:** the frame-cost runner (private) runs against the gallery's bench page on the fake-ML dev server (AC 46). The real-model timing runner (private) is not used, because it needs real models and drives the Studio.
 - **Fixtures** (`tests/fixtures/pixel-kit/`):
   - `poses/*.json`: joint sets in image px, plus `heightPx`. They are recorded once from `solveStance` by `scripts/record-pixel-poses.ts`, so unit tests never import `climber-stance`. Hand-made symmetric and cross poses use art-pixel-centre coordinates (AC 13).
   - `goldens/*.txt`: the expected buffers. Line 1 is `# <name> <w>x<h> P=<px>`, followed by one character per pixel (see `bufferToText`). They read as ASCII art in review.
@@ -637,12 +643,12 @@ Each task is one commit on the step-2 branch.
 
 **T11. Dev gallery, E2E and timing**
 - Acceptance: AC 41–46.
-- Verify: `npm run e2e -- e2e/pixel-kit.spec.ts`, `node spike/pixel-timing.mjs` (with `npx vite` running), and `npm run build`.
-- Files: `px-gallery.html`, `src/modules/pixel-kit/gallery.tsx` (not exported from `index.ts`), `e2e/pixel-kit.spec.ts`, `spike/pixel-timing.mjs`, `scripts/check-dist.ts`, `scripts/check-dist.test.ts`.
+- Verify: `npm run e2e -- e2e/pixel-kit.spec.ts`, the frame-cost runner (private; with `npx vite` running), and `npm run build`.
+- Files: `px-gallery.html`, `src/modules/pixel-kit/gallery.tsx` (not exported from `index.ts`), `e2e/pixel-kit.spec.ts`, the frame-cost runner (private), `scripts/check-dist.ts`, `scripts/check-dist.test.ts`.
 
 **T12. Originality review and real-photo check**
 - Acceptance: AC 48–49, recorded in a Check Results section. `npm test`, `npm run lint`, `npm run build` and `npm run e2e` all pass. Lighthouse accessibility is ≥ 95 on the dev gallery and is unchanged on the app.
-- Verify: the reviewer agent report and the manual phone check on B1-03.
+- Verify: the reviewer agent report and the manual phone check on the earlier sample route.
 - Files: `SPEC-pixel-kit.md`.
 
 Dependencies: T1 → T2 → (T3 ∥ T5 ∥ T7). T3 → T4. T5 → T6. (T4, T6, T7) → T8. T5 → T9. T7 → T10 (the core), and T9 → T10 (`SoundToggle`). (T8, T9, T10) → T11 → T12.
@@ -665,9 +671,9 @@ Small choices made while building, each with its reason. None changes an AC.
 - **T10, toggle feedback:** turning sound on plays `tick`, so the player hears that it worked.
 - **T11, gallery modes:** `px-gallery.html` shows the fixed E2E scenes, a live showcase (outfits, moods, puffs on demand) and the HUD; `?bench` shows only the bench, so no live layer competes with it; `?photo` is an empty photo stage for the AC 49 check. E2E reads `window.pxGallery` (expected pixels, the fake clock, the audio state).
 - **T11, no gallery styles in app.css:** the gallery's own classes (`px-gallery-*`) are styled in `px-gallery.html` and inline, so the string `px-gallery` can never reach `dist/` through the app's CSS. `check-dist.ts` also fails on a file whose name contains it.
-- **T11, bench frames:** each frame is timed inside its own rAF callback, the scene object is built outside the timed part, and the 6 puffs are re-born each frame so all of them stay alive. `spike/pixel-timing.mjs` takes the dev server's base URL (default `http://localhost:5173`), so a lane can point it at its own port.
+- **T11, bench frames:** each frame is timed inside its own rAF callback, the scene object is built outside the timed part, and the 6 puffs are re-born each frame so all of them stay alive. The frame-cost runner takes the dev server's base URL (default `http://localhost:5173`), so a lane can point it at its own port.
 - **Font redraw (2026-11-01):** the glyphs that matched the HD44780-like LCD forms were redrawn, and the provenance comment says so. Spec › Never forbids copying or remaking a font, and accurate provenance is standard licence hygiene: a comment that says "original" over a near-copy is worse than either alone.
-- **End sprites on top (2026-11-01; role: game designer, feel):** hand and foot sprites are always drawn after the trunk and the head. Contact points are the game's core information, and readability rules say key gameplay information is never covered. The head is included because it can cover a hand just as the trunk can. Goldens: none of the existing climber goldens changed, since no hand or foot overlaps the trunk or the head in those poses. The new `b1-03-start` pose (recorded by `scripts/record-pixel-poses.ts`) pins the case.
+- **End sprites on top (2026-11-01; role: game designer, feel):** hand and foot sprites are always drawn after the trunk and the head. Contact points are the game's core information, and readability rules say key gameplay information is never covered. The head is included because it can cover a hand just as the trunk can. Goldens: none of the existing climber goldens changed, since no hand or foot overlaps the trunk or the head in those poses. The old start pose (new then; since replaced by `split-start`; recorded by `scripts/record-pixel-poses.ts`) pins the case.
 - **Start brackets over the climber (2026-11-01; role: game designer, feel):** start markers are drawn after the climber, so their corner brackets always show. Engines render UI overlays after the scene (Unity's overlay canvas, for example), and the brackets leave the hold centre clear, so they never cover a hand. The finish diamond stays under the climber, because its strokes cross the middle of the hold's sides, where a hand can be. The rest of the order is unchanged. No golden changed: the marker and climber goldens draw one layer each, and no scene golden exists. The order is pinned by `scene.test.ts`.
 - **Target label placement (2026-11-01):** follows the cartographic rule that a label never covers the feature beside it.
   - **When it moves:** the limb glyph stays centred below the frame unless that would cover a hand or foot sprite (its box plus the 1-px outline, from `contactBoxes`). Then it goes to the side away from the nearest contact, by centre distance.
@@ -679,7 +685,7 @@ Small choices made while building, each with its reason. None changes an AC.
 
 ### AC 46: frame cost (T11 and T12, 2026-11-01)
 
-`node spike/pixel-timing.mjs`, headless Chromium 156 (Playwright 1.64.1), on the dev laptop (Apple M1, 8 cores), fake-ML dev server. The machine was under heavy unrelated load from other lanes' test runs; the 1-minute load average is shown per run. Medians in ms, with p90 in brackets. CI is the reference for timing.
+The frame-cost runner (private), headless Chromium 156 (Playwright 1.64.1), on the dev laptop (Apple M1, 8 cores), fake-ML dev server. The machine was under heavy unrelated load from other lanes' test runs; the 1-minute load average is shown per run. Medians in ms, with p90 in brackets. CI is the reference for timing.
 
 | Run (load) | `busy` 260 × 260, 1× (≤ 1.5) | `busy`, 4× throttle (≤ 4) | `busy-desktop` 700 × 500 (≤ 3) |
 |---|---|---|---|
@@ -732,9 +738,9 @@ A reviewer agent with a pixel-art and games-history persona read the sprites, ou
 
 ### AC 49: real-photo check (T12, 2026-11-01)
 
-The sample wall (Wanhua B1, `public/samples/routemake-g2-b1.jpg`, 1536 × 1152 working size) on the gallery's photo stage, at 375 × 740 with Pixel 7 emulation (dpr 2.625, P = 5, art height 49.7) and at desktop size.
-- **Climber:** posed by the real `solveStance` (feasible) on B1-03's recorded start contacts at the default climber size (H = 424, Vertical). Those are `stance.test.ts` › B1-03: LH crimp hold 2, RH sloper hold 1, and the feet on the pink and black wall footholds.
-- **Markers:** the B1-03 hold list is not in the repo, so the boxes are estimated by eye from the photo. Start is on hold 1, planned 1 on hold 2 and planned 2 on a yellow hold above. The target (RH) and the finish are on holds above and to the right, with a reach gap.
+The earlier sample photo (1536 × 1152 working size) on the gallery's photo stage, at 375 × 740 with Pixel 7 emulation (dpr 2.625, P = 5, art height 49.7) and at desktop size.
+- **Climber:** posed by the real `solveStance` (feasible) on the earlier sample route's recorded start contacts at the default climber size (H = 424, Vertical). Those are the start contacts in `stance.test.ts` (AC 32): LH crimp hold 2, RH sloper hold 1, and the feet on the pink and black wall footholds.
+- **Markers:** the earlier sample route's hold list is not in the repo, so the boxes are estimated by eye from the photo. Start is on hold 1, planned 1 on hold 2 and planned 2 on a yellow hold above. The target (RH) and the finish are on holds above and to the right, with a reach gap.
 - **Method:** this was a scripted check, not run by a person. The screenshots were taken with Playwright, including CDP `Emulation.setEmulatedVisionDeficiency` for protanopia, deuteranopia, tritanopia and achromatopsia, and then viewed. No physical phone was available.
 
 | Check | Result |
@@ -764,9 +770,9 @@ Raised by the originality review of the play-feel build (SPEC-play-shell › Che
 - **Decision (builder's call).** A `target` frame is at least **13 art px** a side (`TARGET_FRAME_MIN`), grown around its centre the way `markerFrame` grows: the odd pixel goes right or down. At 13 the centre keeps a hole of at least 3 px between the ticks in both breathing phases, so a target always reads as four separate ticks pointing at a hold, never as a cross. `rasterMarkerInFrame` applies it, so every path that draws a target gets it. The other roles keep the 7–40 clamp, so their shapes stay distinct (AC 3, AC 47).
 - **Tests.** `markers.test.ts` › "target centre": no tick pixel in the centre's 3 × 3 at any frame size from 7 to 16, in both phases. There are new goldens `marker-target-smallest-0` and `-300` (the smallest target, centre open). The `marker-target-7x7` and `-12x8` goldens are rewritten: they recorded the cross. The label-placement scene ("keeps a foot visible") moves its target up 3 px, so the grown frame ends on the same row as before, just above the foot.
 
-## Amendment 2026-11-06: Invented Start Pose (ADR-0002)
+## Amendment 2026-11-06: Invented Start Pose (ADR-0003)
 
-**AC 14 and AC 20, amended.** Their regression fixture is now `split-start`, an invented split start. The old start pose was solved from contact points taken off a photo that the public release keeps private (`docs/adr/0001-open-source-release.md:50-56`), so its tests could not ship. Where AC 14, AC 20 and Builder's Calls › End sprites on top name the old start pose, read `split-start`.
+**AC 14 and AC 20, amended.** Their regression fixture is now `split-start`, an invented split start. The old start pose was solved from contact points taken off a photo that the public release keeps private ([ADR-0003](docs/adr/0003-public-repo.md) (d)), so its tests could not ship. Where AC 14, AC 20 and Builder's Calls › End sprites on top name the old start pose, read `split-start`.
 
 - **The pose.** `scripts/record-pixel-poses.ts` solves it with `solveStance` at height 424 on a vertical wall: the left hand on a crimp up and to the left, the right hand on a sloper low near the body's midline, and the feet on two blobs below, all inside a 1536 × 1152 photo. Like the old start pose, its right hand lies inside the shoulder–hip quad (Open Question 11).
 - **AC 20's hold.** The start marker is hold `b`, with an invented 80 × 80 image-px box centred on the right hand, in place of hold 1.
@@ -787,7 +793,7 @@ Raised by the originality review of the play-feel build (SPEC-play-shell › Che
 8. **Unplanned route holds:** should holds in the tagged route that are not yet in the plan get their own subtle marker, so the player can see where they can go? That would mean a fifth role and a fifth shape, re-checked under AC 3.
 9. **Contact accuracy:** SPEC-game success criterion 3 asks for planted contacts within 2 px at the working resolution. Drawing quantises to art pixels, which is about 8.5 image px on the phone fit. Should criterion 3 be measured on the joints before rasterising (in `move-animation`)? This spec assumes yes.
 10. **Who stores what:** this spec stores the sound choice itself (`bouldering-vis:sound`). Should `progression` own that key and the player's look (skin and hair) instead, and which module owns the outfit and look picker UI?
-11. **Resolved 2026-11-01 (coordinator; builder's call, role: game designer, feel): hands and feet are always drawn after the trunk** (and the head); limb segments keep their depth order. See Rendering Rules › Climber 2 and AC 14. The original question follows. **Trunk over a hand (from the AC 49 check):** Rendering Rules › Climber 2 always draws the trunk after the limbs. On B1-03's start, this hides the right hand and its start hold, because the hand lies inside the shoulder–hip quad. The solver puts that elbow nearer the camera than the trunk (z 58 against 34), but the hand is on the wall (z 0), so the arm's mean z (31) is still behind the trunk, and a mean-z rule alone would not fix it. Options:
+11. **Resolved 2026-11-01 (coordinator; builder's call, role: game designer, feel): hands and feet are always drawn after the trunk** (and the head); limb segments keep their depth order. See Rendering Rules › Climber 2 and AC 14. The original question follows. **Trunk over a hand (from the AC 49 check):** Rendering Rules › Climber 2 always draws the trunk after the limbs. On the earlier sample route's start, this hides the right hand and its start hold, because the hand lies inside the shoulder–hip quad. The solver puts that elbow nearer the camera than the trunk (z 58 against 34), but the hand is on the wall (z 0), so the arm's mean z (31) is still behind the trunk, and a mean-z rule alone would not fix it. Options:
     - always draw the hand and foot sprites (or just the hands) after the trunk;
     - draw a limb after the trunk when its middle joint is nearer the camera than the trunk.
 

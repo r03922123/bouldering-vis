@@ -26,7 +26,7 @@ const DEEP_MAX_SIDE = 0.3;
 const MIN_BLOB = 0.012;
 /**
  * Shape gates (blobs only; game guesses, not measured): no side over this (big signs, posters)…
- * Raised from 0.25 after rule 4's check on the sample photo: B1-03's black foothold is 0.30 H tall.
+ * Raised from 0.25 after rule 4's check on the earlier sample photo: its route's black foothold is 0.30 H tall.
  */
 const MAX_BLOB = 0.4;
 /** …no solid rectangle (fill at least this, both sides at least SOLID_SIDE)… */

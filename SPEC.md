@@ -6,7 +6,7 @@ Last updated: 2026-10-26
 ## Objective
 
 A browser-based viewer for climbers. The user brings a photo of a gym bouldering wall
-(like the wall photos on routemake.netlify.app), picks the holds that make up the
+(like the ones climbers share from their gym), picks the holds that make up the
 problem they want to try, and gets a clean visualization of that line:
 
 - selected holds in their real color; everything else flattened into two background colors
@@ -130,7 +130,6 @@ tests/
   fixtures/            → small wall photos + golden masks / expected outputs
 e2e/                   → Playwright specs
 SPEC.md, SPEC-<module-id>.md
-tasks/plan.md, tasks/todo.md
 ```
 
 Each module folder has: `index.ts` (public API only), pure logic files, React components,

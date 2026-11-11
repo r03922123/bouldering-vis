@@ -8,7 +8,7 @@ Everything runs in the browser: SlimSAM, Depth Anything V2 Small and CLIP ViT-B/
 transformers.js. Photos never leave the device.
 
 Specs: [SPEC.md](SPEC.md) (capability map, decisions, success criteria) and one `SPEC-<module>.md`
-per module. Plan and task status: [tasks/plan.md](tasks/plan.md), [tasks/todo.md](tasks/todo.md).
+per module. Open work: the follow-ups in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Commands
 
@@ -23,11 +23,10 @@ npm run build     # type-check + production build into dist/
 
 Dev-only tools:
 
-- `node scripts/fetch-routemake-fixtures.ts` downloads real wall photos and community hold taps into
-  `tests/fixtures/real/` (gitignored, local manual checks only).
 - `node scripts/make-synthetic-fixtures.ts` regenerates the committed synthetic fixtures.
 - `node scripts/build-clip-text-embeddings.ts` rebuilds `src/data/clip-text-embeddings.json`.
-- `spike/*.html` are real-model check pages (`npx vite --port 5175`, then `node spike/run-check.mjs <page> "<query>" [out.jpg]`).
+- Most real-model check pages and their runner stay private; the level recorder and the
+  hold-embedding page move to `scripts/` ([ADR-0003](docs/adr/0003-public-repo.md) (h), follow-up 25).
 
 ## Deploying
 

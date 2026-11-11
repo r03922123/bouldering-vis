@@ -8,8 +8,8 @@ import { profileFor, type Level } from './profile';
 // clock for requestAnimationFrame and timers, and count the frames put on the canvas.
 
 const SAMPLES = [
-  { id: 'routemake-g2-b1', name: 'Wall 1' },
-  { id: 't-up-d2', name: 'Wall 2' },
+  { id: 'wall-a', name: 'Wall 1' },
+  { id: 'wall-b', name: 'Wall 2' },
 ];
 const GYM = placesFor('gym', SAMPLES);
 const X = Object.fromEntries(GYM.map((p) => [p.id, p.x]));
@@ -58,7 +58,7 @@ describe('HubScreen without a canvas (the DOM path, G7)', () => {
     const onUse = vi.fn();
     renderHub({ onUse });
     fireEvent.click(stripButton('Wall 2'));
-    expect(onUse).toHaveBeenCalledWith(GYM.find((p) => p.id === 'bay:t-up-d2'));
+    expect(onUse).toHaveBeenCalledWith(GYM.find((p) => p.id === 'bay:wall-b'));
     expect(screen.getByRole('button', { name: 'Climb Wall 2' })).toBeVisible();
   });
 
@@ -86,7 +86,7 @@ describe('HubScreen without a canvas (the DOM path, G7)', () => {
     fireEvent.keyDown(floor(), { key: 'ArrowRight' });
     expect(screen.getByRole('button', { name: 'Climb Wall 1' })).toBeVisible();
     fireEvent.keyDown(floor(), { key: 'Enter' });
-    expect(onUse).toHaveBeenCalledWith(expect.objectContaining({ id: 'bay:routemake-g2-b1' }));
+    expect(onUse).toHaveBeenCalledWith(expect.objectContaining({ id: 'bay:wall-a' }));
   });
 
   it('keeps the front desk and lockers as scenery: no strip button, a name-only prompt (W4)', () => {
@@ -136,7 +136,7 @@ describe('HubScreen: ←/→ walk anywhere on the gym page (Amendment 2026-11-02
     expect(prompt()).toHaveTextContent('Lockers');
     fireEvent.keyDown(body(), { key: 'ArrowRight' });
     fireEvent.keyDown(floor(), { key: 'Enter' });
-    expect(onUse).toHaveBeenCalledWith(expect.objectContaining({ id: 'bay:routemake-g2-b1' }));
+    expect(onUse).toHaveBeenCalledWith(expect.objectContaining({ id: 'bay:wall-a' }));
   });
 
   it('walks while a strip button has focus, without pressing it', () => {
@@ -356,7 +356,7 @@ describe('HubScreen with a canvas', () => {
     const before = puts;
     fireEvent.click(stripButton('Wall 1'));
     advance(16);
-    expect(climberX()).toBe(X['bay:routemake-g2-b1']);
+    expect(climberX()).toBe(X['bay:wall-a']);
     expect(puts).toBe(before + 1);
     advance(5000);
     expect(puts).toBe(before + 1);
@@ -531,7 +531,7 @@ describe('HubScreen with a canvas', () => {
     fireEvent.click(screen.getByRole('button', { name: "I'm new to climbing" }));
     rerender(<HubScreen {...props} profile={profileFor('beginner')} />);
     advance(2000);
-    expect(climberX()).toBe(X['bay:routemake-g2-b1']);
+    expect(climberX()).toBe(X['bay:wall-a']);
   });
 
   it('pauses while hidden and keeps the climber where it was (G13)', () => {
@@ -548,7 +548,7 @@ describe('HubScreen with a canvas', () => {
     show();
     advance(16);
     expect(puts).toBe(before + 1);
-    expect(climberX()).toBe(X['bay:routemake-g2-b1']);
+    expect(climberX()).toBe(X['bay:wall-a']);
   });
 });
 

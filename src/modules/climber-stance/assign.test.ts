@@ -27,7 +27,7 @@ describe('autoAssign', () => {
     expect(a).toMatchObject({ lh: 's', rh: 's' });
   });
 
-  // B1-03 (a real climber's video): one start hold, the left hand starts on the vertical hold
+  // The earlier sample route (a real climber's video): one start hold, the left hand starts on the vertical hold
   // beside it at about the same height (a split start), not matched.
   it('splits the hands onto the nearest hold beside a single start hold', () => {
     const a = autoAssign(

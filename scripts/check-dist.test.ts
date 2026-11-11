@@ -85,7 +85,7 @@ describe('retiredFiles (follow-up 21: the files taken off the site stay off)', (
   });
 });
 
-describe('photoMetadata (ADR-0001: no EXIF, XMP or IPTC in a public photo)', () => {
+describe('photoMetadata (ADR-0003 (c): no EXIF, XMP or IPTC in a public photo)', () => {
   const ascii = (s: string) => [...Buffer.from(s, 'latin1')];
   const le32 = (n: number) => [n & 0xff, (n >> 8) & 0xff, (n >> 16) & 0xff, n >>> 24];
   const SOS = [0xff, 0xda, 0, 8, 1, 1, 0, 0, 0x3f, 0];

@@ -1,5 +1,5 @@
 # bouldering_vis
-Takeover phase: tidy (next when: follow-ups 1–19, 23 and 24 in docs/ARCHITECTURE.md are done)
+Takeover phase: tidy (next when: follow-ups 1–19 and 23–25 in docs/ARCHITECTURE.md are done)
 - Public repo since 2026-11-11, started as one exported commit (docs/adr/0003-public-repo.md); it was cut by hand (docs/adr/0004-hand-cut-release.md).
 - Commands: `npm test` (unit), `npm run lint`, `npm run build`, `npm run e2e` (Playwright).
 - ML models run in the browser; real models never run in CI (see docs/ml-runtime.md).

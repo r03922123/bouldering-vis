@@ -1,0 +1,25 @@
+{
+  "about": "Betas on synthetic-route.level.json by label (encodeBeta format: 'lh,rh,lf,rf;...'). Found by trying moves against the referee, not predicted; the tests in beta-moves' synthetic-route.test.ts pin what the referee says on each.",
+  "betas": [
+    {
+      "name": "reference",
+      "text": "1S,2,wf:699:863,wf:922:786;3,2,wf:699:863,wf:922:786;3,2,1S,wf:922:786;3,2,1S,1S;4,2,1S,1S;4,7F,1S,1S;4,7F,1S,2;7F,7F,1S,2"
+    },
+    {
+      "name": "early-finish",
+      "text": "1S,2,wf:699:863,wf:922:786;3,2,wf:699:863,wf:922:786;7F,2,wf:699:863,wf:922:786"
+    },
+    {
+      "name": "straight-to-finish",
+      "text": "1S,2,wf:699:863,wf:922:786;1S,7F,wf:699:863,wf:922:786"
+    },
+    {
+      "name": "cut-feet",
+      "text": "1S,2,wf:699:863,wf:922:786;1S,2,-,-"
+    },
+    {
+      "name": "three-limbs",
+      "text": "1S,2,wf:699:863,wf:922:786;3,3,1S,wf:922:786"
+    }
+  ]
+}

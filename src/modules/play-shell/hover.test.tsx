@@ -73,8 +73,8 @@ it('picks exactly what targetAt picks for the same point and radius', () => {
   const step = JSON.parse(stage().dataset.assignment!);
   const v = view();
   const seen: (string | undefined)[] = [];
-  // Two wall footholds, a free route hold (3), hold 2 (the right hand's), the finish (feet skip it)
-  // and bare wall.
+  // Two wall footholds, a free route hold (3), hold 2 (the right hand's: the foot gets 3), the
+  // finish (feet skip it: the foot gets 6) and bare wall (nothing).
   for (const [x, y] of [
     [726, 739],
     [641, 931],
@@ -89,7 +89,7 @@ it('picks exactly what targetAt picks for the same point and radius', () => {
     // fallback is the target list's "Smear", never a tap or a hover.
     const want = got?.startsWith('smear:') ? undefined : got;
     expect(stage().dataset.hover ?? undefined, `${x},${y}`).toBe(want ?? undefined);
-    seen.push(want);
+    seen.push(want ?? undefined);
   }
   // The points reach every kind of answer: a wall foothold, a route hold, and nothing.
   expect(seen.some((t) => t?.startsWith('wf:'))).toBe(true);

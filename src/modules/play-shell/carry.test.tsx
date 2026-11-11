@@ -155,9 +155,12 @@ describe('the plan survives a return to the wall, then the analysis landing (re-
 
 describe('carryPlan: the old plan re-checked on the new context', () => {
   const beta = (c: MoveContext, text = betaText('reference')) => decodeBeta(text, c)!;
-  /** Both feet onto wall footholds, then the left hand up: a plan that stands on wall feet. */
-  const FEET_FIRST =
-    '1S,2,wf:699:863,wf:922:786;1S,2,wf:726:739,wf:922:786;1S,2,wf:726:739,wf:1125:816;' +
+  /**
+   * The left hand up to 3, then both feet onto other wall footholds: a plan whose first move keeps
+   * the start's footholds and whose later moves stand on new ones.
+   */
+  const HAND_THEN_FEET =
+    '1S,2,wf:699:863,wf:922:786;3,2,wf:699:863,wf:922:786;3,2,wf:726:739,wf:922:786;' +
     '3,2,wf:726:739,wf:1125:816';
   const planOf = (c: MoveContext, n: number, text?: string): Plan => {
     const steps = beta(c, text).steps.slice(0, n + 1);
@@ -180,7 +183,7 @@ describe('carryPlan: the old plan re-checked on the new context', () => {
     // The wall footholds came in again without one the plan steps on (a re-run of the analysis):
     // the first move onto it is no longer a legal shape, and everything before it stays.
     const from = ctxOf(SYNTHETIC);
-    const plan = planOf(from, 3, FEET_FIRST);
+    const plan = planOf(from, 3, HAND_THEN_FEET);
     const steps = plan.beta.steps;
     const used = (i: number) => Object.values(steps[i]!).filter((t) => t?.startsWith('wf:'));
     const gone = steps
@@ -190,7 +193,8 @@ describe('carryPlan: the old plan re-checked on the new context', () => {
     const firstOn = steps.findIndex((s) => Object.values(s).includes(gone));
     const to = ctxOf({ ...SYNTHETIC, wallFeet: SYNTHETIC.wallFeet.filter((f) => f.id !== gone) });
     const out = carryPlan(plan, to, createStanceCache())!;
-    expect(firstOn).toBeGreaterThan(0);
+    // At least one move before it, so "everything before it stays" is checked.
+    expect(firstOn).toBeGreaterThan(1);
     // The referee holds every move before it on the new context.
     const cache = createStanceCache();
     expect(checkStart(steps[0]!, to, cache).verdict).not.toBe('fall');

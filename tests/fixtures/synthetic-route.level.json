@@ -1,0 +1,248 @@
+{
+  "about": "A synthetic route on the committed synthetic wall (tests/fixtures/wall-landscape.jpg), for tests only (ADR-0003 (e)). Seven of the wall's 40 painted holds are the route, in its 1536 x 1152 working frame; their types and pulls are set by hand (1S and 7F slopers pulled down, 2-4 pinches, 5-6 crimps, the same pattern as the earlier sample route's corrected types), not detected. wallFeet are the other 33 holds through climber-stance's wall-foothold pipeline (route holds removed, as the level recorder did) (beta-moves' synthetic-route.test.ts recomputes them). height is the app's default climber for this photo (0.26 x width).",
+  "sample": "wall-landscape",
+  "photo": {
+    "width": 1536,
+    "height": 1152
+  },
+  "height": 399.4,
+  "wallAngleDeg": 0,
+  "rules": {
+    "feet": "any",
+    "dynamic": true
+  },
+  "holds": [
+    {
+      "id": "synthetic-1",
+      "order": 0,
+      "label": "1S",
+      "role": "start",
+      "centroid": {
+        "x": 708.5,
+        "y": 584.6
+      },
+      "type": "sloper",
+      "dir": [0, 1, 0],
+      "wallNormal": [0, 0, 1],
+      "forceSource": "user"
+    },
+    {
+      "id": "synthetic-2",
+      "order": 1,
+      "label": "2",
+      "role": "route",
+      "centroid": {
+        "x": 865.9,
+        "y": 520.3
+      },
+      "type": "pinch",
+      "dir": null,
+      "wallNormal": [0, 0, 1],
+      "forceSource": "none"
+    },
+    {
+      "id": "synthetic-3",
+      "order": 2,
+      "label": "3",
+      "role": "route",
+      "centroid": {
+        "x": 774.7,
+        "y": 464.6
+      },
+      "type": "pinch",
+      "dir": null,
+      "wallNormal": [0, 0, 1],
+      "forceSource": "none"
+    },
+    {
+      "id": "synthetic-4",
+      "order": 3,
+      "label": "4",
+      "role": "route",
+      "centroid": {
+        "x": 755.5,
+        "y": 326.4
+      },
+      "type": "pinch",
+      "dir": null,
+      "wallNormal": [0, 0, 1],
+      "forceSource": "none"
+    },
+    {
+      "id": "synthetic-5",
+      "order": 4,
+      "label": "5",
+      "role": "route",
+      "centroid": {
+        "x": 1033.9,
+        "y": 332.2
+      },
+      "type": "crimp",
+      "dir": [0, 1, 0],
+      "wallNormal": [0, 0, 1],
+      "forceSource": "type"
+    },
+    {
+      "id": "synthetic-6",
+      "order": 5,
+      "label": "6",
+      "role": "route",
+      "centroid": {
+        "x": 853.4,
+        "y": 222.7
+      },
+      "type": "crimp",
+      "dir": [0, 1, 0],
+      "wallNormal": [0, 0, 1],
+      "forceSource": "type"
+    },
+    {
+      "id": "synthetic-7",
+      "order": 6,
+      "label": "7F",
+      "role": "finish",
+      "centroid": {
+        "x": 806.4,
+        "y": 143
+      },
+      "type": "sloper",
+      "dir": [0, 1, 0],
+      "wallNormal": [0, 0, 1],
+      "forceSource": "user"
+    }
+  ],
+  "wallFeet": [
+    {
+      "id": "wf:372:101",
+      "point": [372, 101]
+    },
+    {
+      "id": "wf:690:110",
+      "point": [690, 110]
+    },
+    {
+      "id": "wf:571:135",
+      "point": [571, 135]
+    },
+    {
+      "id": "wf:186:179",
+      "point": [186, 179]
+    },
+    {
+      "id": "wf:1127:183",
+      "point": [1127, 183]
+    },
+    {
+      "id": "wf:693:225",
+      "point": [693, 225]
+    },
+    {
+      "id": "wf:1210:237",
+      "point": [1210, 237]
+    },
+    {
+      "id": "wf:259:254",
+      "point": [259, 254]
+    },
+    {
+      "id": "wf:1382:268",
+      "point": [1382, 268]
+    },
+    {
+      "id": "wf:1290:300",
+      "point": [1290, 300]
+    },
+    {
+      "id": "wf:1181:324",
+      "point": [1181, 324]
+    },
+    {
+      "id": "wf:526:326",
+      "point": [526, 326]
+    },
+    {
+      "id": "wf:226:339",
+      "point": [226, 339]
+    },
+    {
+      "id": "wf:457:420",
+      "point": [457, 420]
+    },
+    {
+      "id": "wf:1061:472",
+      "point": [1061, 472]
+    },
+    {
+      "id": "wf:1299:492",
+      "point": [1299, 492]
+    },
+    {
+      "id": "wf:275:538",
+      "point": [275, 538]
+    },
+    {
+      "id": "wf:398:617",
+      "point": [398, 617]
+    },
+    {
+      "id": "wf:1444:617",
+      "point": [1444, 617]
+    },
+    {
+      "id": "wf:242:682",
+      "point": [242, 682]
+    },
+    {
+      "id": "wf:527:701",
+      "point": [527, 701]
+    },
+    {
+      "id": "wf:1376:716",
+      "point": [1376, 716]
+    },
+    {
+      "id": "wf:726:739",
+      "point": [726, 739]
+    },
+    {
+      "id": "wf:922:786",
+      "point": [922, 786]
+    },
+    {
+      "id": "wf:1125:816",
+      "point": [1125, 816]
+    },
+    {
+      "id": "wf:372:818",
+      "point": [372, 818]
+    },
+    {
+      "id": "wf:1276:828",
+      "point": [1276, 828]
+    },
+    {
+      "id": "wf:699:863",
+      "point": [699, 863]
+    },
+    {
+      "id": "wf:471:886",
+      "point": [471, 886]
+    },
+    {
+      "id": "wf:1246:905",
+      "point": [1246, 905]
+    },
+    {
+      "id": "wf:641:931",
+      "point": [641, 931]
+    },
+    {
+      "id": "wf:1231:964",
+      "point": [1231, 964]
+    },
+    {
+      "id": "wf:923:996",
+      "point": [923, 996]
+    }
+  ]
+}

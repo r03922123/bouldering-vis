@@ -2,7 +2,7 @@
 // a tap at the hold's center → SAM mask (pickMask, cleanMask) → cropHold (outside-mask grey) → CLIP.
 // Driven by scripts/hold-data/embed.mjs (ADR-0003 (h)), which calls window.embedPhoto and saves
 // the results.
-import { type HoldMask } from '../../src/modules/hold-segmentation';
+import type { HoldMask } from '../../src/modules/hold-segmentation';
 import { cleanMask, maskStats, pickMask } from '../../src/modules/hold-segmentation/worker';
 import { cropHold } from '../../src/modules/hold-classification/worker';
 import { loadImage } from '../../src/modules/image-input';

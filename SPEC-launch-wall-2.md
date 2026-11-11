@@ -17,7 +17,7 @@ climber stands but the next move fails. Wall 1 has no level at all since 2026-11
    under `rules.feet: 'any'`. If "two start feet" must be pinned, the format gets a start-foot field (plan step).
 3. Root cause of "can't make the next move" is unknown until reproduced (debug step); follow-up 19
    (poses drift since the 2026-11-04 solver commits) is a lead, not a conclusion.
-4. Out of scope: picking start holds, the release chain (#42 and later), parked branches, ML accuracy work.
+4. Out of scope: picking start holds, the release chain (private PR #42 and later), parked branches, ML accuracy work.
 
 ## Steps proposed for removal (your call)
 | # | Step | Why it adds nothing with one wall |

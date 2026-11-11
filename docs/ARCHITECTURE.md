@@ -219,17 +219,23 @@ says Done in its title, with its PR, or its date when the PR was in the private 
       canonical suite, the play-shell suites, `src/app/Root.test.tsx`, `src/app/playWall.test.ts`,
       the climber-stance foot-band check and the five Play E2E specs; and the inline points
       above are invented ones.
-24. **Neutral names and dead links** ([ADR-0003](adr/0003-public-repo.md) (g)). SPECs, docs, code
-    comments and `.gitignore` still name the earlier sample wall and route by their old names, and
-    link to ADRs, task notes and check pages that are not in this repo.
-    - *Done when:* `git grep` finds no old name, no link to a file or anchor this repo lacks, and
-      no link to the private repo's PRs (which now point into this repo's numbering).
+24. **Done (2026-11-11): neutral names and dead links** ([ADR-0003](adr/0003-public-repo.md) (g);
+    PRs #3, #5 and #PART3). Public text says "the earlier sample wall / route / photo", `real-N` or
+    `heldout` for the private real photos, and names private tools by what they do; no Markdown
+    link points to a missing file or anchor, and no link points at a private-repo PR. Plain-text
+    private PR numbers remain: follow-up 26.
 25. **Ship the two pages ADR-0003 (h) moves to `scripts/`** ([ADR-0003](adr/0003-public-repo.md)
     (h)). The hand cut left out the level recorder and the hold-embedding page, so
     `scripts/hold-data/embed.mjs` opens `scripts/hold-data/probe-data.html`, which this repo
     lacks, and Wall 1's level has no public recorder.
     - *Done when:* both pages are in `scripts/`, hold none of the data ADR-0003 (d) keeps private,
       and `embed.mjs` reaches its page on `npx vite --port 5175`.
+26. **Say which repo a PR number belongs to.** About 60 plain-text mentions such as "PR #32" in
+    SPECs, docs and code comments name private-repo PRs. This repo's own numbering reaches them
+    soon, so a reader will open the wrong PR; this file already mixes the public PR #1 with
+    private ones.
+    - *Done when:* every PR number from the private repo reads "private PR #N" (or gives a date
+      instead), and a PR number without "private" is this repo's.
 
 ### Carried over from earlier PRs
 

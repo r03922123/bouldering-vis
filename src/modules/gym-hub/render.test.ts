@@ -16,8 +16,8 @@ import {
 // SPEC-gym-hub G1–G3, G10 and AC 12: the hub scene, deterministic and snapshotted exactly.
 
 const SAMPLES = [
-  { id: 'routemake-g2-b1', name: 'Wall 1' },
-  { id: 't-up-d2', name: 'Wall 2' },
+  { id: 'wall-a', name: 'Wall 1' },
+  { id: 'wall-b', name: 'Wall 2' },
 ];
 const GYM = placesFor('gym', SAMPLES);
 const BEGINNER = placesFor('beginner', SAMPLES);

@@ -236,21 +236,21 @@ describe('StancePanel hands-pull-in note', () => {
     expect(screen.queryByText(NOTE)).not.toBeInTheDocument();
   });
 
-  it('shows on B1-03’s start on Vertical (the solver’s own numbers)', () => {
-    const b1: StanceContacts = {
-      lh: { holdId: 'a', point: [906, 584], type: 'crimp', dir: unit([1, 0, -0.3]) },
+  it('shows on an invented start on Vertical (the solver’s own numbers)', () => {
+    const start: StanceContacts = {
+      lh: { holdId: 'a', point: [-100, 0], type: 'crimp', dir: unit([1, 0, -0.3]) },
       rh: {
         holdId: 'b',
-        point: [1106, 626],
+        point: [100, 100],
         type: 'sloper',
         dir: unit([0, 0.6, -1]),
         surface: { normal: unit([0, -0.6, 1]), source: 'assumed' },
       },
-      lf: { holdId: 'c', point: [960, 838], type: null, dir: null },
-      rf: { holdId: 'd', point: [1133, 847], type: null, dir: null },
+      lf: { holdId: 'c', point: [-50, 600], type: null, dir: null },
+      rf: { holdId: 'd', point: [150, 600], type: null, dir: null },
     };
-    const stance = solveStance(b1, { height: 424, wallAngleDeg: 0 });
-    render(<StancePanel state={{ ...solved, contacts: b1, height: 424, stance }} />);
+    const stance = solveStance(start, { height: 1000, wallAngleDeg: 0 });
+    render(<StancePanel state={{ ...solved, contacts: start, height: 1000, stance }} />);
     expect(screen.getByText(NOTE)).toBeInTheDocument();
   });
 

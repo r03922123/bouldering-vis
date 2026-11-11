@@ -1,5 +1,5 @@
 {
-  "about": "A synthetic route on the committed synthetic wall (tests/fixtures/wall-landscape.jpg), for tests only (ADR-0003 (e)). Seven of the wall's 40 painted holds are the route, in its 1536 x 1152 working frame; their types and pulls are invented, not detected. wallFeet are the other 33 holds through climber-stance's wall-foothold pipeline (beta-moves' synthetic-route.test.ts recomputes them). height is the app's default climber for this photo (0.26 x width).",
+  "about": "A synthetic route on the committed synthetic wall (tests/fixtures/wall-landscape.jpg), for tests only (ADR-0003 (e)). Seven of the wall's 40 painted holds are the route, in its 1536 x 1152 working frame; their types and pulls are set by hand (1S and 7F slopers pulled down, 2-4 pinches, 5-6 crimps, the same pattern as the earlier sample route's corrected types), not detected. wallFeet are the other 33 holds through climber-stance's wall-foothold pipeline (route holds removed, as the level recorder did) (beta-moves' synthetic-route.test.ts recomputes them). height is the app's default climber for this photo (0.26 x width).",
   "sample": "wall-landscape",
   "photo": {
     "width": 1536,
@@ -38,7 +38,7 @@
       "type": "pinch",
       "dir": null,
       "wallNormal": [0, 0, 1],
-      "forceSource": "type"
+      "forceSource": "none"
     },
     {
       "id": "synthetic-3",
@@ -52,7 +52,7 @@
       "type": "pinch",
       "dir": null,
       "wallNormal": [0, 0, 1],
-      "forceSource": "type"
+      "forceSource": "none"
     },
     {
       "id": "synthetic-4",
@@ -66,7 +66,7 @@
       "type": "pinch",
       "dir": null,
       "wallNormal": [0, 0, 1],
-      "forceSource": "type"
+      "forceSource": "none"
     },
     {
       "id": "synthetic-5",

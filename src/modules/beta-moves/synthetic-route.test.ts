@@ -18,6 +18,10 @@ import { DEADPOINT_REACH, type Beta, type MoveRules, type RouteHold, type WallFo
 // session: the shape gates dropping merged wall regions and an edge strip, the route sign kept as
 // a foothold, two noise blobs no gate can tell from a foothold, and the setter's corrections.
 // climber-stance's anyFeet.test.ts covers each shape gate on drawn blobs.
+//
+// The wall feet are recomputed from the test's own drawing of the painted holds (the same ellipses
+// scripts/make-synthetic-fixtures.ts paints), not from a segmentation of the photo, with the route
+// holds removed as the level recorder did.
 
 vi.setConfig({ testTimeout: 120_000 });
 
@@ -31,8 +35,8 @@ const level = {
 const ctx = makeContext(level);
 const betas = betasFile.betas;
 const text = (name: string) => betas.find((b) => b.name === name)!.text;
-const decode = (name: string): Beta => {
-  const beta = decodeBeta(text(name), ctx);
+const decode = (name: string, c = ctx): Beta => {
+  const beta = decodeBeta(text(name), c);
   if (!beta) throw new Error(`synthetic route: ${name} doesn't decode`);
   return beta;
 };
@@ -136,7 +140,9 @@ describe('the reference beta (AC 44)', () => {
 
   it('marks its one deadpoint, left hand 3 → 4 at move 4', () => {
     expect(r.steps.map((s) => s.style).filter((x) => x === 'deadpoint')).toHaveLength(1);
+    const id = (label: string) => level.holds.find((h) => h.label === label)!.id;
     expect(r.steps[4]!.move!.limbs).toEqual(['lh']);
+    expect([beta.steps[3]!.lh, beta.steps[4]!.lh]).toEqual([id('3'), id('4')]);
     expect(r.steps[4]!.style).toBe('deadpoint');
     expect(r.steps[4]!.tip).toBe('Deadpoint: move fast and catch the hold');
   });
@@ -146,7 +152,9 @@ describe('early-finish: the left hand goes for the finish from the start foothol
   it('falls on reach: "move your feet up first"', () => {
     const r = checkBeta(decode('early-finish'), ctx);
     expect(r.fallAt).toBe(2);
+    // Out of reach even as a deadpoint, yet a reach the solver measured (not the no-pelvis Infinity).
     expect(r.steps[2]!.reach.lh).toBeGreaterThan(DEADPOINT_REACH);
+    expect(Number.isFinite(r.steps[2]!.reach.lh)).toBe(true);
     expect(r.steps[2]!.fail!.kind).toBe('reach');
     expect(r.steps[2]!.fail!.text).toBe('Too far: left hand — move your feet up first');
   });
@@ -167,7 +175,7 @@ describe('replay (AC 36, Node)', () => {
     ['the route', ctx],
     ['an all-jugs copy of the route', jugs],
   ] as const)('the reference on %s gives byte-identical JSON across 3 runs', (_, c) => {
-    const beta = decodeBeta(text('reference'), c)!;
+    const beta = decode('reference', c);
     const runs = [createStanceCache(), createStanceCache(), createStanceCache()].map((cache) =>
       JSON.stringify(checkBeta(beta, c, cache)),
     );
@@ -176,7 +184,7 @@ describe('replay (AC 36, Node)', () => {
   });
 
   it('the reference also tops out on the all-jugs copy', () => {
-    const r = checkBeta(decodeBeta(text('reference'), jugs)!, jugs);
+    const r = checkBeta(decode('reference', jugs), jugs);
     expect([r.fallAt, r.rejectedAt, r.toppedAt]).toEqual([null, null, r.moves]);
   });
 });

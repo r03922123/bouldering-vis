@@ -680,7 +680,7 @@ It's a technical V2–V3 with small-hold sidepulls, climbed static. A moderate c
 
 ### Rebase onto main: the book-based posture prior (2026-11-01)
 
-- **Conflicts:** `stance.ts`, `stance.test.ts` and `assign.ts` conflicted with PR #8. Both sides were kept: main's `PosturePrior`, plus this branch's `region` option, `PELVIS_SEARCH` and `StanceHold`.
+- **Conflicts:** `stance.ts`, `stance.test.ts` and `assign.ts` conflicted with private PR #8. Both sides were kept: main's `PosturePrior`, plus this branch's `region` option, `PELVIS_SEARCH` and `StanceHold`.
 - **`reachRatios` follows the prior.** The prior moved the hip floor into `prior.hipsBelowHands` and gave `trunkDirection` a `lean`. So `reachRatios` now reads both from `{ ...DEFAULT_PRIOR, ...opts.prior }`, the same merge `solveStance` uses. A new `reach.test.ts` case goes red if overrides are ignored.
 - **One expectation changed:** the `jugs-search` stand-in. Its last move (left hand matching `7F`) is now "Too far: left hand — move your feet up first", at a ratio of **1.115** (over 1.100). The trunk now leans 0.25 toward the hands, which moves the shoulders. The same search under the new prior found a new 8-move top, now in the recorded betas. No rule or threshold changed.
 - **Unchanged:** every other beta-moves and climber-stance expectation, including the ladder top (AC 22), cut feet (AC 9), the deadpoint (AC 11), the effort order (AC 21), the earlier sample route's default start (AC 43), its failing betas (AC 45), and the reference falling at move 1.

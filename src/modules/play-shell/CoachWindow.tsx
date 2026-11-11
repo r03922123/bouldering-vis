@@ -37,7 +37,7 @@ export function CoachWindow({
   /** What the box shows, page by page: the referee's words, nothing else. */
   pages: readonly string[];
   /**
-   * PR #17 review 3: the attempt these words answer. A new attempt with the same words (the same
+   * Private PR #17 review 3: the attempt these words answer. A new attempt with the same words (the same
    * blocked hold again) starts the reveal again, so the box visibly answers.
    */
   replay?: number;

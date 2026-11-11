@@ -1037,7 +1037,7 @@ The referee should stop being wrong in ways a climber notices:
 - a heel hook takes weight off the arms on steep walls (today the game can't express one);
 - an upright edge with no known type is not a jug you pull down.
 
-Every other stance stays byte-identical, and the earlier sample route's reference beta still tops out at move 16. **Corrected after the PR #18 review:** not byte-identical. M2 changes the pose (and so the shares) of the stances whose knee or hip was past range, and rejects stances that stand on a foot at or above hand height (Check Results › Review).
+Every other stance stays byte-identical, and the earlier sample route's reference beta still tops out at move 16. **Corrected after the private PR #18 review:** not byte-identical. M2 changes the pose (and so the shares) of the stances whose knee or hip was past range, and rejects stances that stand on a foot at or above hand height (Check Results › Review).
 
 ### Spike (2026-11-04)
 
@@ -1068,7 +1068,7 @@ A throwaway copy of the solver behind environment flags (a throwaway diff, not c
 
 **Scope.** With any foot on, there is no body contact, so every existing stance is unchanged. The search box is unchanged too: the spike's hangs sit 0.39–0.58 H below the hands, inside today's 0.6 H. So on an overhang the CoM already swings under the hands.
 
-**Output.** `Stance.body: { percent, share, force } | null`. It is null unless the chosen pose uses the body contact, and below 0.5 % of bodyweight (the hips only touch; PR #18 review). The four limbs' shares plus `body.share` add up to 100. The region (`feasibleRegion`) solves with the shown pose's body contact held fixed.
+**Output.** `Stance.body: { percent, share, force } | null`. It is null unless the chosen pose uses the body contact, and below 0.5 % of bodyweight (the hips only touch; private PR #18 review). The four limbs' shares plus `body.share` add up to 100. The region (`feasibleRegion`) solves with the shown pose's body contact held fixed.
 
 **Display.**
 - Panel: a fifth row, "Body on the wall 17 %", only when `body` is set.
@@ -1096,7 +1096,7 @@ These are passive goniometer ranges, measured lying down. A climber's high step 
 
    For the move text, `ReachResult` gains `cramped: Limb[]`.
 
-   **As built (PR #18 review):**
+   **As built (private PR #18 review):**
    - **The rule.** "Every allowed pelvis" never fires: the grid always reaches positions where the limb is simply too far. So the rule is "some position fails on that limb alone, by a joint's range". Without the limits, every limb would reach there.
    - **Too high.** Where only the hip's range stops a foot, it is too high, not too close, and needs a lower hold:
      - stance: "Too high: left foot — pick a lower foothold" (`highText`, `Candidate.high`);
@@ -1132,7 +1132,7 @@ No force measurements exist for either hook. The research found only hamstring-i
 2. **Pinches stay two-sided.** "Squeeze; no single pull", cone up the wall, 60°. Squeeze strength is a `stance-odds` question (R2), not a cone.
 3. **A pinch with a pull set keeps 60°.** This is a bug fix. Today a user or setter pull on a pinch drops its cone to the 40° default, because `HAND_ANGLE` has no `pinch`.
 
-The earlier sample route is unchanged by construction: it has no untyped holds, and its pinches have no pull. User walls with untyped upright holds change; Task 5 re-checks Wall 1 and Wall 2 (orange). A hold is also untyped until the classifier answers, so an upright hold reads as a sidepull until then, as it read "no single pull" before (PR #17's `carryPlan` handles late types).
+The earlier sample route is unchanged by construction: it has no untyped holds, and its pinches have no pull. User walls with untyped upright holds change; Task 5 re-checks Wall 1 and Wall 2 (orange). A hold is also untyped until the classifier answers, so an upright hold reads as a sidepull until then, as it read "no single pull" before (private PR #17's `carryPlan` handles late types).
 
 **If approved,** SPEC-game's map row reads: "a sidepull axis for untyped upright holds; pinches stay two-sided".
 
@@ -1208,7 +1208,7 @@ UI and manual:
 - **Ask first:** changing `hipFloor`, the search box, any cone not listed here, or any pinned beta other than `cut-feet`.
 - **Never:** hooks or the body contact in Play's tray before the beta-moves amendment (D3); a hook on a smear or a wall-foothold chip; calling a builder's-call constant measured.
 
-### Tasks (one commit each, branch `redesign-r1-stance` from `main` after PR #17)
+### Tasks (one commit each, branch `redesign-r1-stance` from `main` after private PR #17)
 
 1. **M2 joint ranges.** `ik.ts` (`JOINT_RANGE`, `minReach`, `legPole`), `stance.ts`, `reach.ts`, `diagnose.ts`, beta-moves' reach text. AC 44–46.
 2. **M1 body on the wall.** `stance.ts` (evaluate, region, `Stance.body`), panel row, overlay chip, the `cut-feet` re-prediction under D1. AC 41–43.
@@ -1272,7 +1272,7 @@ Branch `redesign-r1-stance`:
   - SPEC-beta-moves AC 9 and AC 10 flipped with D1-A (see Pinned Expectations).
   - Play's Numbers mode gained a "Body on the wall share" row (builder's call).
 
-### Review (PR #18, 2026-11-04)
+### Review (private PR #18, 2026-11-04)
 
 The independent code review found no Critical issues and four Important ones. All four are fixed:
 

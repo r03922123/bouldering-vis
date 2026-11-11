@@ -78,7 +78,7 @@ function Shape({ a }: { a: Annotation }) {
 
 /**
  * H3's marks: a dot (holds), a ring (deadpoint), a diagonal × (falls), each with an outline, in
- * the arrows' own thin strokes (≤ 3 CSS px, PR #15 review).
+ * the arrows' own thin strokes (≤ 3 CSS px, private PR #15 review).
  */
 function Mark({ at, kind }: { at: Point; kind: MarkKind }) {
   const { x, y } = at;

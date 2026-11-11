@@ -144,7 +144,7 @@ describe('diagnosis', () => {
     });
   });
 
-  // PR #17 review 6 (game designer): Play's Down advice names the hold and says why, in this
+  // Private PR #17 review 6 (game designer): Play's Down advice names the hold and says why, in this
   // table's words; Play fills in the hold's label and its pull.
   describe('Play’s steep-sloper words, by hold (R0 review 6)', () => {
     it('names the hold, its pull, why, and the button', () => {
@@ -165,7 +165,7 @@ describe('diagnosis', () => {
     });
   });
 
-  // PR #17 review 7 (game designer): out of reach in Play's words, feet "foothold", hands "hold",
+  // Private PR #17 review 7 (game designer): out of reach in Play's words, feet "foothold", hands "hold",
   // and with the move that made it so when the limb out of reach isn't the one that moved.
   describe('Play’s out-of-reach words (R0 review 7)', () => {
     it('feet say foothold, hands say hold', () => {
@@ -218,7 +218,7 @@ describe('diagnosis › cramped (M2)', () => {
     });
   });
 
-  // PR #18 review 2: only the hip's range stops it, so the foot is too high, not too close.
+  // Private PR #18 review 2: only the hip's range stops it, so the foot is too high, not too close.
   it('says "Too high" when the hip’s range alone stops that limb', () => {
     const d = run([at(LF, LF, LF), at(LF, LF, LF), at(LF, 0)]);
     expect(d.text).toBe('Too high: left foot — pick a lower foothold');

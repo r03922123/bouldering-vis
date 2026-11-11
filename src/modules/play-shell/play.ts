@@ -132,7 +132,7 @@ export interface Carried {
 }
 
 /**
- * PR #17 review 8: the same route's context changed under a plan (the wall's analysis landing
+ * Private PR #17 review 8: the same route's context changed under a plan (the wall's analysis landing
  * after Plan opened: hold types, forces, footholds). Rather than start again, the old plan is
  * replayed on the new context: the start, then each move while the referee still holds it (a fall
  * is never committed, S6). The moves kept are committed one by one, so Undo walks back through
@@ -233,13 +233,13 @@ export function reasonText(check: MoveCheck, ctx?: MoveContext): string | null {
 }
 
 /**
- * PR #17 review 6: a steep sloper's Down advice by hold, from climber-stance's table: only when Down
+ * Private PR #17 review 6: a steep sloper's Down advice by hold, from climber-stance's table: only when Down
  * would change the hold's pull, and saying why ("hold 4 pulls mostly into the wall, which a sloper
  * can't take"); for a pull already straight down, the slip text. Null when it doesn't apply.
  */
 function byHold(check: MoveCheck, ctx: MoveContext): string | null {
   const d = check.fail?.diagnosis;
-  // PR #17 review 7: the new stance leaves a limb that didn't move out of reach: say the move.
+  // Private PR #17 review 7: the new stance leaves a limb that didn't move out of reach: say the move.
   const move = check.move;
   // A cramped limb (SPEC-climber-stance M2) keeps the referee's words: it reaches, just not that close.
   if (d?.kind === 'reach' && d.limb && !d.cramped && check.fail?.kind === 'stance' && move) {

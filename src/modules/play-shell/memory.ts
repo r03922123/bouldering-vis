@@ -26,7 +26,7 @@ export function forgetPlan(key: string): void {
   plans.delete(key);
 }
 
-// PR #17 re-review 1: the latest plan per wall and route (its hold ids), with the context key it
+// Private PR #17 re-review 1: the latest plan per wall and route (its hold ids), with the context key it
 // was made on, so a plan comes back onto the same route even when its context changed while the
 // wall was closed or after it reopened (the wall's analysis landing late): it is then re-checked
 // on the new context (carryPlan), never dropped silently.

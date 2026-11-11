@@ -316,15 +316,15 @@ describe('solveStance on slopers', () => {
     }
   });
 
-  // The recorded B1-03 session on the sample wall: a crimp sidepull and an assumed sloper.
-  describe('B1-03 (AC 32)', () => {
-    const B1_H = 424;
+  // An invented start on a vertical wall: a crimp sidepull and an assumed sloper.
+  describe('a crimp sidepull and an assumed sloper (AC 32)', () => {
+    const START_H = 420;
     const typeRule = unit([0, 0.6, -1]);
     const hands: StanceContacts = {
-      lh: { holdId: '2', point: [906, 584], type: 'crimp', dir: unit([1, 0, -0.3]) },
+      lh: { holdId: '2', point: [880, 560], type: 'crimp', dir: unit([1, 0, -0.3]) },
       rh: {
         holdId: '1',
-        point: [1106, 626],
+        point: [1080, 600],
         type: 'sloper',
         dir: typeRule,
         surface: { normal: unit([0, -0.6, 1]), source: 'assumed' },
@@ -332,19 +332,19 @@ describe('solveStance on slopers', () => {
     };
     const onFootholds: StanceContacts = {
       ...hands,
-      lf: { holdId: 'blob:a', point: [960, 840], type: null, dir: null },
-      rf: { holdId: 'blob:b', point: [1131, 847], type: null, dir: null },
+      lf: { holdId: 'blob:a', point: [930, 815], type: null, dir: null },
+      rf: { holdId: 'blob:b', point: [1110, 825], type: null, dir: null },
     };
 
     it('holds on Vertical with the feet on wall footholds, the feet taking most of it', () => {
-      const s = solveStance(onFootholds, { height: B1_H, wallAngleDeg: 0 });
+      const s = solveStance(onFootholds, { height: START_H, wallAngleDeg: 0 });
       expect(s.feasible).toBe(true);
       expect(shares(s).reduce((a, b) => a + b, 0)).toBe(100);
       expect(s.load.lf!.share + s.load.rf!.share).toBeGreaterThanOrEqual(50);
     });
 
     it('holds on Slab', () => {
-      expect(solveStance(onFootholds, { height: B1_H, wallAngleDeg: -10 }).feasible).toBe(true);
+      expect(solveStance(onFootholds, { height: START_H, wallAngleDeg: -10 }).feasible).toBe(true);
     });
 
     it('can’t be held with the same hands on two smears (the gap this fixes)', () => {
@@ -352,10 +352,10 @@ describe('solveStance on slopers', () => {
       const s = solveStance(
         {
           ...hands,
-          lf: hold(1006 - 0.21 * B1_H, 626 + 0.58 * B1_H, 'smear', null),
-          rf: hold(1006 + 0.21 * B1_H, 626 + 0.58 * B1_H, 'smear', null),
+          lf: hold(980 - 0.21 * START_H, 600 + 0.58 * START_H, 'smear', null),
+          rf: hold(980 + 0.21 * START_H, 600 + 0.58 * START_H, 'smear', null),
         },
-        { height: B1_H, wallAngleDeg: 0 },
+        { height: START_H, wallAngleDeg: 0 },
       );
       expect(s.feasible).toBe(false);
     });

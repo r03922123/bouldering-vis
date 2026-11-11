@@ -164,7 +164,8 @@ which makes up masks and depth. Real models never run in CI
 ([why](ml-runtime.md#ci-and-e2e-never-run-real-models)).
 
 **Three E2E projects** (`playwright.config.ts:31-43`) each run as their own CI job. Test counts are
-from main's CI run once the Play tests were back (follow-up 23, 2026-11-11).
+from main's CI run on 6f920a9, once the Play tests were back (follow-up 23, 2026-11-11). Each
+Chromium project has 150 tests; `desktop` skips 9 and `phone` skips 1 (phone-only or desktop-only).
 
 | Project | Browser | Device | Specs | Tests |
 |---|---|---|---|---|
@@ -219,8 +220,7 @@ says Done in its title, with its PR, or its date when the PR was in the private 
       merged wall regions and an edge strip, the route sign kept as a foothold, two noise blobs
       no gate rejects, and the setter's corrections. They can return once Wall 1's level is
       recorded on the owner's photo (ADR-0003 (e)).
-    - Seen while porting: on a 375 px phone the edit map can put one hold's handle on another's
-      (1S's base dot under hold 4's head handle), so `e2e/play.spec.ts` drags hold 5's.
+    - Seen while porting: two holds' edit handles can overlap on a phone (follow-up 27).
 24. **Done (2026-11-11): neutral names and dead links** ([ADR-0003](adr/0003-public-repo.md) (g);
     PRs #3, #5 and #6). Public text says "the earlier sample wall / route / photo", `real-N` or
     `heldout` for the private real photos, and names private tools by what they do; no Markdown
@@ -264,7 +264,7 @@ says Done in its title, with its PR, or its date when the PR was in the private 
 5. **Done (2026-11-11, #21): make the hub paint test reload.** The hub spec came back with the
    Play E2E specs (follow-up 23), and now leaves the page before the throttled load. The old note: `goto('/#/')` after `goto('/')` changes only the hash, so the
    page never reloads: the throttled paint is never measured and the "no Studio bundle" check sees
-   no requests (`e2e/hub.spec.ts:137-146`; private PR #31 review).
+   no requests (the private repo's `e2e/hub.spec.ts`; private PR #31 review).
    - *Done when:* the test times a real 4×-throttled load against SPEC-gym-hub's 2 s.
 
 ### Likely bugs (tidy writes the failing test first)
@@ -318,6 +318,13 @@ says Done in its title, with its PR, or its date when the PR was in the private 
     - *Done when:* a beta-moves test gets a different stance for a move with a heel hook than for
       the same move without it, and `canHook` reads both prefixes from constants (so `'wf:'` moves
       into climber-stance), checked by a test whose ids are built from those constants.
+
+27. **Two holds' edit handles can overlap on a phone.** On a 375 px phone, the direction map's
+    edit handles sit at fixed screen offsets from each hold, so on the synthetic route 1S's base
+    dot lies under hold 4's head handle, and dragging it moves hold 4's pull instead (found while
+    porting `e2e/play.spec.ts`, which now drags hold 5's; follow-up 23).
+    - *Done when:* at 375 px, dragging 1S's base dot on the synthetic route moves 1S's grip, in a
+      test that fails today.
 
 ### Needs the owner's decision
 

@@ -17,7 +17,7 @@
   branch, hover points left from the old photo, a carry check with nothing before the drop, and an
   out-of-wall part that compared 0 with 0 because every synthetic pull lies flat in the wall. The
   fix each time was to pin the branch or add an input with the missing feature (an invented pull
-  with a z part), and to assert that the loop really saw each kind of case.
+  with a z part), and, where a loop ran, to assert that it saw each kind of case.
 
 ## 2026-11-11 · tidy: neutral names and dead links
 

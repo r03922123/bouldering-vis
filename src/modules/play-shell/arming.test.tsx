@@ -181,18 +181,18 @@ describe('R0-1: a foot tap that finds nothing', () => {
 // Review 1: after a bare-wall foot miss, the foot can still go to that spot on purpose:
 // "Smear here" in the hint line and in the target list, so a foot can be moved up the wall.
 describe('Smear here (R0 review 1)', () => {
-  const bare = { x: 100, y: 1100 };
+  /** Bare wall just below the start's two footholds: no foothold there, and a smear that holds. */
+  const bare = { x: 800, y: 900 };
   /** What the referee says of the left foot smearing at the tapped spot. */
   const expected = () => {
     const prev = JSON.parse(stage().dataset.assignment!);
-    return checkMove(prev, { ...prev, lf: 'smear:100:1100' }, ctx, createStanceCache());
+    return checkMove(prev, { ...prev, lf: 'smear:800:900' }, ctx, createStanceCache());
   };
   const after = (want: ReturnType<typeof expected>) => {
-    if (want.verdict === 'fall') expect(stage()).toHaveAttribute('data-preview', 'fall');
-    else {
-      expect(stage()).toHaveAttribute('data-moves', '1');
-      expect(JSON.parse(stage().dataset.assignment!).lf).toBe('smear:100:1100');
-    }
+    // The referee holds this smear, so choosing it is a move, not a fall preview.
+    expect(want.verdict).not.toBe('fall');
+    expect(stage()).toHaveAttribute('data-moves', '1');
+    expect(JSON.parse(stage().dataset.assignment!).lf).toBe('smear:800:900');
   };
 
   it('the hint line offers it after the miss, and it moves the foot there', () => {

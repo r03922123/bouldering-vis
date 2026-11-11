@@ -72,11 +72,15 @@ it('picks exactly what targetAt picks for the same point and radius', () => {
   fireEvent.click(limb('LF'));
   const step = JSON.parse(stage().dataset.assignment!);
   const v = view();
+  const seen: (string | undefined)[] = [];
+  // Two wall footholds, a free route hold (3), hold 2 (the right hand's), the finish (feet skip it)
+  // and bare wall.
   for (const [x, y] of [
-    [878, 721],
-    [959, 837],
-    [905, 590],
-    [700, 1000],
+    [726, 739],
+    [641, 931],
+    [774.7, 464.6],
+    [865.9, 520.3],
+    [806.4, 143],
     [1300, 120],
   ] as const) {
     fireEvent.pointerMove(taps(), { pointerType: 'mouse', ...at(x, y) });
@@ -85,7 +89,12 @@ it('picks exactly what targetAt picks for the same point and radius', () => {
     // fallback is the target list's "Smear", never a tap or a hover.
     const want = got?.startsWith('smear:') ? undefined : got;
     expect(stage().dataset.hover ?? undefined, `${x},${y}`).toBe(want ?? undefined);
+    seen.push(want);
   }
+  // The points reach every kind of answer: a wall foothold, a route hold, and nothing.
+  expect(seen.some((t) => t?.startsWith('wf:'))).toBe(true);
+  expect(seen.some((t) => ctx.holds.some((h) => h.id === t))).toBe(true);
+  expect(seen).toContain(undefined);
 });
 
 it('outlines nothing off every hold, with no limb picked, or after the pointer leaves', () => {

@@ -92,7 +92,7 @@ function steepPlayText(limb: Limb, c: ContactInput): string | undefined {
 const PRESS_DOWN = 'if its top faces up, press Down for it in Edit directions';
 
 /**
- * PR #17 review 6 (Play): a steep sloper or volume hand on its assumed surface, by hold. Play fills
+ * Private PR #17 review 6 (Play): a steep sloper or volume hand on its assumed surface, by hold. Play fills
  * in the hold's label and its pull in words ("pulls mostly into the wall"), so the advice says
  * which hold, why, and the button that changes it. For a pull Down wouldn't change, Play uses
  * playSlipText instead.
@@ -107,7 +107,7 @@ export function playSteepText(
 }
 
 /**
- * Play's out of reach (R0-3 a; PR #17 review 7): feet pick a closer foothold, hands a closer hold.
+ * Play's out of reach (R0-3 a; private PR #17 review 7): feet pick a closer foothold, hands a closer hold.
  * With `moved` ("right hand on 6"), the stance a move made leaves a limb that didn't move out of
  * reach, and the words say so: "With your right hand on 6, your left foot can't reach — …".
  */
@@ -122,7 +122,7 @@ export function playReachText(limb: Limb, moved?: string): string {
 export const crampedText = (limb: Limb) =>
   `Too cramped: ${lower(limb)} — pick a hold further from your body`;
 
-/** M2 rule 3 (PR #18 review 2): a foot above the hip's range. A lower hold, not a further one. */
+/** M2 rule 3 (private PR #18 review 2): a foot above the hip's range. A lower hold, not a further one. */
 export const highText = (limb: Limb) => `Too high: ${lower(limb)} — pick a lower foothold`;
 
 /** The slip text (the Studio's own), for Play where no Down advice applies. */
@@ -185,7 +185,7 @@ export function diagnose(args: {
     const bit = 1 << LIMBS.indexOf(limb);
     const only = grid.filter((g) => g.missing === bit && g.cramped & bit);
     if (only.length) {
-      // PR #18 review 2: where only the hip's range stops it, the foot is too high, not too close.
+      // Private PR #18 review 2: where only the hip's range stops it, the foot is too high, not too close.
       const high = only.every((g) => g.high & bit);
       return {
         kind: 'reach',

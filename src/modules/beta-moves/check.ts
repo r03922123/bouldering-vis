@@ -55,7 +55,7 @@ function tooFar(limb: Limb, from: StanceContacts[Limb], to: StanceContacts[Limb]
 /** SPEC-climber-stance Amendment 2026-11-04, M2 rule 3: a move blocked by a joint's range. */
 export const tooCramped = (limb: Limb) => `Too cramped: ${lower(limb)} — move your hips away first`;
 
-/** M2 rule 3 (PR #18 review 2): a foot above the hip's range. */
+/** M2 rule 3 (private PR #18 review 2): a foot above the hip's range. */
 export const tooHigh = (limb: Limb) => `Too high: ${lower(limb)} — try a lower foothold`;
 
 /** "While your left foot moves: …", "While your right hand and left foot move: …". */

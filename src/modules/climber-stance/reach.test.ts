@@ -150,7 +150,7 @@ describe('reachRatios', () => {
     }
   });
 
-  // After the book-based prior (main, PR #8): the hip floor and the trunk's lean come from the
+  // After the book-based prior (main, private PR #8): the hip floor and the trunk's lean come from the
   // solver's posture prior, with the same `opts.prior` overrides solveStance takes.
   it('uses the solver’s posture prior, overrides included', () => {
     const target = { rh: jug(600, 700) };
@@ -256,7 +256,7 @@ describe('reachRatios › joint range (M2)', () => {
     const r = reachRatios(hands, { lf: foot(-95, 140) }, opts, pinned);
     expect(r.ratios.lf).toBe(Infinity);
     expect(r.cramped).toEqual(['lf']);
-    // PR #18 review 2: the hip's range alone stops it, so the move says too high.
+    // Private PR #18 review 2: the hip's range alone stops it, so the move says too high.
     expect(r.high).toEqual(['lf']);
     // Not the knee's fold and not too far: the hip-to-foot distance is ~0.46 H.
     const d = bodyDims(H);

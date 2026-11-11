@@ -34,7 +34,7 @@ export interface ReachResult {
    */
   cramped: Limb[];
   /**
-   * PR #18 review 2: the moving legs, when the hip's range alone is what stops every pelvis (the
+   * Private PR #18 review 2: the moving legs, when the hip's range alone is what stops every pelvis (the
    * knee's and elbow's fold allowed): a foot too high, not too close. Empty otherwise.
    */
   high: Limb[];
@@ -165,7 +165,7 @@ export function reachRatios(
   };
   let best = scan((p) => score(p));
   // M2 rule 3: without the joint limits a pelvis fits, so the move is cramped, not far; when the
-  // hip's range alone is what stops it, its legs are too high (PR #18 review 2).
+  // hip's range alone is what stops it, its legs are too high (private PR #18 review 2).
   if (!best) {
     const limbs = moved.map((p) => p.limb);
     if (scan((p) => score(p, { fold: true, hip: false }))) {

@@ -200,7 +200,7 @@ function place(
   missing: number;
   cramped: number;
   high: number;
-  /** PR #18 review 1: how far past the hip's range (a slope for the pattern search). */
+  /** Private PR #18 review 1: how far past the hip's range (a slope for the pattern search). */
   excess: number;
   posture: number;
 } {
@@ -313,7 +313,7 @@ function evaluate(
   }
   const p = place(pelvis, contacts, d, gravity, prior);
   // M2 rule 2: the hip's range, known only once the knee is placed. Its excess keeps a slope for
-  // the pattern search, as reachOnly's does (PR #18 review 1).
+  // the pattern search, as reachOnly's does (private PR #18 review 1).
   if (p.missing) {
     const at = {
       pelvis,
@@ -497,7 +497,7 @@ export function solveStance(input: StanceContacts, opts: StanceOptions): Stance 
       };
     };
     for (const [limb, f] of Object.entries(b.sol.forces) as [Limb, Vec3][]) load[limb] = loadOf(f);
-    // PR #18 review 4: a body contact that carries next to nothing is no body contact.
+    // Private PR #18 review 4: a body contact that carries next to nothing is no body contact.
     if (b.sol.body) {
       const on = loadOf(b.sol.body);
       if (on.percent >= BODY_MIN_PERCENT) body = on;

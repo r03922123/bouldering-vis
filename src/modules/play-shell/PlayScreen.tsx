@@ -198,7 +198,7 @@ export function PlayScreen(props: PlayScreenProps) {
         : 'closed';
   const inMap = mapMode === 'check' || mapMode === 'edit';
   const [selectedHold, setSelectedHold] = useState<string | null>(null);
-  // PR #17 review 11: a limb key or a wall tap on the direction check, answered in its banner.
+  // Private PR #17 review 11: a limb key or a wall tap on the direction check, answered in its banner.
   // Belongs to one check of one route (derived: shown only while that check is open).
   const [mapNudged, setMapNudged] = useState<string | null>(null);
   const nudgeMap = () => setMapNudged(eKey);

@@ -47,7 +47,7 @@ export type Feedback = (
   { kind: 'preview'; check: MoveCheck } | { kind: 'rejected'; text: string }
 ) & {
   /**
-   * PR #17 review 10: another limb has been picked since, so this is the last try, not the
+   * Private PR #17 review 10: another limb has been picked since, so this is the last try, not the
    * current one: its words stay ("Last try: …"), its ghost and target go.
    */
   stale?: true;
@@ -69,7 +69,7 @@ interface Tray {
   /** R0-1: "+ limb" is on, so the next limb pressed is added rather than replacing. */
   adding: boolean;
   /**
-   * PR #17 review 1: the bare-wall spot a foot's tap just missed, as a smear target, so "Smear
+   * Private PR #17 review 1: the bare-wall spot a foot's tap just missed, as a smear target, so "Smear
    * here" can put that foot there on purpose. Belongs to that foot while it waits.
    */
   smearSpot: { limb: Limb; target: string } | null;
@@ -121,7 +121,7 @@ export function usePlay(
   );
   const [saved, setSaved] = useState<{ key: string; plan: Plan; tray: Tray } | null>(null);
   const [puffs, setPuffs] = useState<ChalkPuff[]>([]);
-  // PR #17 review 3: attempts made (committed, previewed or rejected), so a repeated attempt with
+  // Private PR #17 review 3: attempts made (committed, previewed or rejected), so a repeated attempt with
   // the same words is still a new one (the COACH answers it).
   const [tries, setTries] = useState(0);
   const sfx = useSfx();
@@ -132,7 +132,7 @@ export function usePlay(
   const current = id && saved?.key === id ? saved : null;
   const memoryKey = id ? planKey(wallId, id) : null;
   const remembered = memoryKey ? rememberedPlan(memoryKey) : undefined;
-  // PR #17 review 8: the same route (the same hold ids) on a new context, e.g. the wall's analysis
+  // Private PR #17 review 8: the same route (the same hold ids) on a new context, e.g. the wall's analysis
   // landing after Plan opened. The plan made on the old context is re-checked here rather than
   // dropped: never a silent reset. Re-review 1: from this session's state, or else from memory's
   // latest plan for this wall and route (after a return to the wall). Derived; the next save keeps

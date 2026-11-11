@@ -192,49 +192,31 @@ from [PR #32](https://github.com/r03922123/bouldering-vis/pull/32)'s final run.
 
 ## Follow-ups
 
-Each item except 21 and 22 is small enough for its own PR; those two take a few PRs each. A done
-item says Done, with its PR, in its title. ⚖ marks an item that needs the owner's decision first.
-The tidy phase ends when all 22 are done. Do them in the order 21, 22, then 1–20: 21 is a live
-exposure, and 22, the public release, builds on 21's photo swap.
+Each item is small enough for its own PR. A done item says Done, with its PR, in its title.
+⚖ marks an item that needs the owner's decision first. The tidy phase ends when every item is done.
 
-### Do first
+### Release (done)
 
-21. **The deployed site serves the private photos.** bouldering-vis.pages.dev returns both routemake
-    photos, the 24 Learn crops and `levels/b1-03.json`, which the release keeps private
-    (`docs/adr/0001-open-source-release.md:50-53`). On 2026-11-06 all 27 came back as their files
-    (`image/*` or JSON); ADR-0001 already lists the exposure as a known issue
-    (`docs/adr/0001-open-source-release.md:144-146`).
-    Deploys are manual (`README.md:35`). Taking the files down leaves the site with no sample wall
-    or Learn photos until the replacements exist (`docs/adr/0001-open-source-release.md:147-148`).
-    - *Done when:* none of those paths serves its file on the deployed site, and the ADR's known
-      issue records the takedown. Check the content type, not only the status: a missing path
-      answers 200 with the app's HTML today.
+21. **Done (before the release): the deployed site no longer serves the earlier photos.** On
+    2026-11-11 the earlier sample photos, the Learn crops and the old baked level answer with the
+    app's HTML (`text/html`), not their files.
+22. **Done (2026-11-11): the public release.** This repo started as one commit, made by hand
+    rather than by the planned allowlist tool; [ADR-0004](adr/0004-forced-release.md) records how
+    and what it left undone. main is protected with the four CI checks required. Follow-up 20
+    (`spike/`) is moot here: those pages stayed private.
 
-### Then the public release
+### Left by the release
 
-22. **Do the public release in ADR-0001 as amended by ADR-0002.** It comes before 1–20 because the
-    photo swap that fixes 21 does most of its prerequisites, and main gets protection only after
-    the move (`docs/adr/0001-open-source-release.md:110`). The order and its reasons are in
-    [ADR-0002](adr/0002-replacement-photos.md#the-public-release-becomes-follow-up-22).
-    Follow-up 20 can't wait until after it: 20 fixes `spike/`, which stays private
-    (`docs/adr/0001-open-source-release.md:65`), and archiving makes this repo read-only. So 20 is
-    done here, before the archive, as one of the release PRs below (the owner's go-ahead on
-    2026-11-06).
-    The public repo's decision record is [ADR-0003](adr/0003-public-repo.md): it restates what
-    still binds the public repo, and adds that the tests move to a synthetic route.
-    - *How it runs:*
-      - The release PRs land on main first: the license files, the export tool and its allowlist,
-        follow-up 20, the tests' move to the synthetic route, the docs rewrites, and a check that
-        runs CI on the exported tree.
-      - The export copies only allowlisted files from one reviewed commit. It scans every file
-        (names, paths, emails, tokens, private links, photo metadata, copies of private files)
-        and writes nothing if any check fails.
-      - This repo is renamed first, to free its name. The new repo is created private, pushed and
-        CI-checked, then made public and protected. Then this repo is archived.
-      - The public repo's first PR records 22 as done.
-    - *Done when:* the new public repo exists from the allowlist export, its main is protected,
-      and this repo is renamed and archived (private). ⚖ The owner approves the release step
-      itself.
+23. **Bring the Play tests back on the synthetic route** ([ADR-0003](adr/0003-public-repo.md) (e)).
+    The release dropped the 32 unit and E2E test files that read the earlier sample route's data
+    (ADR-0004). Until they return, no public check covers the referee on a recorded level or the
+    Play E2E flows.
+    - *Done when:* the play-shell, Root and Play E2E suites run in CI on the synthetic route or on
+      invented points.
+24. **Neutral names and dead links** ([ADR-0003](adr/0003-public-repo.md) (g)). SPECs, docs, code
+    comments and `.gitignore` still name the earlier sample wall and route by their old names, and
+    link to ADRs, task notes and check pages that are not in this repo.
+    - *Done when:* `git grep` finds no old name and no link to a file this repo lacks.
 
 ### Carried over from earlier PRs
 
@@ -381,30 +363,9 @@ exposure, and 22, the public release, builds on 21's photo swap.
       (`SPEC-pixel-kit.md:549`), so a re-run leaves `tests/fixtures/pixel-kit` unchanged.
     - README: E2E runs desktop and phone only (`README.md:19`).
     - *Done when:* each SPEC says what the code does, or the code changes after a decision.
-20. **The `spike/` check pages import functions that were removed.** For example,
-    `spike/sam-check.ts:4` imports `pickMask` from the module index, which no longer exports it.
-    `spike/` isn't type-checked, so nothing catches this.
-    - *Done when:* the spike pages load, or the broken ones are deleted. `spike/` stays private
-      either way (`docs/adr/0001-open-source-release.md:65`).
+20. **Done (2026-11-11, moot): the `spike/` check pages.** They stayed private at the release
+    (ADR-0004), so this repo has none to fix.
 
-**Release work is follow-ups 21 and 22.** 27 test files still import fixtures that the public
-release keeps private (`docs/adr/0001-open-source-release.md:54-55`):
-- the beta-moves canonical suite;
-- the play-shell level fixture and the 23 play-shell tests that import it, directly or through
-  `src/modules/play-shell/screen.fixture.ts`;
-- `src/app/Root.test.tsx` and `src/app/playWall.test.ts`;
-- the climber-stance foot-band check (`src/modules/climber-stance/anyFeet.test.ts`).
-
-Two more kinds use that data without importing a fixture:
-- five E2E specs load the private test level and photo through `e2e/testLevel.ts`, served in
-  place of Wall 2's (SPEC-launch-wall-2 R1)
-  (SPEC-play-shell › Amendment 2026-11-10), which the release's move to the synthetic route removes (22,
-  [ADR-0003](adr/0003-public-repo.md) (e));
-- three climber-stance tests copy the old start's contact points inline
-  (`src/modules/climber-stance/stance.test.ts:324-336`,
-  `src/modules/climber-stance/StancePanel.test.tsx:241-250`,
-  `src/modules/climber-stance/anyFeet.test.ts:520`).
-
-As part of 22 they move to the synthetic route or to invented points
-([ADR-0003](adr/0003-public-repo.md) (e)), as the pixel-kit tests already did with an invented
-pose.
+Three climber-stance tests still copy the earlier route's start contact points inline
+(`src/modules/climber-stance/stance.test.ts:324-336`,
+`src/modules/climber-stance/StancePanel.test.tsx:241-250`); they move to invented points with 23.

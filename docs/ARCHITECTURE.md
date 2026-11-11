@@ -246,9 +246,8 @@ says Done in its title, with its PR, or its date when the PR was in the private 
    (a private learning-log entry, 2026-11-05).
    - *Done when:* 30 CI runs in a row, on any branch, show none in the `iphone` job log, or the
      cause is fixed.
-4. **Watch the `onnxruntime-node` download.** Done
-   (a private PR). One `npm ci` timed out
-   fetching its binary (PR #32).
+4. **Done (2026-11-06): watch the `onnxruntime-node` download.** One `npm ci` timed out
+   fetching its binary (a private PR, 2026-11-05).
    transformers.js pulls it in (`package-lock.json:722`) with an install script
    (`package-lock.json:3943`), yet no unit test imports `src/workers/` `sam.ts`, `depth.ts` or
    `clip.ts`, the files that load transformers.js.

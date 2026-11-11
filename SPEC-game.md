@@ -2,7 +2,7 @@
 
 Status: capability map **approved 2026-10-31**. Module specs follow in build order, each reviewed before code.
 
-Results dated before 2026-11-06 that mention the earlier sample wall or the earlier sample route
+Results and criteria dated before 2026-11-06 that mention the earlier sample wall or the earlier sample route
 were measured on an earlier sample photo that the project no longer ships
 ([ADR-0003](docs/adr/0003-public-repo.md)). Their verdicts, timings and ratios stand as recorded;
 points, foothold ids and heights measured on that photo are given as labels.
@@ -420,7 +420,7 @@ All content is original. No copy, credit or store text may describe Bloc Hall as
 1. **Speculative solving.** Approve targeted pre-solves (Lift to test, which warms the pivot cache; Show a move that holds) and the `reachPreview` export, as a follow-up beta-moves amendment?
 2. **Beta persistence.** Approve saving betas on this device only (echo ticks, resuming a plan after a reload) and adding "betas" to the `progression` row of the capability map?
 3. **`Diagnosis.side`.** Approve a small climber-stance amendment that exposes the existing barn-door hinge side?
-4. **Licence.** May the earlier sample photo and its route data (taken from the photo's source site, naming a real gym) ship as game content under neutral names? *Answered in part 2026-11-01 (user):* our own tagging of the earlier sample route, made in this app, ships as a baked level beside the already-public sample photo. No scraped route data ships (SPEC-play-shell › S9).
+4. **Licence.** May the earlier sample photo and its route data (taken from the photo's source site, naming a real gym) ship as game content under neutral names? *Answered in part 2026-11-01 (user):* our own tagging of the earlier sample route, made in this app, ships as a baked level beside the earlier sample photo, public at the time. No scraped route data ships (SPEC-play-shell › S9).
 
 ## Amendment 2026-11-01 (b): The App Opens Into the Gym, From Beginner to Pro
 
@@ -473,7 +473,7 @@ Module specs for step 3: [SPEC-gym-hub.md](SPEC-gym-hub.md) (v0) and [SPEC-play-
 
 | Step | Modules | Result |
 |---|---|---|
-| 1 | `climber-stance` amendment | **Done** (PR #7). |
+| 1 | `climber-stance` amendment | **Done** (2026-11-01). |
 | 2 | `beta-moves` and `pixel-kit`, in parallel | In progress (lanes). |
 | 3 | `play-shell` **and `gym-hub` v0** | **First playable, and the app now opens into the gym.** The Setting Room door leads to the Studio. |
 | 4 | `move-animation` and `scoring`, in parallel | Send, watch, stars. |

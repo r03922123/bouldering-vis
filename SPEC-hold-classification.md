@@ -126,7 +126,7 @@ saving overrides across sessions.
 
 ## Check Results (2026-10-28, M1)
 
-AC 9: 29 real holds from the `heldout` spray wall (private, unseen gym) (SAM masks from community taps, cropped exactly like the app),
+AC 9: 29 real holds from the `heldout` spray wall, a private held-out set from an unseen gym (SAM masks from community taps, cropped exactly like the app),
 classified by the real CLIP worker and **labeled by Claude from the crops** (a stand-in for human labels; some calls,
 like dish slopers vs. jugs, are judgment). Harness: a real-model check page (private).
 
@@ -196,7 +196,7 @@ per-class recall and the confusion matrix here, per test set.
 - Content per type (catalog fields `learn: { examples[], mistake, footUse }`):
   - **3 real example photos**: masked crops of labeled holds (≤ 20 KB WebP each, `public/learn/`), each with credit.
     Crimp, Jug, Pinch, Pocket, Sloper, Volume and Foot chip come from the CC BY 4.0 training sets (credited per image). Edge comes
-    from the public sample wall (the earlier second sample), hand-picked.
+    from the earlier second sample photo (public then, since removed), hand-picked.
   - **How to hold** (the existing grip text), **one common mistake**, **how it works as a foothold**.
 - **Credits:** each CC BY 4.0 training set and every example photo is credited by name and link.
 
@@ -264,5 +264,5 @@ The crimp tip teaches the half-crimp as the default grip. It presents the full c
 **Learn cards show no photos for now.** The 24 crops in `public/learn/` are deleted: they were cut from a photo the release keeps private ([ADR-0003](docs/adr/0003-public-repo.md) (d)), and the deployed site still served them (follow-up 21 in `docs/ARCHITECTURE.md`). `LEARN_PHOTOS` in `src/modules/hold-classification/names.ts` is `false`, so a Learn card shows how to hold, the common mistake and the foothold line, with no photos and no "Photos:" line. Credits no longer names a source for example photos.
 
 - **A13, suspended in part.** `src/data/hold-catalog.json` keeps its example entries, and `src/data/catalog.test.ts` still checks 3 per type, each path, credit, license and source URL. Only the check that each file exists and is ≤ 20 KB waits: it runs only while `LEARN_PHOTOS` is on.
-- **Until.** The owner's crops from photo B ([ADR-0003](docs/adr/0003-public-repo.md) (c), (f)) replace the catalog's entries and turn `LEARN_PHOTOS` back on, which restores A13 in full.
+- **Until.** The owner's crops from Wall 2's photo, `wall-b` ([ADR-0003](docs/adr/0003-public-repo.md) (c), (f)) replace the catalog's entries and turn `LEARN_PHOTOS` back on, which restores A13 in full.
 - **Test.** `LearnCard.test.tsx`: a Learn card from the catalog shows no image and no "Photos:" line. `HoldCard.test.tsx`: Credits has no "Example photos" sentence.

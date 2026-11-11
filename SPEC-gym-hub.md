@@ -1,7 +1,7 @@
 # Spec: gym-hub v0, the App Root
 
 Status: **APPROVED 2026-11-01** (user, "approve both"). Open questions 1 and 2 are settled as proposed: the hub sprites live in `gym-hub`, and the bays are "Wall 1", "Wall 2". Question 3 (Mags's look) stays open: until the pillars are decided, she is an original design recorded in the AC 15 review.
-Parent: [SPEC-game.md](SPEC-game.md) › Amendment 2026-11-01 (b) (approved). Build step 3, task C3 (and C4's front-desk question).
+Parent: [SPEC-game.md](SPEC-game.md) › Amendment 2026-11-01 (b) (approved). Build step 3.
 
 `gym-hub` v1 (stars on bays, the badge board, route cards, lockers' outfit mirror) stays in step 5 and gets its own section in this file then.
 

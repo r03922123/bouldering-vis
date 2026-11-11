@@ -2,13 +2,12 @@
 
 Module id: `image-input` · Depends on: — · Used by: `hold-segmentation`, `depth-estimation`
 Status: **APPROVED (2026-10-26)**
+Parent: [SPEC.md](SPEC.md)
 
 Results dated before 2026-11-06 that mention the earlier sample wall or the earlier sample route
 were measured on an earlier sample photo that the project no longer ships
 ([ADR-0003](docs/adr/0003-public-repo.md)). Their verdicts, timings and ratios stand as recorded;
 points, foothold ids and heights measured on that photo are given as labels.
-
-Parent: [SPEC.md](SPEC.md)
 
 ## Objective
 
@@ -105,7 +104,7 @@ Cropping or rotation tools, HEIC conversion, multiple images, live camera previe
 ## Amendment 2026-10-29: Sample Wall Pool (T30)
 
 A small built-in pool of sample wall photos the user can pick from (`public/samples/`, listed in
-`samples.ts`). The default selection is **the earlier second sample** (a test photo from the human). Picking a
+`samples.ts`). The default selection is **an earlier test photo from the human** (later the earlier second sample). Picking a
 sample and pressing **Load sample** runs the same `loadImage` path as a file, including the replace
 confirmation when a route exists. Note: files in `public/` are served publicly.
 
@@ -135,8 +134,8 @@ AC S3: the earlier second sample still loads, with no `pxPerCm`.
 
 ## Amendment 2026-11-06: no video link
 
-The release ([ADR-0003](docs/adr/0003-public-repo.md) (d)) retires the climbing videos: the photo that had
-them is being replaced, and the owner's video shows a different wall. `Sample` loses its `videos`
+The release drops the photo the videos belonged to ([ADR-0003](docs/adr/0003-public-repo.md) (d)), so the
+climbing videos retire: the photo that had them is being replaced, and the owner's video shows a different wall. `Sample` loses its `videos`
 field, and the credit line shows only the photo's source. The credit text and the measured scale
 stay while the current default photo is still served.
 

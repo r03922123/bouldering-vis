@@ -25,7 +25,8 @@ Dev-only tools:
 
 - `node scripts/make-synthetic-fixtures.ts` regenerates the committed synthetic fixtures.
 - `node scripts/build-clip-text-embeddings.ts` rebuilds `src/data/clip-text-embeddings.json`.
-- The real-model check pages and their runner are private ([ADR-0003](docs/adr/0003-public-repo.md)).
+- Most real-model check pages and their runner stay private; the level recorder and the
+  hold-embedding page move to `scripts/` ([ADR-0003](docs/adr/0003-public-repo.md) (h), follow-up 25).
 
 ## Deploying
 

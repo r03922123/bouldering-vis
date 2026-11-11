@@ -8,7 +8,7 @@ A player opens the app, sees the climber on the setter's start (two hands, two f
 moves from there to the top. Wall 1 and the steps that only served choosing between walls are gone.
 
 Today: Wall 2 has no baked level, so Play opens in **Tag** (the player taps holds); after Tag the
-climber stands but the next move fails. Wall 1 has no level at all since PR #36.
+climber stands but the next move fails. Wall 1 has no level at all since 2026-11-06.
 
 ## Assumptions (correct me now)
 1. "Setter's tagged start" = a baked level file for Wall 2, like the private `tests/fixtures/e2e/wall-1.level.json`,

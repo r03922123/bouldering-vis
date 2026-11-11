@@ -2,6 +2,7 @@ import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import {
   checkMove,
   createStanceCache,
+  decodeBeta,
   validateShape,
   type BetaStep,
   type MoveContext,
@@ -10,7 +11,7 @@ import {
 import { LIMBS } from '../climber-stance';
 import { useAppStore } from '../../store/app';
 import { resetViewAids } from './aids';
-import { SYNTHETIC } from './synthetic.fixture';
+import { betaText, SYNTHETIC } from './synthetic.fixture';
 import { forgetPlans } from './memory';
 import { contextFor, listTargets, startPlan } from './play';
 import { CHUNK, MARK_WORDS, markOf, summaryLine, type Mark } from './plausible';
@@ -46,6 +47,24 @@ describe('markOf (acceptance 5)', () => {
     }
     // Every limb's whole list: 7 holds, 33 wall feet, Smear for the feet (none for a hand's).
     expect(checked).toBe(96);
+  });
+
+  // From the start no candidate is a deadpoint; three moves into the reference, the left hand's
+  // reach to 4 is one, so every kind of mark is compared there.
+  it('equals it for every candidate of every limb three moves in, deadpoints included', () => {
+    const from = decodeBeta(betaText('reference'), ctx)!.steps[3]!;
+    const cache = createStanceCache();
+    const seen = new Set<string | null>();
+    for (const limb of LIMBS) {
+      for (const t of listTargets(ctx, limb, { x: 900, y: 900 })) {
+        if (t.target === null) continue;
+        const next = { ...from, [limb]: t.target };
+        const want = referee(from, next);
+        expect(markOf(from, next, ctx, cache), `${limb} → ${t.label}`).toBe(want);
+        seen.add(want);
+      }
+    }
+    expect(seen).toEqual(new Set(['holds', 'deadpoint', 'falls', null]));
   });
 
   it('summaryLine counts each mark once, and the counts add up to the total', () => {

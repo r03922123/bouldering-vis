@@ -224,12 +224,11 @@ says Done in its title, with its PR, or its date when the PR was in the private 
     `heldout` for the private real photos, and names private tools by what they do; no Markdown
     link points to a missing file or anchor, and no link points at a private-repo PR. Plain-text
     private PR numbers remain: follow-up 26.
-25. **Ship the two pages ADR-0003 (h) moves to `scripts/`** ([ADR-0003](adr/0003-public-repo.md)
-    (h)). The hand cut left out the level recorder and the hold-embedding page, so
-    `scripts/hold-data/embed.mjs` opens `scripts/hold-data/probe-data.html`, which this repo
-    lacks, and Wall 1's level has no public recorder.
-    - *Done when:* both pages are in `scripts/`, hold none of the data ADR-0003 (d) keeps private,
-      and `embed.mjs` reaches its page on `npx vite --port 5175`.
+25. **Done (2026-11-11): the two pages ADR-0003 (h) moves to `scripts/`**
+    ([ADR-0003](adr/0003-public-repo.md) (h); PR #17). `scripts/level-recorder.html` records a
+    level on the photo in the Studio, and `scripts/hold-data/probe-data.html` is the page
+    `embed.mjs` drives; both are code only, and `embed.mjs` reaches its page on
+    `npx vite --port 5175`.
 26. **Say which repo a PR number belongs to.** About 60 plain-text mentions such as "PR #32" in
     SPECs, docs and code comments name private-repo PRs. This repo's own numbering reaches them
     soon, so a reader will open the wrong PR; this file already mixes the public PR #1 with

@@ -739,7 +739,7 @@ A reviewer agent with a pixel-art and games-history persona read the sprites, ou
 ### AC 49: real-photo check (T12, 2026-11-01)
 
 The earlier sample photo (1536 × 1152 working size) on the gallery's photo stage, at 375 × 740 with Pixel 7 emulation (dpr 2.625, P = 5, art height 49.7) and at desktop size.
-- **Climber:** posed by the real `solveStance` (feasible) on the earlier sample route's recorded start contacts at the default climber size (H = 424, Vertical). Those are the start contacts in `stance.test.ts` (AC 32): LH crimp hold 2, RH sloper hold 1, and the feet on the pink and black wall footholds.
+- **Climber:** posed by the real `solveStance` (feasible) on the earlier sample route's recorded start contacts at the default climber size (H = 424, Vertical). Those were the start contacts in `stance.test.ts` (AC 32) at the time, since replaced by invented points: LH crimp hold 2, RH sloper hold 1, and the feet on the pink and black wall footholds.
 - **Markers:** the earlier sample route's hold list is not in the repo, so the boxes are estimated by eye from the photo. Start is on hold 1, planned 1 on hold 2 and planned 2 on a yellow hold above. The target (RH) and the finish are on holds above and to the right, with a reach gap.
 - **Method:** this was a scripted check, not run by a person. The screenshots were taken with Playwright, including CDP `Emulation.setEmulatedVisionDeficiency` for protanopia, deuteranopia, tritanopia and achromatopsia, and then viewed. No physical phone was available.
 

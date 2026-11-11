@@ -24,14 +24,19 @@ that repo public would have published the photo whatever was deleted first.
 - **A new repo, one commit, made by hand.** The tree of the private repo's last reviewed commit
   was copied, then these were removed: the earlier sample photo and every file recorded on it
   (levels, betas, wall blobs, foot-band blobs), the private working folders, the private
-  decision records and learning log, the scripts that fetched the photo's source site, the
-  export tool itself, and the 32 test files that read the removed data.
+  decision records and learning log, the scripts tied to the earlier photo's source, the
+  export tool (private), and the 32 test files and 3 test helpers that read the removed data.
 - **Checks run on that tree before anything was public:** both type-checks, lint, the build,
-  1437 unit tests, a scan for emails, home-folder paths, tokens and keys, and a photo-metadata
+  the unit tests, a scan for emails, home-folder paths, tokens and keys, and a photo-metadata
   scan. The repo was then pushed while private, its tree checked for the photo's blob, and only
-  then made public. CI passed on the first public commit.
+  then made public. CI passed on the first public commit: 1392 unit tests in 131 files, and
+  81, 81 and 52 E2E tests in the three projects.
 - **Added at the release:** `LICENSE` (Apache-2.0) and `NOTICE`, as ADR-0003 (a) requires.
-- **Everything else in ADR-0003 still binds this repo.**
+- **The tests' move is deferred.** This takes the alternative ADR-0003 rejected, "Export
+  without those tests": ADR-0003 (e) now happens after the release, as follow-up 23 in
+  `docs/ARCHITECTURE.md`. The checks are not lost for good, because the archived private repo
+  keeps the removed tests to port from.
+- **Everything else in ADR-0003, including (e) as deferred, still binds this repo.**
 
 ## Alternatives Considered
 
@@ -47,7 +52,9 @@ that repo public would have published the photo whatever was deleted first.
 
 - A denylist made this tree, not an allowlist, so a private file the removal missed could have
   shipped. The scans above found none, but they had no list of personal strings to look for.
-- The removed tests leave no public check on the referee over a recorded level or on the Play
-  E2E flows until they return on the synthetic route (follow-up 23 in `docs/ARCHITECTURE.md`).
+- The cases the removed suites pinned (the earlier route's moves and verdicts, and the Play
+  screen and E2E flows built on them) have no public check until they return on the synthetic
+  route (follow-up 23). Wall 2's shipped level is still checked: `src/app/wall2Level.test.ts`
+  runs the referee on it and `e2e/wall2-top.spec.ts` plays it to the top.
 - Old names and links to files this repo lacks remain in SPECs, docs and comments
   (follow-up 24).

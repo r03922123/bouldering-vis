@@ -156,21 +156,21 @@ flowchart LR
 
 ## 5. Tests and CI
 
-**Unit and component tests** run in Vitest with jsdom (`vite.config.ts:30-36`): 157 test files:
-152 next to the code and 5 in `scripts/`. **Browser (E2E) tests** run whole flows in
-Playwright (27 spec files in `e2e/`) against a fake ML worker: `playwright.config.ts:50` sets
+**Unit and component tests** run in Vitest with jsdom (`vite.config.ts:30-36`): 131 test files:
+127 next to the code and 4 in `scripts/`. **Browser (E2E) tests** run whole flows in
+Playwright (23 spec files in `e2e/`) against a fake ML worker: `playwright.config.ts:50` sets
 `VITE_FAKE_ML=1`, and the client then starts `fake.worker.ts` (`src/workers/client.ts:54-57`),
 which makes up masks and depth. Real models never run in CI
 ([why](ml-runtime.md#ci-and-e2e-never-run-real-models)).
 
 **Three E2E projects** (`playwright.config.ts:31-43`) each run as their own CI job. Test counts are
-from [PR #32](https://github.com/r03922123/bouldering-vis/pull/32)'s final run.
+from the first public CI run (2026-11-11).
 
 | Project | Browser | Device | Specs | Tests |
 |---|---|---|---|---|
-| `desktop` | Chromium | Desktop Chrome | all 27 | 141 passed, 9 skipped |
-| `phone` | Chromium | Pixel 7, 375 px wide | all 27 | 149 passed, 1 skipped |
-| `iphone` | WebKit (Safari's engine) | iPhone 15 | the 16 in `playwright.config.ts:5-22` | 52 passed |
+| `desktop` | Chromium | Desktop Chrome | all 23 | 81 passed |
+| `phone` | Chromium | Pixel 7, 375 px wide | all 23 | 81 passed |
+| `iphone` | WebKit (Safari's engine) | iPhone 15 | the 17 in `playwright.config.ts:5-23` | 52 passed |
 
 - **`budgetMs` gives only the iPhone extra time** (`e2e/helpers.ts:14-15`): a SPEC time set "on a
   laptop" is tripled on `iphone` and exact elsewhere, because `phone` is Chromium at desktop CPU
@@ -192,7 +192,8 @@ from [PR #32](https://github.com/r03922123/bouldering-vis/pull/32)'s final run.
 
 ## Follow-ups
 
-Each item is small enough for its own PR. A done item says Done, with its PR, in its title.
+Each item except 23 and 24 is small enough for its own PR; those take a few PRs each. A done item
+says Done in its title, with its PR, or its date when the PR was in the private repo.
 ⚖ marks an item that needs the owner's decision first. The tidy phase ends when every item is done.
 
 ### Release (done)
@@ -201,22 +202,28 @@ Each item is small enough for its own PR. A done item says Done, with its PR, in
     2026-11-11 the earlier sample photos, the Learn crops and the old baked level answer with the
     app's HTML (`text/html`), not their files.
 22. **Done (2026-11-11): the public release.** This repo started as one commit, made by hand
-    rather than by the planned allowlist tool; [ADR-0004](adr/0004-forced-release.md) records how
-    and what it left undone. main is protected with the four CI checks required. Follow-up 20
-    (`spike/`) is moot here: those pages stayed private.
+    rather than by the planned allowlist tool; [ADR-0004](adr/0004-hand-cut-release.md) records how
+    and what it left undone (recorded in PR #1). main is protected with the four CI checks
+    required.
 
 ### Left by the release
 
 23. **Bring the Play tests back on the synthetic route** ([ADR-0003](adr/0003-public-repo.md) (e)).
-    The release dropped the 32 unit and E2E test files that read the earlier sample route's data
-    (ADR-0004). Until they return, no public check covers the referee on a recorded level or the
-    Play E2E flows.
-    - *Done when:* the play-shell, Root and Play E2E suites run in CI on the synthetic route or on
-      invented points.
+    The release dropped the 32 test files and 3 test helpers that read the earlier sample route's
+    data (ADR-0004). Until they return, the cases they pinned have no public check; Wall 2's
+    shipped level is still checked by `src/app/wall2Level.test.ts` and `e2e/wall2-top.spec.ts`.
+    - Two climber-stance test files still copy the earlier route's start contact points inline
+      (4 tests: `src/modules/climber-stance/stance.test.ts:339, 346, 350`,
+      `src/modules/climber-stance/StancePanel.test.tsx:239`).
+    - *Done when:* these run in CI on the synthetic route or on invented points: the beta-moves
+      canonical suite, the play-shell suites, `src/app/Root.test.tsx`, `src/app/playWall.test.ts`,
+      the climber-stance foot-band check and the five Play E2E specs; and the inline points
+      above are invented ones.
 24. **Neutral names and dead links** ([ADR-0003](adr/0003-public-repo.md) (g)). SPECs, docs, code
     comments and `.gitignore` still name the earlier sample wall and route by their old names, and
     link to ADRs, task notes and check pages that are not in this repo.
-    - *Done when:* `git grep` finds no old name and no link to a file this repo lacks.
+    - *Done when:* `git grep` finds no old name, no link to a file or anchor this repo lacks, and
+      no link to the private repo's PRs (which now point into this repo's numbering).
 
 ### Carried over from earlier PRs
 
@@ -230,7 +237,7 @@ Each item is small enough for its own PR. A done item says Done, with its PR, in
      from CI runs on any branch, show no first-try `feedback.spec` failure. A failure makes this
      a debugging task.
 3. ⚖ **Watch the iPhone `beforeEach` timeouts.** Two on Nov 4, cause unknown, none since
-   ([PR #32's log entry](learning-log.md#2026-11-05--stop-the-bleeding-catch-the-450-ms-pulse-by-recording-it-not-polling-for-it)).
+   (a private learning-log entry, 2026-11-05).
    - *Done when:* 30 CI runs in a row, on any branch, show none in the `iphone` job log, or the
      cause is fixed.
 4. **Watch the `onnxruntime-node` download.** Done
@@ -245,7 +252,8 @@ Each item is small enough for its own PR. A done item says Done, with its PR, in
      (`.github/workflows/ci.yml:17-18`), the package's documented switch (`onnxruntime-node`
      1.30.0, `script/install.js:31-47`), so its postinstall exits before downloading. Only the
      CUDA binaries were downloaded; the CPU ones ship in the npm package.
-5. **Make the hub paint test reload.** `goto('/#/')` after `goto('/')` changes only the hash, so the
+5. **Done (2026-11-11, moot): make the hub paint test reload.** The hub spec left with the
+   Play E2E specs (follow-up 23), so its rewrite there should time a real load. The old note: `goto('/#/')` after `goto('/')` changes only the hash, so the
    page never reloads: the throttled paint is never measured and the "no Studio bundle" check sees
    no requests (`e2e/hub.spec.ts:137-146`; PR #31 review).
    - *Done when:* the test times a real 4×-throttled load against SPEC-gym-hub's 2 s.
@@ -363,9 +371,5 @@ Each item is small enough for its own PR. A done item says Done, with its PR, in
       (`SPEC-pixel-kit.md:549`), so a re-run leaves `tests/fixtures/pixel-kit` unchanged.
     - README: E2E runs desktop and phone only (`README.md:19`).
     - *Done when:* each SPEC says what the code does, or the code changes after a decision.
-20. **Done (2026-11-11, moot): the `spike/` check pages.** They stayed private at the release
+20. **Done (2026-11-11, moot): the private check pages.** They stayed private at the release
     (ADR-0004), so this repo has none to fix.
-
-Three climber-stance tests still copy the earlier route's start contact points inline
-(`src/modules/climber-stance/stance.test.ts:324-336`,
-`src/modules/climber-stance/StancePanel.test.tsx:241-250`); they move to invented points with 23.

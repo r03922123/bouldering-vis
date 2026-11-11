@@ -94,7 +94,7 @@ export default tseslint.config(
   },
   {
     // Playwright runner: Node script whose page.evaluate callbacks run in the browser.
-    files: ['spike/**/*.mjs', 'scripts/**/*.mjs'],
+    files: ['scripts/**/*.mjs'],
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
   },
 );

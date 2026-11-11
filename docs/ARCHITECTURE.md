@@ -224,6 +224,12 @@ says Done in its title, with its PR, or its date when the PR was in the private 
     link to ADRs, task notes and check pages that are not in this repo.
     - *Done when:* `git grep` finds no old name, no link to a file or anchor this repo lacks, and
       no link to the private repo's PRs (which now point into this repo's numbering).
+25. **Ship the two pages ADR-0003 (h) moves to `scripts/`** ([ADR-0003](adr/0003-public-repo.md)
+    (h)). The hand cut left out the level recorder and the hold-embedding page, so
+    `scripts/hold-data/embed.mjs` opens `scripts/hold-data/probe-data.html`, which this repo
+    lacks, and Wall 1's level has no public recorder.
+    - *Done when:* both pages are in `scripts/`, hold none of the data ADR-0003 (d) keeps private,
+      and `embed.mjs` reaches its page on `npx vite --port 5175`.
 
 ### Carried over from earlier PRs
 
@@ -241,7 +247,7 @@ says Done in its title, with its PR, or its date when the PR was in the private 
    - *Done when:* 30 CI runs in a row, on any branch, show none in the `iphone` job log, or the
      cause is fixed.
 4. **Watch the `onnxruntime-node` download.** Done
-   ([PR #40](https://github.com/r03922123/bouldering-vis/pull/40)). One `npm ci` timed out
+   (a private PR). One `npm ci` timed out
    fetching its binary (PR #32).
    transformers.js pulls it in (`package-lock.json:722`) with an install script
    (`package-lock.json:3943`), yet no unit test imports `src/workers/` `sam.ts`, `depth.ts` or

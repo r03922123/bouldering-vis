@@ -6,7 +6,7 @@ coverage/
 .env*
 playwright-report/
 test-results/
-# Third-party photos from routemake: local manual checks only, never committed
+# Private real wall photos: local manual checks only, never committed
 tests/fixtures/real/
 
 # Third-party hold datasets (Roboflow, Kaggle): local training/testing only, never committed

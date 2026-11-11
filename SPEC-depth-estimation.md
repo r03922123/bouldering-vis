@@ -98,12 +98,12 @@ blend slider.
 
 | Check | Result | Target |
 |---|---|---|
-| Real photo `mingde-A1`, 1536×1152, warm (incl. normalize + normals) | **689 ms** | ≤ 5 s ✓ |
+| Real photo `real-1`, 1536×1152, warm (incl. normalize + normals) | **689 ms** | ≤ 5 s ✓ |
 | Cold first run (download + load + run) | 21.7 s | progress shown |
 | Unit: flat/ramp/sphere normals, percentile normalization, viridis ends | pass | AC 3, 4, 5 |
 
-Visual check (harness `spike/depth-check.html`): physically plausible. Floor and mats are nearest (yellow), the wall is farther, and volumes
-and large holds read as nearer than the wall, so AC 7 holds for A1. **Finding:** the floor takes most of the 0–1 range, which squeezes
+Visual check (a real-model check page, private): physically plausible. Floor and mats are nearest (yellow), the wall is farther, and volumes
+and large holds read as nearer than the wall, so AC 7 holds for `real-1`. **Finding:** the floor takes most of the 0–1 range, which squeezes
 the wall and holds into a narrow band. The heatmap stays correct but has low contrast on the wall, and hold relief is small, so fixed-gain
 normals are close to +z. `hold-geometry` (T14) tunes the normal gain against real photos.
 

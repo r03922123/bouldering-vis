@@ -2,6 +2,11 @@
 
 Status: capability map **approved 2026-10-31**. Module specs follow in build order, each reviewed before code.
 
+Results dated before 2026-11-06 that mention the earlier sample wall or the earlier sample route
+were measured on an earlier sample photo that the project no longer ships
+([ADR-0003](docs/adr/0003-public-repo.md)). Their verdicts, timings and ratios stand as recorded;
+points, foothold ids and heights measured on that photo are given as labels.
+
 ## Objective
 
 Turn bouldering-vis into a fun game for **gym climbers, V0–V5**. They plan the *beta* (the sequence of moves) for a route on a **real wall photo**, and an honest physics model referees every stance. Then they watch an **original pixel-art climber** send it.
@@ -124,7 +129,7 @@ export function checkMove(prev: BetaStep, next: BetaStep, ctx: MoveContext): Mov
 | Unit | Vitest | Move legality, fall detection, scoring, unlocks, sprite rasterising (exact pixel snapshots), sound-effect envelopes (parameters, not audio) |
 | Component | Vitest + Testing Library | Move tray, Undo, Send, star display, the Studio/Play switch |
 | E2E | Playwright (desktop + Pixel 7, fake models) | Sample wall → plan a 3-move beta → Send → stars appear; hub walk → enter wall; save survives a reload |
-| Real-model check | The recorded real-model session script | The sample wall B1-03 is playable to a send with real models |
+| Real-model check | The recorded real-model session script | The earlier sample route is playable to a send with real models |
 | Pro playtest | Reviewer agent (pro-climber persona) | Is it fun, honest and clear? A ranked issue list for each step |
 
 - Coverage ≥ 80% on the pure logic in `beta-moves`, `scoring` and `progression`.
@@ -152,7 +157,7 @@ export function checkMove(prev: BetaStep, next: BetaStep, ctx: MoveContext): Mov
 
 ## Success Criteria
 
-1. On the sample wall (B1-03), a player plans and sends a beta with real models on a phone in under 3 minutes. The default start stance can be held, and the weight shares are real numbers.
+1. On the earlier sample route, a player plans and sends a beta with real models on a phone in under 3 minutes. The default start stance can be held, and the weight shares are real numbers.
 2. Every illegal move gives a reason in climbing words, and Undo always restores the previous stance.
 3. The send replay keeps every planted contact on its hold (within 2 px at the working resolution) and plays at ≥ 30 fps on a mid-range phone.
 4. Stars and badges persist across reloads, and the game still works with storage blocked.
@@ -374,7 +379,7 @@ All content is original. No copy, credit or store text may describe Bloc Hall as
 3. **Honesty test.** Every frame drawn in planning and replay belongs to one of the allowed pose classes, asserted from a render log.
 4. **Replay camera.** Zoom ≤ 1.21×, and P stays the same for the whole replay.
 5. **Content gate.** Every shipped level and chip has a reference beta that passes `checkBeta` in Node and in WebKit. Every ratio and feasibility value stays a named margin away from its threshold, and CI fails on a regression.
-6. **Measure before scoring.** Hand `load.percent` on B1-03 Vertical is recorded in a fixture test before the scoring spec is written. If it is near 0, effort stars and Light arms are not used on that level.
+6. **Measure before scoring.** Hand `load.percent` on the earlier sample route (Vertical) is recorded in a fixture test before the scoring spec is written. If it is near 0, effort stars and Light arms are not used on that level.
 7. **Lesson fixtures.** The A3 barn-door, the B3 loss of smears at 20° and the C2 sloper slip each have a passing fixture test before their content is built.
 8. **Accessibility.**
    - The Play screen can be completed with the keyboard alone, with verdicts announced (E2E).
@@ -384,7 +389,7 @@ All content is original. No copy, credit or store text may describe Bloc Hall as
 9. **Originality.** A recorded review for every new character, name and sound before merge.
 10. **Playtest.** A manual session with 5 real V0–V5 climbers:
     - at least 4 send problem A1 without help;
-    - the median time to a first B1-03 send is under 3 minutes.
+    - the median time to a first send of the earlier sample route is under 3 minutes.
 11. **Charter.** Each charter rule has a unit test.
 
 ### 9. Cut list
@@ -415,7 +420,7 @@ All content is original. No copy, credit or store text may describe Bloc Hall as
 1. **Speculative solving.** Approve targeted pre-solves (Lift to test, which warms the pivot cache; Show a move that holds) and the `reachPreview` export, as a follow-up beta-moves amendment?
 2. **Beta persistence.** Approve saving betas on this device only (echo ticks, resuming a plan after a reload) and adding "betas" to the `progression` row of the capability map?
 3. **`Diagnosis.side`.** Approve a small climber-stance amendment that exposes the existing barn-door hinge side?
-4. **Licence.** May the B1 photo and its route data (scraped from a third-party site, naming a real gym) ship as game content under neutral names? *Answered in part 2026-11-01 (user):* our own tagging of B1-03, made in this app, ships as a baked level beside the already-public sample photo. No scraped route data ships (SPEC-play-shell › S9).
+4. **Licence.** May the earlier sample photo and its route data (taken from the photo's source site, naming a real gym) ship as game content under neutral names? *Answered in part 2026-11-01 (user):* our own tagging of the earlier sample route, made in this app, ships as a baked level beside the already-public sample photo. No scraped route data ships (SPEC-play-shell › S9).
 
 ## Amendment 2026-11-01 (b): The App Opens Into the Gym, From Beginner to Pro
 
@@ -484,7 +489,7 @@ These add to or replace the matching criteria above:
 1. **Opens into the gym.** `/` shows the hub. The climber is walkable and a wall door can be tapped within 2 s on a mid-range phone.
 2. **Studio unchanged.** Every existing Studio unit, component and E2E test passes, the E2E tests via `/#/studio`. The Setting Room is reachable in ≤ 2 taps from the hub.
 3. **Beginner** (replaces "a V0–V5 climber can plan and send…in under 3 minutes"). Someone who has never climbed sends Room A's first wall without outside help, and the median time is under 3 minutes.
-4. **Gym climber.** Sends B1-03 with real models on a phone in under 3 minutes (the old SC 1).
+4. **Gym climber.** Sends the earlier sample route with real models on a phone in under 3 minutes (the old SC 1).
 5. **Pro.**
    - From the first screen, a pro loads their own wall photo and sees the first verdict in ≤ 4 taps plus the hold taps.
    - Numbers mode values match the referee's output exactly (unit test).

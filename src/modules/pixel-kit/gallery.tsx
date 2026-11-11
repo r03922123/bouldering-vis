@@ -24,7 +24,7 @@ import { artGrid, pixelSize, type PixelView } from './view';
 // /px-gallery.html. It is not exported from index.ts, and `vite build` only builds index.html;
 // scripts/check-dist.ts fails the build if it ever leaks into dist/ (AC 45).
 //   /px-gallery.html          fixed scenes for E2E (AC 41–44), a live showcase and the HUD
-//   /px-gallery.html?bench    the frame-cost bench for spike/pixel-timing.mjs (AC 46)
+//   /px-gallery.html?bench    the frame-cost bench for the frame-cost runner (private; AC 46)
 //   /px-gallery.html?photo    an empty photo stage, filled by window.pxGallery.showPhoto (AC 49)
 
 type SceneInput = PixelLayerProps['scene'];

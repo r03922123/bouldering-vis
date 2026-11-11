@@ -137,11 +137,11 @@ ML-based chalk or wall segmentation.
 |---|---|---|
 | `compositeRoute` 1536×1152, 10 holds | **25 ms** | ≤ 100 ms ✓ |
 | `segmentWall` on the synthetic wall vs exact all-holds mask | recall **1.000**, IoU **0.946**, ~300 ms | recall ≥ 0.80, IoU ≥ 0.60, ≤ 1 s ✓ |
-| `segmentWall` on real photos (`mingde-A1`, `mingde-S`, `g2-A`) | 320–370 ms each; visual check below | ≤ 1 s ✓ |
+| `segmentWall` on real photos (`real-1`, `heldout`, `real-2`) | 320–370 ms each; visual check below | ≤ 1 s ✓ |
 
-Visual check (harness `spike/wall-check.html`): on A1 every colored hold and volume on the wall face is found. On the dense spray
+Visual check (a real-model check page, private): on `real-1` every colored hold and volume on the wall face is found. On the dense spray
 wall almost all holds are found; white or chalky holds and chalk patches are partly missed, as predicted. Before the > 8% rule the
-dark ceiling and beams on A1 counted as one huge "hold". With it they're dropped, but **holds touching that ceiling region are dropped
-with it** (e.g. a top yellow ball on A1), and a few light-blue glare blobs remain. Acceptable for v1; the SAM segment-everything
+dark ceiling and beams on `real-1` counted as one huge "hold". With it they're dropped, but **holds touching that ceiling region are dropped
+with it** (e.g. a top yellow ball on `real-1`), and a few light-blue glare blobs remain. Acceptable for v1; the SAM segment-everything
 fallback stays available.
 

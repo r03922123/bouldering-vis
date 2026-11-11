@@ -1,8 +1,8 @@
 import { PLACE_GAP, placeAt, placesFor, stripFor } from './places';
 
 const SAMPLES = [
-  { id: 'routemake-g2-b1', name: 'Wall 1' },
-  { id: 't-up-d2', name: 'Wall 2' },
+  { id: 'wall-a', name: 'Wall 1' },
+  { id: 'wall-b', name: 'Wall 2' },
 ];
 
 describe('placesFor (SPEC-gym-hub G1, G9, AC 3)', () => {
@@ -11,8 +11,8 @@ describe('placesFor (SPEC-gym-hub G1, G9, AC 3)', () => {
     expect(places.map((p) => p.id)).toEqual([
       'desk',
       'lockers',
-      'bay:routemake-g2-b1',
-      'bay:t-up-d2',
+      'bay:wall-a',
+      'bay:wall-b',
       'new-wall',
       'setting-room',
     ]);
@@ -23,8 +23,8 @@ describe('placesFor (SPEC-gym-hub G1, G9, AC 3)', () => {
   it('signs the bays "Wall 1", "Wall 2" in sample order and links them to their sample', () => {
     const bays = placesFor('gym', SAMPLES).filter((p) => p.kind === 'bay');
     expect(bays.map((b) => [b.label, b.sampleId])).toEqual([
-      ['Wall 1', 'routemake-g2-b1'],
-      ['Wall 2', 't-up-d2'],
+      ['Wall 1', 'wall-a'],
+      ['Wall 2', 'wall-b'],
     ]);
   });
 
@@ -56,8 +56,8 @@ describe('stripFor (G7, G9)', () => {
       'new-wall',
       'desk',
       'lockers',
-      'bay:routemake-g2-b1',
-      'bay:t-up-d2',
+      'bay:wall-a',
+      'bay:wall-b',
     ]);
   });
 });

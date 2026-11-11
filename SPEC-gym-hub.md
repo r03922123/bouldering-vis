@@ -1,7 +1,7 @@
 # Spec: gym-hub v0, the App Root
 
 Status: **APPROVED 2026-11-01** (user, "approve both"). Open questions 1 and 2 are settled as proposed: the hub sprites live in `gym-hub`, and the bays are "Wall 1", "Wall 2". Question 3 (Mags's look) stays open: until the pillars are decided, she is an original design recorded in the AC 15 review.
-Parent: [SPEC-game.md](SPEC-game.md) › Amendment 2026-11-01 (b) (approved). Build step 3, task C3 (and C4's front-desk question) in [tasks/game-todo.md](tasks/game-todo.md).
+Parent: [SPEC-game.md](SPEC-game.md) › Amendment 2026-11-01 (b) (approved). Build step 3, task C3 (and C4's front-desk question).
 
 `gym-hub` v1 (stars on bays, the badge board, route cards, lockers' outfit mirror) stays in step 5 and gets its own section in this file then.
 
@@ -215,9 +215,9 @@ Status: **APPROVED 2026-11-02** (user: "approve"), from the user's play-test fee
 
 Acceptance: `/` shows no dialog. ← / → walk the climber without focusing the floor, and the ◀ ▶ buttons walk it on a touch profile. The strip has no Front desk or Lockers button. Every other gym AC still passes.
 
-## Amendment 2026-11-06: No Sample Credit Line (ADR-0002)
+## Amendment 2026-11-06: No Sample Credit Line (ADR-0003)
 
-**G10, amended.** Bays still read **"Wall 1"**, **"Wall 2"**, … in sample order. There is no sample credit line: both samples are the owner's own photos ([ADR-0002](docs/adr/0002-replacement-photos.md)), so there is no source to name, and the Studio's `SampleCredit` is removed. The picker still lists each sample by its own name ("Sample wall A").
+**G10, amended.** Bays still read **"Wall 1"**, **"Wall 2"**, … in sample order. There is no sample credit line: both samples are the owner's own photos ([ADR-0003](docs/adr/0003-public-repo.md) (c)), so there is no source to name, and the Studio's `SampleCredit` is removed. The picker still lists each sample by its own name ("Sample wall A").
 
 - **Test.** `ImageInput.samples.test.tsx` (SPEC-image-input AC S5): no sample shows a `.sample-credit` element.
 

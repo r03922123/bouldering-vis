@@ -64,7 +64,7 @@ export function autoAssign(
     .sort((a, b) => a.centroid.x - b.centroid.x);
   if (!starts.length) return { ...EMPTY_ASSIGNMENT };
   // One start hold: the other hand takes the nearest hold beside it at about the same height (a
-  // split start, as real climbers start B1-03), else both hands match on it.
+  // split start, as real climbers started the earlier sample route), else both hands match on it.
   const only = starts.length === 1 ? starts[0]! : null;
   const partner = only ? splitPartner(holds, only, height) : null;
   const pair = partner

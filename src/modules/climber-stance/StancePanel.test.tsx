@@ -189,7 +189,7 @@ describe('StancePanel hands-pull-in note', () => {
     percent,
     force: [0, 0, 0] as [number, number, number],
   });
-  /** The solved stance with these loads (B1-03 on Vertical: LH 0 · RH 0 · LF 98 · RF 2). */
+  /** The solved stance with these loads (the earlier sample route on Vertical: LH 0 · RH 0 · LF 98 · RF 2). */
   const withLoad = (load: Load, feasible = true): StanceState => ({
     ...solved,
     stance: { ...solved.stance!, feasible, load },

@@ -4,6 +4,11 @@ Module id: `beta-moves` · Depends on: `climber-stance` (through `index.ts` only
 Status: **DRAFT, revised after review (2026-10-31)**. Blocked on: the climber-stance any-feet amendment spec. It has not been written yet; see A1.
 Parent: [SPEC-game.md](SPEC-game.md) (Bloc Hall capability map) · App conventions: [SPEC.md](SPEC.md) · Solver: [SPEC-climber-stance.md](SPEC-climber-stance.md)
 
+Results dated before 2026-11-06 that mention the earlier sample wall or the earlier sample route
+were measured on an earlier sample photo that the project no longer ships
+([ADR-0003](docs/adr/0003-public-repo.md)). Their verdicts, timings and ratios stand as recorded;
+points, foothold ids and heights measured on that photo are given as labels.
+
 ## Objective
 
 This is the pure rules engine of the plan-the-beta game. A **beta** is an ordered list of steps. Each step is a full limb assignment: every hand and foot is on a route hold, on a wall foothold, smearing at a fixed point, or off. Each **move** changes one or two limbs. For each move the engine says:
@@ -434,7 +439,7 @@ Start: lh 1S, rh 2S, lf 8, rf 9. Ids are random in every test, apart from the id
 33. **Quantisation:** two contexts whose centroids differ by 0.01 px give deep-equal results whichever is checked first on a shared cache.
 34. `decodeBeta(encodeBeta(b))` deep-equals `b`. An unknown label, an unknown wf id, an off-photo smear, or a step with ≠ 4 fields gives `null`.
 35. **Lint guard:** a Vitest test runs ESLint's Node API (`lintText` with `filePath` under `src/modules/beta-moves/`) on snippets and expects an error for each of these: `Math.random`, `Date`, `performance`, `setTimeout`, `setInterval`, `requestAnimationFrame`, `crypto`, `window`, `document`, `localStorage`, `sessionStorage`, `indexedDB`, `fetch`, `XMLHttpRequest`, `WebSocket`, `navigator`, an import of `react`, the store, or any module other than `climber-stance`. Test files are excluded. The override keeps the repo's existing `deepModuleImport` and `deepSiblingImport` patterns, because a flat-config rule override replaces the options.
-36. **Replay guarantee:** on the B1-03 reference beta, `JSON.stringify(checkBeta(...))` is byte-identical across 3 runs in Vitest (Node) and across 3 runs in Chromium (timing page). Across engines (Chromium vs WebKit), the guarantee is the same verdicts, styles and rounded numbers (Open Question 7).
+36. **Replay guarantee:** on the earlier sample route's reference beta, `JSON.stringify(checkBeta(...))` is byte-identical across 3 runs in Vitest (Node) and across 3 runs in Chromium (timing page). Across engines (Chromium vs WebKit), the guarantee is the same verdicts, styles and rounded numbers (Open Question 7).
 
 *Cache*
 
@@ -444,16 +449,16 @@ Start: lh 1S, rh 2S, lf 8, rf 9. Ids are random in every test, apart from the id
 *Performance* (timing page, Task 9; an M1 at 4× CPU throttle stands in for a mid-range phone, as in climber-stance AC 12)
 
 39. `checkMove` cold (reach plus two solves without region, 4 contacts): **≤ 150 ms** at 4× throttle (the long-task budget). Desktop is measured and recorded, not gated. **Risk:** one full solve *with* region measured 51–59 ms desktop and 110–117 ms at 4× in the app (climber-stance Check Results), and 35–49 ms in Vitest/Node in this review. Two solves may exceed 150 ms. If they do: stop and ask (worker, or a cheaper pivot check).
-40. `checkMove` warm (cache hit): **≤ 2 ms** at 4×. `checkBeta` warm on the B1-03 reference beta: **≤ 10 ms** at 4×. `checkBeta` **cold** on it is measured and recorded, as the cost `play-shell` must spread across tasks after a context change.
+40. `checkMove` warm (cache hit): **≤ 2 ms** at 4×. `checkBeta` warm on the earlier sample route's reference beta: **≤ 10 ms** at 4×. `checkBeta` **cold** on it is measured and recorded, as the cost `play-shell` must spread across tasks after a context change.
 41. `reachRatios`: **≤ 5 ms** at 4×. `validateShape` and `targetAt`: **≤ 1 ms**.
 
-*B1-03, the canonical level* (`tests/fixtures/beta/b1-03.level.json`)
+*The earlier sample route, the canonical level* (the recorded level, private)
 
-The level uses sample `routemake-g2-b1`: 1600 × 1200 source, working image 1536 × 1152. The climber is 170 cm × 2.6 px/cm × 1536/1600 = **424.3 px**, from the sample's measured scale (verified in `samples.ts`). Feet rule `any`. The wall angle is **unconfirmed** (Open Question 6).
+The level uses the earlier sample photo: 1600 × 1200 source, working image 1536 × 1152. The climber is 170 cm × 2.6 px/cm × 1536/1600 = **424.3 px**, from the sample's measured scale (verified in `samples.ts` at the time). Feet rule `any`. The wall angle is **unconfirmed** (Open Question 6).
 
-42. The level records the holds as tapped in Task 8, labelled by `badgeLabels` order, with exactly 1 start-role group (1–2 holds) and 1 finish. The hold count and labels are taken from that recording. The draft's "7 holds, 1S … 7F" is unverified: routemake's zone data has no hold taps (`holdTaps: 0` in `zones/g2-B1/meta.json`). Its wall-foothold list isn't empty (needs A1).
+42. The level records the holds as tapped in Task 8, labelled by `badgeLabels` order, with exactly 1 start-role group (1–2 holds) and 1 finish. The hold count and labels are taken from that recording. The draft's "7 holds, 1S … 7F" is unverified: the source site's data for the wall has no hold taps. Its wall-foothold list isn't empty (needs A1).
 43. `defaultStart` is `hold`, its loads add up to 100 ± 0.2, and every share is a number (SPEC-game › Success Criterion 1).
-44. The **reference beta** (`b1-03.betas.json`, ≤ **16** moves (raised from 8 on 2026-11-01, Open Question 10 d; builder's call, the user can veto), written by labels, reviewed by the pro-climber persona) is `hold` on every step and `top` on its last, with `toppedAt` = its last index.
+44. The **reference beta** (in the recorded betas, ≤ **16** moves (raised from 8 on 2026-11-01, Open Question 10 d; builder's call, the user can veto), written by labels, reviewed by the pro-climber persona) is `hold` on every step and `top` on its last, with `toppedAt` = its last index.
 45. **Failing betas:** the persona writes them with their expected verdicts **before** running them, so the expectations aren't copied from the output. They are: start → rh straight to the finish (fall `reach` at step 1); cutting both feet from the start (fall `pivot`, "Your feet would cut loose — find a foothold", if the wall is Vertical); and three limbs at once (`too-many-limbs`). A mismatch is investigated and recorded in Check Results, never re-recorded silently.
 
 ## Testing
@@ -469,16 +474,16 @@ The level uses sample `routemake-g2-b1`: 1600 × 1200 source, working image 1536
   - `encode.test.ts` (AC 32, 34);
   - `cache.test.ts` (AC 37–38);
   - `lint.test.ts` (AC 35);
-  - `b1-03.test.ts` (AC 36 in Node, 42–45);
+  - the recorded-level suite (private; AC 36 in Node, 42–45);
   - `climber-stance/reach.test.ts` (AC 16–18, A3), plus a regression test that `solveStance` output is deep-equal with `region` left out and `region: true`.
 - **Fixtures:**
   - `src/modules/beta-moves/fixtures.ts`: the ladder, the 35° barn-door set (AC 11), the sloper start (AC 19), the Task 4 pivot and stance fixtures;
-  - `tests/fixtures/beta/b1-03.level.json`: `RouteHold[]` with fixed ids `b1-03-1…n`, wall feet, height, wall angle, photo size and rules;
-  - `tests/fixtures/beta/b1-03.betas.json`: the reference and failing betas, by label, with the expected verdict, fail kind and step.
+  - the recorded level (private): `RouteHold[]` with fixed ids numbered `1…n`, wall feet, height, wall angle, photo size and rules;
+  - the recorded betas (private): the reference and failing betas, by label, with the expected verdict, fail kind and step.
 - **Lint:** the ESLint override is part of `npm run lint`, and AC 35 proves it bites.
 - **Component:** none. This module has no UI.
-- **E2E:** none of its own. `play-shell`'s E2E (desktop + Pixel 7, fake models) uses B1-03's level file. The recorded real-model session script climbs the full reference beta to a top.
-- **Timing:** `spike/beta-timing.html` + `.ts`, driven by the existing `spike/loop-timing.mjs` CDP throttle and long-task setup (one new scenario, not a second runner), at 1× and 4×. It writes Check Results (AC 36 in Chromium, AC 39–41). Dev only, not in CI.
+- **E2E:** none of its own. `play-shell`'s E2E (desktop + Pixel 7, fake models) uses the earlier sample route's level file. The recorded real-model session script climbs the full reference beta to a top.
+- **Timing:** the beta timing page (private), driven by the existing real-model timing runner's (private) CDP throttle and long-task setup (one new scenario, not a second runner), at 1× and 4×. It writes Check Results (AC 36 in Chromium, AC 39–41). Dev only, not in CI.
 - **Coverage:** ≥ 90 % lines on `src/modules/beta-moves/*.ts`, checked with `npx vitest run --coverage --coverage.include='src/modules/beta-moves/**' --coverage.thresholds.lines=90` (the game's floor is 80 %).
 
 ## Boundaries
@@ -548,17 +553,17 @@ The level uses sample `routemake-g2-b1`: 1600 × 1200 source, working image 1536
 - **Verify:** `npm test -- src/modules/beta-moves/encode`
 - **Files:** `src/modules/beta-moves/encode.ts`, `encode.test.ts`, `index.ts`
 
-**Task 8: B1-03 canonical level** (needs Task 0)
+**Task 8: the earlier sample route as the canonical level** (needs Task 0)
 - **Acceptance:** AC 36 (Node) and AC 42–45.
-- **Recording:** in the real-model session on the sample, tap B1-03's holds in order (checked against its video frames in `tests/fixtures/real/zones/g2-B1`), then export the `RouteHold`s and wall feet as JSON.
+- **Recording:** in the real-model session on the sample, tap the earlier sample route's holds in order (checked against its video frames, private), then export the `RouteHold`s and wall feet as JSON.
 - **Review:** the pro-climber persona writes and reviews the betas, and the review is recorded in Check Results. Confirm the wall angle (Open Question 6).
-- **Verify:** `npm test -- src/modules/beta-moves/b1-03`, and the recorded real-model session script
-- **Files:** `spike/beta-level.html`, `spike/beta-level.ts`, `tests/fixtures/beta/b1-03.level.json`, `tests/fixtures/beta/b1-03.betas.json`, `src/modules/beta-moves/b1-03.test.ts`
+- **Verify:** the recorded-level suite (private), and the recorded real-model session script
+- **Files:** the level recorder page, the recorded level, the recorded betas and the recorded-level suite (the last three private)
 
 **Task 9: timing and Check Results**
 - **Acceptance:** AC 39–41 and AC 36 (Chromium), measured and written into this spec's Check Results. If AC 39 fails, stop and ask (B15).
-- **Verify:** `npx vite --port 5175`, then `node spike/loop-timing.mjs --scenario beta`, then the coverage command in Testing.
-- **Files:** `spike/beta-timing.html`, `spike/beta-timing.ts`, `spike/loop-timing.mjs`, `SPEC-beta-moves.md`
+- **Verify:** `npx vite --port 5175`, then the real-model timing runner's `beta` scenario (private), then the coverage command in Testing.
+- **Files:** the beta timing page and the real-model timing runner (private), `SPEC-beta-moves.md`
 
 ## Check Results
 
@@ -573,31 +578,31 @@ The level uses sample `routemake-g2-b1`: 1600 × 1200 source, working image 1536
   - Each fix was written test-first.
 - **Builder's call:** `encodeBeta` *throws* on such a beta rather than returning something lossy, as it already did for an unknown hold. The spec gave no rule for encoding, and a code that silently doesn't round-trip would break AC 34's promise to fixtures.
 
-### Task 8: B1-03 canonical level (2026-11-01)
+### Task 8: the earlier sample route as the canonical level (2026-11-01)
 
 **Recording.**
-- **Session:** real models (SlimSAM, CLIP, Depth Anything) on `spike/beta-level.html`, which is the Studio plus `window.betaLevel / betaRun / betaFrames`. Chromium desktop, dev server on port **5185**.
-- **Driver:** a local script, like `spike/pro-session.mjs`. It isn't committed because it reads routemake-derived tap points. It loads the sample and taps B1-03's holds lowest first, at the step-1 recording's points. It tags hold 1 Start and hold 7 Finish, then Show route. It waits for hold types and depth, then presses "Try the start position", which loads the wall footholds. Finally it calls `betaLevel(0)`.
+- **Session:** real models (SlimSAM, CLIP, Depth Anything) on the level recorder page, which is the Studio plus `window.betaLevel / betaRun / betaFrames`. Chromium desktop, dev server on port **5185**.
+- **Driver:** a local script, like the real-model session script (private). It isn't committed because it reads tap points recorded on the earlier sample photo. It loads the sample and taps the earlier sample route's holds lowest first, at the step-1 recording's points. It tags hold 1 Start and hold 7 Finish, then Show route. It waits for hold types and depth, then presses "Try the start position", which loads the wall footholds. Finally it calls `betaLevel(0)`.
 - **Reproducible:** a second session gave a byte-identical level, apart from the date. No console errors. About 42 s per session; hold types took 27 s.
 
 **Wall angle (Open Question 6): Vertical, confirmed.**
-- Video `f7ff7eed` (B1-03, a flash by a 160–169 cm climber, `move: static`): the climber stays upright with the hips in. Nothing swings, and no foot cuts.
+- The route's video (a flash by a 160–169 cm climber, `move: static`): the climber stays upright with the hips in. Nothing swings, and no foot cuts.
 - The photo's panel seams and bolt grid are parallel to the frame, and the wall meets the mats and the ceiling square.
 - So AC 45's cut-feet expectation applies.
 
-**Builder's calls in the level** (`tests/fixtures/beta/b1-03.level.json`):
-- **Hold set: B1-03's 7 hand holds** (`1S` … `7F`). The pink footholds the video's climber uses are **wall feet**, not picked holds. I also recorded a 9-hold level, with the big low pink and the left pink tapped as holds 8 and 9 (the climber stands on them in frames f_0001 and f_0009). CLIP typed both as `sloper`. `autoAssign` then puts the left foot on hold 8 as a sloper contact at its centroid, and the start becomes infeasible: "Left hand: a crimp can't take this pull — move your hips under it". The same Studio session with 7 holds said "Balanced". A foothold the user tags gets a *hand* type and cone. That is a fidelity gap for `hold-classification` and `climber-stance` (Open Question 10), and not something to work around in a fixture.
+**Builder's calls in the level** (the recorded level, private):
+- **Hold set: the earlier sample route's 7 hand holds** (`1S` … `7F`). The pink footholds the video's climber uses are **wall feet**, not picked holds. I also recorded a 9-hold level, with the big low pink and the left pink tapped as holds 8 and 9 (the climber stands on them in frames f_0001 and f_0009). CLIP typed both as `sloper`. `autoAssign` then puts the left foot on hold 8 as a sloper contact at its centroid, and the start becomes infeasible: "Left hand: a crimp can't take this pull — move your hips under it". The same Studio session with 7 holds said "Balanced". A foothold the user tags gets a *hand* type and cone. That is a fidelity gap for `hold-classification` and `climber-stance` (Open Question 10), and not something to work around in a fixture.
 - **The start:** only hold 1 is tagged Start. In the video the climber starts matched on it (frames f_0001–f_0003), so this is a 1-start route, and `autoAssign` makes its split start from hold 2.
 - **Wall feet** (gated since Q2, below): climber-stance's `wallFootholds` from the real mask, through `toWallFeet`, minus the blobs a picked hold covers. A blob is dropped when ≥ 0.3 of the smaller area is shared with the hold, or when it holds the hold's centroid (rule 6; the spike repeats that test because `claimedBlobs` isn't exported). That leaves 85 wall feet; 9 blobs are claimed. Rule 4's shape gates aren't applied, because they are private to climber-stance and play-shell hasn't decided whether to use them. So the list includes mask noise. A route sign (`wf:1054:933`, the floor sticker) and bolt holes or tiny chips (`wf:1170:188`, `wf:970:546`) are "footholds". No beta here uses them, but `targetAt` will offer them.
 - **Rounding:** centroids are written to 0.1 px, and dirs and wall normals to 4 decimals, which is beta-moves' own quantum (B16).
 - **`defaultStart`:**
   - Node (with stand-ins for the real blobs) and the page (with the real footholds and label grid) agree: `2,1S,wf:959:837,wf:1108:848`. That is the low pink and the black "SLIP" volume, the feet the step-1 check found.
 
-**Results** (`src/modules/beta-moves/b1-03.test.ts`; the betas were written by the persona **before** any run, with their predictions in `b1-03.betas.json`):
+**Results** (the recorded-level suite, private; the betas were written by the persona **before** any run, with their predictions in the recorded betas):
 
 | AC | Result |
 |---|---|
-| 42 level | ✅ 7 holds `1S 2 3 4 5 6 7F` by order, ids `b1-03-1…7`, 1 start, 1 finish, H 424.3 px, photo 1536 × 1152, 85 wall feet whose ids match their points. The draft's "7 holds, 1S … 7F" is now verified. |
+| 42 level | ✅ 7 holds `1S 2 3 4 5 6 7F` by order, ids numbered `1…7`, 1 start, 1 finish, H 424.3 px, photo 1536 × 1152, 85 wall feet whose ids match their points. The draft's "7 holds, 1S … 7F" is now verified. |
 | 43 default start | ✅ `hold`. Loads LH −0.2 · RH 0 · LF 99.3 · RF 0.8 (sum 99.9). Every share is a number. Effort 57.5: the hands *pull in* at 57 % of bodyweight while carrying no weight. |
 | 44 reference beta | ❌ **Not met at Task 8** (Open Question 10; **met 2026-11-01 by draft 5**, see the section of that name below). Both persona drafts fall at move 1; see below. The test is an `it.fails` that runs the real assertion. |
 | 45 failing betas | ✅ All three as predicted: straight-to-finish falls `reach` at step 1, `rh`, "Too far: right hand — move your feet up first". Cut-feet falls `pivot` at step 1, "Your feet would cut loose — find a foothold". Three limbs gives `rejectedAt` 1, `too-many-limbs`. |
@@ -612,7 +617,7 @@ The level uses sample `routemake-g2-b1`: 1600 × 1200 source, working image 1536
 
 **Pro-climber review** (persona: route setter and V8 boulderer, reviewing the level, the frames, the solver's stance drawings and the numbers above).
 
-*The route.* B1-03 is a pink "3" (this gym's scale, tagged 指力, finger strength). It starts matched on the big pink kidney sloper `1S`, which has the blue start tape. The left hand takes the thin vertical pinch-crimps `2` and `3`, which are sidepulls. The line goes up the left column (`4`, the slanted pink; `5`, a small crimp) and then right to the double crimp `6` and the big double pink finish `7F`, matched. On the video the climber:
+*The route.* The earlier sample route is a pink "3" (this gym's scale). It starts matched on the big pink kidney sloper `1S`, which has the blue start tape. The left hand takes the thin vertical pinch-crimps `2` and `3`, which are sidepulls. The line goes up the left column (`4`, the slanted pink; `5`, a small crimp) and then right to the double crimp `6` and the big double pink finish `7F`, matched. On the video the climber:
 - uses `1S` as a right foothold (frame f_0018);
 - uses the two pink footholds and the small pink chips;
 - at the top, steps the right foot high onto the purple and black volume to stand up into `7F`. It's a hip-in high step, close to a heel-toe (frame f_0048).
@@ -631,21 +636,21 @@ It's a technical V2–V3 with small-hold sidepulls, climbed static. A moderate c
 3. **Slopers on the type rule are too pessimistic.** `1S` and `7F` are big, positive, slopey pinches that climbers rest on. With the assumed surface (CLIP says sloper; depth isn't reliable here, so `forceSource: 'type'`), every pivot that leans on `1S` fails with "may be too steep". The real fix is the Studio's own correction ("if its top faces up, set its pull to Down"). A player of the game can't make that correction, and a level shouldn't need one.
 4. **Picked footholds become hand holds** (the 9-hold probe above). A setter tags footholds as part of the route, but the app types them as slopers for the hands.
 5. **Feet above the hips.** In the stand-in (steps 6–8) the left foot stands on `5`, 0.1 H below the matched hands on `6`. At the top it is 94 px *above* the pelvis, with the hips 34 px off the wall. That works as a heel hook or a full rock-over, but as a toe stance on a vertical wall it is impossible. The solver accepts it because it has no "a toe can't be above the hip" limit. It is also why only the stand-in, and not the persona, found an 8-move top.
-6. **Not modelled at all** (SPEC-climber-stance › Not in Stage 1; as expected, but B1-03 needs them): the drop knee and backstep that make `2 → 3` easy; the flag that would turn draft 2's barn door into a hold; and the high heel-toe at the finish.
+6. **Not modelled at all** (SPEC-climber-stance › Not in Stage 1; as expected, but the earlier sample route needs them): the drop knee and backstep that make `2 → 3` easy; the flag that would turn draft 2's barn door into a hold; and the high heel-toe at the finish.
 7. **The 8-move cap** (AC 44) is below this route's natural count: 12–16 single moves on the video, and 12 single moves for the solver even on jugs. It forces hand-and-foot pairs, and those are where the pivot is weakest (B6, B7).
 8. **The reach box and allowance** (Open Question 1) didn't decide anything here. Every failure was a pivot or a stance, never a box limit, so this level gives no evidence for tuning HIP_SHIFT or the deadpoint allowance.
 
-*Verdict (Task 8).* The engine's referee is honest: no verdict here contradicts the solver, and its texts are good coaching. But on B1-03 the referee is **stricter than the wall**, because of the solver's hold model (items 1, 3, 4) and body model (items 1, 6). Shipping B1-03 as the canonical level needs one of the choices in Open Question 10.
+*Verdict (Task 8).* The engine's referee is honest: no verdict here contradicts the solver, and its texts are good coaching. But on the earlier sample route the referee is **stricter than the wall**, because of the solver's hold model (items 1, 3, 4) and body model (items 1, 6). Shipping the earlier sample route as the canonical level needs one of the choices in Open Question 10.
 
 ### Task 9: timing (2026-11-01)
 
 **How it was measured.**
-- `npx vite --port 5185`, then `node spike/loop-timing.mjs --scenario beta --port 5185 <out.json>`. That is the existing runner's CDP throttle and long-task observer, with one new scenario.
+- `npx vite --port 5185`, then the real-model timing runner's `beta` scenario on port 5185 (private). That is the existing runner's CDP throttle and long-task observer, with one new scenario.
 - **Port 5185, not 5175**, because other lanes run their own servers on this machine. `--port` is a new flag; the default is still 5175.
 - Chromium headless shell, M1 desktop, at 1× and with the CPU throttled 4×.
 - Each call runs in its own task (a `setTimeout` between calls).
 - **"Cold"** means a fresh cache with the JIT warm. The previous step's stance is primed, as it would be in play (it was the last move). So the time is the move's own reach plus its two `region: false` solves.
-- **The reference beta falls at move 1 (AC 44).** So the 4-contact moves and `checkBeta` are timed on the 8-move `jugs-search` stand-in (`b1-03.betas.json › standIns`): the same holds, wall feet, height and contact count, but jug cones. The reference beta's move 1 is timed too, as a check on the real holds.
+- **The reference beta falls at move 1 (AC 44).** So the 4-contact moves and `checkBeta` are timed on the 8-move `jugs-search` stand-in (the recorded betas › `standIns`): the same holds, wall feet, height and contact count, but jug cones. The reference beta's move 1 is timed too, as a check on the real holds.
 - **Load:** the machine runs unrelated jobs, at load 20–146 during this session.
   - A first run at load 42–60 is **discarded as contaminated**: cold `checkMove` at 4× had a median of 126 ms and a max of 215 ms.
   - The results below are two back-to-back runs at load **8–10.5**. CI is the reference.
@@ -677,8 +682,8 @@ It's a technical V2–V3 with small-hold sidepulls, climbed static. A moderate c
 
 - **Conflicts:** `stance.ts`, `stance.test.ts` and `assign.ts` conflicted with PR #8. Both sides were kept: main's `PosturePrior`, plus this branch's `region` option, `PELVIS_SEARCH` and `StanceHold`.
 - **`reachRatios` follows the prior.** The prior moved the hip floor into `prior.hipsBelowHands` and gave `trunkDirection` a `lean`. So `reachRatios` now reads both from `{ ...DEFAULT_PRIOR, ...opts.prior }`, the same merge `solveStance` uses. A new `reach.test.ts` case goes red if overrides are ignored.
-- **One expectation changed:** the `jugs-search` stand-in. Its last move (left hand matching `7F`) is now "Too far: left hand — move your feet up first", at a ratio of **1.115** (over 1.100). The trunk now leans 0.25 toward the hands, which moves the shoulders. The same search under the new prior found a new 8-move top, now in `b1-03.betas.json`. No rule or threshold changed.
-- **Unchanged:** every other beta-moves and climber-stance expectation, including the ladder top (AC 22), cut feet (AC 9), the deadpoint (AC 11), the effort order (AC 21), B1-03's default start (AC 43), its failing betas (AC 45), and the reference falling at move 1.
+- **One expectation changed:** the `jugs-search` stand-in. Its last move (left hand matching `7F`) is now "Too far: left hand — move your feet up first", at a ratio of **1.115** (over 1.100). The trunk now leans 0.25 toward the hands, which moves the shoulders. The same search under the new prior found a new 8-move top, now in the recorded betas. No rule or threshold changed.
+- **Unchanged:** every other beta-moves and climber-stance expectation, including the ladder top (AC 22), cut feet (AC 9), the deadpoint (AC 11), the effort order (AC 21), the earlier sample route's default start (AC 43), its failing betas (AC 45), and the reference falling at move 1.
 - **Timing:** Task 9's numbers were measured on the old stand-in, before the rebase.
 
 ### Q2: wall feet through the foothold shape gates (2026-11-01)
@@ -691,15 +696,15 @@ It's a technical V2–V3 with small-hold sidepulls, climbed static. A moderate c
 
 Only the gate is newly exported from climber-stance's index (`blobShapeOk`, unchanged).
 
-**On B1-03's real mask** (pinned in `tests/fixtures/beta/b1-03.wall-blobs.json`, 92 blobs):
+**On the earlier sample route's real mask** (its pinned wall-mask blobs, private: 92 blobs):
 - **Dropped:** 6 blobs, so the wall-foot list goes from 85 to 79. They are merged wall regions 209–432 px across, and a 98 × 826 px strip down the wall's right edge (`wf:145:134`, `wf:598:219`, `wf:377:373`, `wf:1489:215`, `wf:1400:830`, `wf:198:947`). None of them is a foothold.
-- **Kept:** every foothold the B1-03 betas use.
+- **Kept:** every foothold the earlier sample route's betas use.
 - **Kept, as decided:** the route sign (blob 91, `wf:1054:933`, the safety sticker), which the user kept as a manual "Wall foothold" option. It passes the gates, as the 2026-11-01 decision expects.
-- **Not dropped, and honestly so:** the two pieces of noise I flagged in Task 8, a faint dimple on blank wall (blob 11, `wf:1170:188`, 28 × 28 px, fill 0.54) and scuff marks (blob 45, `wf:970:546`, 36 × 47 px, fill 0.30). They pass every gate, and their fill overlaps real footholds (0.32–0.68), so no existing shape gate can tell them apart. A colour or depth test would be a new gate (ask first). `b1-03.test.ts` pins that they are still offered.
+- **Not dropped, and honestly so:** the two pieces of noise I flagged in Task 8, a faint dimple on blank wall (blob 11, `wf:1170:188`, 28 × 28 px, fill 0.54) and scuff marks (blob 45, `wf:970:546`, 36 × 47 px, fill 0.30). They pass every gate, and their fill overlaps real footholds (0.32–0.68), so no existing shape gate can tell them apart. A colour or depth test would be a new gate (ask first). the recorded-level suite (private) pins that they are still offered.
 
 ### AC 44 with setter corrections (option a, 2026-11-01)
 
-**Builder's call** (pro-climber role), directed by the coordinator after Open Question 10. Each hold was labelled as a route setter would, from the photo and video `f7ff7eed`. The corrections were made with the Studio's own type and pull controls (the store's override actions) in the recorded real-model session. Each corrected hold in `b1-03.level.json` carries `setter: { source: 'setter', note, was }`, with its CLIP values under `was`.
+**Builder's call** (pro-climber role), directed by the coordinator after Open Question 10. Each hold was labelled as a route setter would, from the photo and the route's video. The corrections were made with the Studio's own type and pull controls (the store's override actions) in the recorded real-model session. Each corrected hold in the recorded level carries `setter: { source: 'setter', note, was }`, with its CLIP values under `was`.
 
 | Hold | CLIP / type rule | Setter | Why |
 |---|---|---|---|
@@ -743,7 +748,7 @@ I didn't retype anything as a jug. A pinch keeps the spec's pinch model: no sing
   - With the right hand on 7F, the left foot still on `3` (1.24 H from 7F) and the right foot on the purple, no pelvis in the hip box keeps every kept limb on.
   - The solver is right, and this is a persona error, not a modelling gap: the left foot has to come up before the match. In the video, the climber's left foot is well above `3` when they match.
   - Draft 4 already uses all 16 moves, so fixing it would mean merging moves (for example, left foot 2 → 4 in one step). Following the rule "if it still fails, report and tune nothing", no draft 5 was run.
-- The `it.fails` guard stays. `b1-03.test.ts` pins the fall at move 16 and the deadpoint at move 7. The `jugs-search` stand-in stays, still labelled diagnostic and non-normative.
+- The `it.fails` guard stays. The recorded-level suite (private) pins the fall at move 16 and the deadpoint at move 7. The `jugs-search` stand-in stays, still labelled diagnostic and non-normative.
 - **Unchanged:** `reference-draft-3`, the 8-move draft, still barn-doors at move 1. `natural-length` falls at its move 4 on the pivot (OQ 11 above). The failing betas fall as predicted.
 
 ### AC 44 met: persona draft 5 (2026-11-01)
@@ -759,28 +764,28 @@ I didn't retype anything as a jug. A pinch keeps the spec's pinch model: no sing
 - **Feet:** they stay below the hips throughout. At the top the pelvis is at y 249, with the feet at y 412 and 361.
 - **Persona review:** it reads as the video's climb, foot for foot, apart from that foot match on the black volume. A real climber might simply high-step the left foot onto it, so that's a fair simplification.
 
-**Kept for the record:** drafts 1–4 in `b1-03.betas.json`. `b1-03.test.ts` pins draft 4's final-match fall. **The `jugs-search` line is relabelled diagnostic only, non-normative.** It stays only because `spike/beta-timing.ts` times it. AC 36's Node replay now runs on the real reference (a 17-step top) as well.
+**Kept for the record:** drafts 1–4 in the recorded betas. The recorded-level suite pins draft 4's final-match fall. **The `jugs-search` line is relabelled diagnostic only, non-normative.** It stays only because the beta timing page (private) times it. AC 36's Node replay now runs on the real reference (a 17-step top) as well.
 
 ## Open Questions
 
-1. **Allowances, hip box and dynamic moves.** Deadpoint 1.10, `HIP_SHIFT` 0.3 H, the 1.15 factor, and reach and pivot being checked at separate pelvis positions are all first guesses. Note also that the solver's posture prior puts the start pelvis low: in the ladder probe it sat about 0.03 H above the footholds. Questions for the pro-climber playtest on B1-03, recorded before `scoring` relies on them:
+1. **Allowances, hip box and dynamic moves.** Deadpoint 1.10, `HIP_SHIFT` 0.3 H, the 1.15 factor, and reach and pivot being checked at separate pelvis positions are all first guesses. Note also that the solver's posture prior puts the start pelvis low: in the ladder probe it sat about 0.03 H above the footholds. Questions for the pro-climber playtest on the earlier sample route, recorded before `scoring` relies on them:
    - Tune these values?
    - **Resolved 2026-10-31 (user):** `dynamic: true` stays the default. A deadpoint is marked on its step, and `scoring` rates it slightly below a static move.
    - Bring dynos back?
 2. **Top-out variant.** Keep the matched finish only (B10), or add `rules.topOut: 'match' | 'touch'`?
 3. **Any-feet contract (A1).** The amendment isn't written. Does its foothold finder output map to `WallFoot { id: 'wf:<x>:<y>', point }`? Does a wall foothold use the plain foot cone (type `null`) or get a type?
-4. **Hand-foot matches and heel hooks.** Out of scope in v1 (B12). Do V0–V5 players miss them on B1-03?
+4. **Hand-foot matches and heel hooks.** Out of scope in v1 (B12). Do V0–V5 players miss them on the earlier sample route?
 5. **Resolved 2026-10-31 (user): preview first.** A failing move is previewed with its reason, and appended only when the player commits the fall (B9).
-6. **Resolved 2026-11-01 (Task 8): B1-03 is Vertical**, confirmed from video `f7ff7eed`'s frames and the photo (Check Results). AC 45's cut-feet expectation applies.
+6. **Resolved 2026-11-01 (Task 8): the earlier sample route is Vertical**, confirmed from the route's video frames and the photo (Check Results). AC 45's cut-feet expectation applies.
 7. **Cross-engine replay.** ECMAScript lets `Math.sin`, `Math.hypot` and similar differ between engines (V8 vs JavaScriptCore). Rounding (B16) makes a flipped verdict unlikely, but it can't rule one out at an exact threshold. Is "identical within one engine; same rounded verdicts across engines" enough? WebKit isn't in the E2E matrix today, but iPhones are phone-first targets.
 8. **Feet rule per route.** Which UI (if any) sets `feet: 'marked'`? The sample uses `any`.
-9. **Match shift vs planted contacts.** The staying hand moves 0.015 H (about 6 px on B1-03) when a match is made or broken (B3). SPEC-game SC 3 asks for ≤ 2 px. Exempt it, or have climber-stance offset only the arriving hand (a climber-stance change, ask first)?
-10. **Resolved 2026-11-01: AC 44 is met** by persona draft 5 on the setter-corrected level, under OQ 11's shared hip floor and the 16-move cap (Check Results › AC 44 met). The history below is kept. **AC 44 was not met on B1-03 at Task 8 (2026-11-01).** On the recorded level, the solver accepts no beta past move 3. The pivots fail on the sidepull crimps `2`/`3` and the type-rule sloper `1S`. With every hand hold retyped as a jug, it tops out in 8 moves. Which way?
+9. **Match shift vs planted contacts.** The staying hand moves 0.015 H (about 6 px on the earlier sample route) when a match is made or broken (B3). SPEC-game SC 3 asks for ≤ 2 px. Exempt it, or have climber-stance offset only the arriving hand (a climber-stance change, ask first)?
+10. **Resolved 2026-11-01: AC 44 is met** by persona draft 5 on the setter-corrected level, under OQ 11's shared hip floor and the 16-move cap (Check Results › AC 44 met). The history below is kept. **AC 44 was not met on the earlier sample route at Task 8 (2026-11-01).** On the recorded level, the solver accepts no beta past move 3. The pivots fail on the sidepull crimps `2`/`3` and the type-rule sloper `1S`. With every hand hold retyped as a jug, it tops out in 8 moves. Which way?
     - (a) **Record setter corrections in the level:** per-hold type and pull overrides, made in the Studio session as a user would and kept as `forceSource: 'user'`. That is quick, but it makes the canonical level depend on hand edits a player never sees.
-    - (b) **Fix the fidelity in climber-stance and hold-classification first** (ask-first): trunk rotation and leaning off sidepulls (Deferred: Trunk Rotation), sloper surfaces, foothold types for picked feet, and a toe-above-hip limit. B1-03 then stays as recorded.
+    - (b) **Fix the fidelity in climber-stance and hold-classification first** (ask-first): trunk rotation and leaning off sidepulls (Deferred: Trunk Rotation), sloper surfaces, foothold types for picked feet, and a toe-above-hip limit. The earlier sample route then stays as recorded.
     - (c) **Pick another canonical route** that the solver can climb as recorded.
     - (d) **Change AC 44:** raise the 8-move cap (the route naturally takes 12–16), or accept a reference beta found on a corrected copy.
-    Until then, `b1-03.test.ts` keeps AC 44 as an `it.fails`, and timing (AC 40) runs on the `jugs-search` stand-in.
+    Until then, the recorded-level suite keeps AC 44 as an `it.fails`, and timing (AC 40) runs on the `jugs-search` stand-in.
     **Resolved (d), 2026-11-01 (builder's call, pro-climber role; the user can veto): the cap is 16 moves.** The video's climbers take 12–16 moves on this line, and par is set from how skilled players actually play the course (as a USGA course rating is), not guessed. Option (a), the setter corrections, also stands.
     **Status 2026-11-01, after OQ 11 and the 16-move cap:** draft 4 held 15 of 16 moves and fell on the final match because the left foot was too low, the beta's error and not the solver's. Draft 5 fixed it and tops out.
     **Update 2026-11-01:** option (a) is done (Check Results › AC 44 with setter corrections), and AC 44 is still not met. The blocker moved from the hold model to the reach hip floor (Open Question 11) and to the 8-move cap (option d).
@@ -790,8 +795,8 @@ I didn't retype anything as a jug. A pinch keeps the spec's pinch model: no sing
     - **Tests** (`reach.test.ts`):
       - a one-hand-up move the solver holds (pelvis y 926, above the old 1150 floor) now reaches at ≤ 1.0. It was 1.166.
       - a guard over 5 moves: whenever the solver holds stay ∪ moving at pelvis P, reach's ratio is never above the ratio at P (+ 0.02). A stricter floor in reach would break it.
-    - **Fixtures re-derived:** only `natural-length`. Its move 4 (left hand 3 → 4) now reaches at 0.667, where it was 1.184, and then falls on that move's pivot: "While your left hand and left foot move: Can't hold this position on this wall". Every other expectation is unchanged, including the ladder (AC 15–18, 22), the B1-03 failing betas and the stand-in.
-12. **Wall-foot colour or depth gate (deferred follow-up, 2026-11-01).** The rule 4 shape gates (Q2) still let through two known false positives on B1-03: a faint dimple on blank wall (blob 11, `wf:1170:188`) and scuff marks (blob 45, `wf:970:546`). Their fill overlaps real footholds. A colour test (hold vs wall in Lab) or a depth test (a blob that stands off the wall) could drop them. That would be a new gate, so it is ask-first. Until then `targetAt` may offer them, and the referee still judges any stance that uses them like any other contact.
+    - **Fixtures re-derived:** only `natural-length`. Its move 4 (left hand 3 → 4) now reaches at 0.667, where it was 1.184, and then falls on that move's pivot: "While your left hand and left foot move: Can't hold this position on this wall". Every other expectation is unchanged, including the ladder (AC 15–18, 22), the earlier sample route's failing betas and the stand-in.
+12. **Wall-foot colour or depth gate (deferred follow-up, 2026-11-01).** The rule 4 shape gates (Q2) still let through two known false positives on the earlier sample route: a faint dimple on blank wall (blob 11, `wf:1170:188`) and scuff marks (blob 45, `wf:970:546`). Their fill overlaps real footholds. A colour test (hold vs wall in Lab) or a depth test (a blob that stands off the wall) could drop them. That would be a new gate, so it is ask-first. Until then `targetAt` may offer them, and the referee still judges any stance that uses them like any other contact.
 
 ## Amendment 2026-11-02: Grip Point (SPEC-play-shell E1)
 
@@ -809,7 +814,7 @@ I didn't retype anything as a jug. A pinch keeps the spec's pinch model: no sing
 
 **Not affected:** labels, hold order, `targetAt`, the default start's assignment (start hands, split partner, foot candidates and claims all read the centroid). So moving a grip never re-labels or re-orders holds.
 
-**Tests.** `context.test.ts` (grip off the photo, contact on the grip, match about the grip, smears unaffected, order kept), `cache.test.ts` (the key changes with a grip and with a 0.1 px move, not below it; the pre-grip key literal; cache miss and hit on grips), `check.test.ts` (a grip on the centroid checks exactly as no grip; moving rh's grip on hold 4 from x 600 to 570 to 540, toward the left hand, raises its reach 0.287 → 0.307 → 0.327 and its load 11.2 → 12.6 → 14.1 %, and lowers the left hand's). **Every existing fixture is unchanged:** the whole suite passes untouched, and a dump of every B1-03 beta's `checkBeta`, the ladder top at 0° and 35°, the default starts, the context keys and the Studio's direct `autoAssign` / `contactsFor` was byte-identical before and after.
+**Tests.** `context.test.ts` (grip off the photo, contact on the grip, match about the grip, smears unaffected, order kept), `cache.test.ts` (the key changes with a grip and with a 0.1 px move, not below it; the pre-grip key literal; cache miss and hit on grips), `check.test.ts` (a grip on the centroid checks exactly as no grip; moving rh's grip on hold 4 from x 600 to 570 to 540, toward the left hand, raises its reach 0.287 → 0.307 → 0.327 and its load 11.2 → 12.6 → 14.1 %, and lowers the left hand's). **Every existing fixture is unchanged:** the whole suite passes untouched, and a dump of `checkBeta` for every beta on the earlier sample route, the ladder top at 0° and 35°, the default starts, the context keys and the Studio's direct `autoAssign` / `contactsFor` was byte-identical before and after.
 
 ## Amendment 2026-11-03: Finish Tip (B10)
 

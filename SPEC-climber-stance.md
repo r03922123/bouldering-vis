@@ -4,6 +4,11 @@ Module id: `climber-stance` · Depends on: `hold-segmentation`, `hold-geometry` 
 Status: **APPROVED (2026-10-30)**
 Parent: [SPEC.md](SPEC.md) · Research: the pose report from 2026-10-30 (Stage 1; Stage 3, physics simulation / RL, closed 2026-10-30: no GPU budget for training or serving)
 
+Results dated before 2026-11-06 that mention the earlier sample wall or the earlier sample route
+were measured on an earlier sample photo that the project no longer ships
+([ADR-0003](docs/adr/0003-public-repo.md)). Their verdicts, timings and ratios stand as recorded;
+points, foothold ids and heights measured on that photo are given as labels.
+
 ## Objective
 
 Show **how a body could hang on the chosen holds**: which hand and foot go where, where the
@@ -65,7 +70,7 @@ depend on `hold-classification`.
 ### Default limb assignment ("Try the start position")
 
 1. **Hands:** two start holds → left hand on the left one, right hand on the right one. One start hold → both hands match on it (± 0.015 H apart).
-2. **Feet:** from the other selected holds (route role, not finish) at least 0.35 H below the lower hand. Pick the pair with the lowest total of (horizontal distance from below the hands + |drop − 0.75 H|), with the left foot left of the right foot. One candidate → one foot; a foot with no foothold **smears on the wall** ("Smear on the wall": 0.75 H below the hands, 0.1 H to its side, kept on the photo; cone out of the wall, 35°). Changed from "both feet off" on 2026-10-30: the routemake routes list hand holds only (spray walls use any feet), so every real start position became a campus hang that no vertical wall allows.
+2. **Feet:** from the other selected holds (route role, not finish) at least 0.35 H below the lower hand. Pick the pair with the lowest total of (horizontal distance from below the hands + |drop − 0.75 H|), with the left foot left of the right foot. One candidate → one foot; a foot with no foothold **smears on the wall** ("Smear on the wall": 0.75 H below the hands, 0.1 H to its side, kept on the photo; cone out of the wall, 35°). Changed from "both feet off" on 2026-10-30: the private real routes list hand holds only (spray walls use any feet), so every real start position became a campus hang that no vertical wall allows.
 3. The user can change any limb to any selected hold, or set it to **Off**. Removing a hold frees its limb.
 
 ### Diagnosis when a stance can't be held (first rule that applies)
@@ -157,7 +162,7 @@ UI (component + E2E, desktop and 375 px):
 15. The overlay follows zoom and pan; the "Climber" switch hides it; no console errors.
 16. A new image resets the stance; removing a hold that has a limb frees that limb.
 
-Manual (real photos, 5 routemake fixtures):
+Manual (real photos, 5 private real routes):
 17. On walls where a climber would agree the start position is holdable, it's shown as Balanced. A wrong verdict is either explained by a wrong hold type or pull direction (the user can fix it), or recorded in Check Results.
 
 ## Testing
@@ -165,7 +170,7 @@ Manual (real photos, 5 routemake fixtures):
 - **Unit (Vitest):** `body`, `ik`, `nnls`, `equilibrium`, `pose`, `assign`, `diagnose`, `region` (AC 1–11), each with small hand-built fixtures.
 - **Component:** `StancePanel` (rows, sum, select changes, Off), overlay draw calls with a stub context.
 - **E2E (Playwright, fake ML):** AC 13–16 on desktop and phone.
-- **Timing:** add `stance` to `spike/loop-timing.mjs` (AC 12).
+- **Timing:** add `stance` to the real-model timing runner (private; AC 12).
 
 ## Boundaries
 
@@ -175,22 +180,22 @@ Manual (real photos, 5 routemake fixtures):
 
 ## Check Results (2026-10-30)
 
-Real models (SlimSAM, Depth Anything, CLIP + probe), local dev server, five routemake routes (3 on `mingde-S`, 2 on `g4-SW`), start position from the route's own start tags, default climber size.
+Real models (SlimSAM, Depth Anything, CLIP + probe), local dev server, five private real routes (3 on `heldout`, 2 on `real-3`), start position from the route's own start tags, default climber size.
 
 After the review fixes (posture-first pose, wall-frame forces, barn door first):
 
 | Route | Holds | Vertical | Overhang 35° |
 |---|---|---|---|
-| mingde-S #0 (grade 7) | 8 | Balanced: hands 31 + 31, smears 19 + 19 | Balanced: hands 50 + 50, smears 0 + 0 |
-| mingde-S #1 (grade 4) | 6 | Balanced: hands 31 + 31, smears 19 + 19 | Balanced: hands 50 + 50 |
-| mingde-S #2 (grade 2) | 5 | Right hand: a sloper can't take this pull | Right hand: a sloper can't take this pull |
-| g4-SW #0 (grade 3) | 6 | Balanced: hands 33 + 34, smears 16 + 17 | Balanced: hands 50 + 50 |
-| g4-SW #2 (grade 6) | 6 | Right hand: a sloper can't take this pull | Left hand: a sloper can't take this pull |
+| heldout #0 (grade 7) | 8 | Balanced: hands 31 + 31, smears 19 + 19 | Balanced: hands 50 + 50, smears 0 + 0 |
+| heldout #1 (grade 4) | 6 | Balanced: hands 31 + 31, smears 19 + 19 | Balanced: hands 50 + 50 |
+| heldout #2 (grade 2) | 5 | Right hand: a sloper can't take this pull | Right hand: a sloper can't take this pull |
+| real-3 #0 (grade 3) | 6 | Balanced: hands 33 + 34, smears 16 + 17 | Balanced: hands 50 + 50 |
+| real-3 #2 (grade 6) | 6 | Right hand: a sloper can't take this pull | Left hand: a sloper can't take this pull |
 
 - **AC 17:** 3 of 5 start positions balance on a vertical wall. The two that don't have a start hold typed "sloper" (CLIP + probe, matched hands, smearing feet). Whether that's right depends on the hold type, which the user can correct, as the AC allows. Smears carry nothing on a 35° overhang, which matches climbing experience.
 - **First version (feet off):** 0 of 5 balanced on vertical. That drove the smear change above.
 - **AC 12:** the longest main-thread task while the stance re-solves is 51–59 ms on desktop and 110–117 ms at 4× CPU throttle. Both meet the targets (60 ms, and the 150 ms long-task budget), but desktop is close: the next speed-up is bisecting the CoM range instead of sampling an 18 × 18 region grid (review suggestion; ~half the solves).
-- **Size:** on `g4-SW` the default climber is about 0.8 of the photo's height, which looks ~20 % too big for a spray wall. Kept: the slider fixes it, and there is no ground truth to tune against (Open Question 1).
+- **Size:** on `real-3` the default climber is about 0.8 of the photo's height, which looks ~20 % too big for a spray wall. Kept: the slider fixes it, and there is no ground truth to tune against (Open Question 1).
 - **Display:** a failing stance first drew the search's least-bad pose (a mantle with the head above the hands). It's now a natural hanging pose, dashed, with no shares.
 - No console errors.
 
@@ -205,13 +210,13 @@ game infers body size from hold size either: they author the wall around a fixed
 Creed's 30 cm handhold grid, [GamesBeat](https://gamesbeat.com/ubisofts-creative-director-on-why-hooded-assassins-still-fit-in-the-american-revolution-interview/);
 Cairn's hand-placed holds, [Point'n Think](https://www.pointnthink.fr/en/emeric-thoa-cairn-2/)).
 
-**Ground truth.** `scripts/fetch-routemake-zone.ts` saves routemake zones with climbers' videos and
-their self-reported height band. Per video, MediaPipe joints are mapped onto the zone photo (SIFT +
-RANSAC homography) and leg segments give photo px/cm (spike: `spike/zone-scale/`). Independent vision
-agents checked every video's registration and scale; 11 of 16 were trusted (5 zones, 5 gyms:
-g2-B1 ×6, g5-A1 ×2, g3-AB1, g4-C1, mingde-A2). Target per climb: a 170 cm climber at that local scale.
+**Ground truth.** A private fetch script saves wall photos from a public route-sharing site, with
+climbers' videos and their self-reported height band. Per video, MediaPipe joints are mapped onto the wall photo (SIFT +
+RANSAC homography) and leg segments give photo px/cm (the private scale study). Independent vision
+agents checked every video's registration and scale; 11 of 16 were trusted (5 walls, 5 gyms:
+the earlier sample wall ×6, `real-5` ×2, `real-6`, `real-7`, `real-4`). Target per climb: a 170 cm climber at that local scale.
 
-**Candidates** (leave-one-zone-out for fitted constants; error as a ratio to the target):
+**Candidates** (leave-one-wall-out for fitted constants; error as a ratio to the target):
 
 | Default climber height | Bias | Typical error | Worst |
 |---|---|---|---|
@@ -222,7 +227,7 @@ g2-B1 ×6, g5-A1 ×2, g3-AB1, g4-C1, mingde-A2). Target per climb: a 170 cm clim
 | k × √(image area) | 0.93× | ×1.33 | ×1.72 |
 | **k × image width, k = 0.26** | **0.96×** | **×1.22** | **×1.40** |
 
-Width works because zone photos frame a wall section of similar width (0.26 → ~6.5 m across);
+Width works because these wall photos frame a wall section of similar width (0.26 → ~6.5 m across);
 height fails on portrait photos. **Decision:** `climberHeight = 0.26 × imageWidth`, clamped to
 0.12–0.6 × imageHeight (a guard for panoramas and very tall crops), independent of the selected holds
 (so the figure no longer jumps as holds are added). The slider stays (50–200 %).
@@ -269,7 +274,7 @@ Used as a reference for principles only: nothing from the book ships in the app.
 flags as counterweight instead of a smear (p72–83), press vs pull by hand height (p40, 96, 135),
 grip-strength curve and 50%/80% grip warnings (p39, 136), wall-angle families (p148–151).
 
-**Validation (59 still stances from 19 verified climbs, 5 gyms; `spike/zone-scale/`):**
+**Validation (59 still stances from 19 verified climbs, 5 gyms; the private scale study):**
 
 | Real vs solved | Old prior | Book prior |
 |---|---|---|
@@ -299,9 +304,9 @@ alone the hips now sit a little high (−0.061 H; was +0.081 H).
   so B1's near-straight band doesn't apply to it; it gets the free 0.45–1.0 band. Without this the
   straight legs lift the hips and AC 31's smears carry 3.7 % each at 20° (bound 3 %); with it,
   0.3 %. The 59 stances are all vertical with no smears, so their numbers don't change.
-- **B1-03 (pinned `b1-foot-band.blobs.json`, H 424, Vertical):** the pelvis sits 0.051 H below the
+- **The earlier sample route (pinned foot-band blobs, H 424, Vertical):** the pelvis sits 0.051 H below the
   right (lower) hand, down from 0.111 H on `main` in the same unit setup (Task 8's live check read
-  0.09 H). B1-03's feet are only 0.50–0.52 H below the lower hand, so the near-straight legs lift
+  0.09 H). The earlier sample route's feet are only 0.50–0.52 H below the lower hand, so the near-straight legs lift
   the hips onto the search's floor (0.15 H below the higher, left hand). The real starts with feet
   that close sit 0.00–0.21 H below (B1-07, B1-11, B1-12, C1-24); the 0.275 H median comes from
   deeper feet. `anyFeet.test.ts` pins the floor exactly (0.051 H), and `stance.test.ts` ("hangs the
@@ -318,7 +323,7 @@ alone the hips now sit a little high (−0.061 H; was +0.081 H).
 ## Amendment 2026-10-31: Split Start and Measured Foot Spacing (pro-climber review)
 
 - **One start hold:** the other hand takes the nearest picked route hold beside it: within 0.55 H sideways, within 0.25 H in height, and more sideways than vertical. Hands are ordered left to right. If there is no such hold, both hands match on the start hold.
-- **Foot spacing:** feet go 0.58 H below the lower hand and 0.21 H to each side. A picked hold counts as a foothold from 0.25 H below the hand. These values come from 12 real starts in `spike/zone-scale`.
+- **Foot spacing:** feet go 0.58 H below the lower hand and 0.21 H to each side. A picked hold counts as a foothold from 0.25 H below the hand. These values come from 12 real starts in the private scale study.
 - **Known gap:** with only hand holds picked, both feet smear. A smear can only push the body away from the wall, and a sloper's cone points out of the wall too, so a sloper start on a vertical wall has no feasible forces and every share shows "—". The proposed next step is "any feet": stand on the nearest hold in `wallMask`.
 
 ## Amendment 2026-10-31 (b): Any Feet and Sloper Cone (Bloc Hall step 1)
@@ -333,7 +338,7 @@ Parent decisions changed here:
 S3 and the smear cone are not changed.
 
 Sources:
-- the research report `research-climbing-re.md` §3 and §5, and the techniques list `research-climbing-re-techniques.json`. Both exist only in the session scratchpad today, so task 8 commits them under `tasks/`;
+- the research report §3 and §5, and its techniques list (the research notes, private);
 - the claims this amendment relies on, checked in **Spot-Check** below.
 
 ### Objective
@@ -342,7 +347,7 @@ Make the default start position holdable on real walls, with real weight shares.
 
 Today, a route that lists only hand holds gets two smearing feet. A smear can only push the body *away* from the wall. Under today's type rule, a sloper hand's reaction also points out of the wall. On a vertical wall, a body whose centre of mass (CoM) hangs off the wall needs an *inward* pull at the hands to stop it toppling. Neither contact can give that pull, so the forces never balance and every share shows "—". This is the "Known gap" in the previous amendment.
 
-The recorded real-model session on the sample wall shows the gap on route **B1-03**:
+The recorded real-model session on the earlier sample wall shows the gap on **the earlier sample route**:
 - Vertical: "Right hand: a sloper can't take this pull", with all four shares "—".
 - Overhang 35°: "Can't hold this position on this wall".
 
@@ -356,13 +361,13 @@ This amendment does two things, the two items on the capability map:
 2. **Sloper cone.** A sloper or volume hand's friction cone is centred on the grip surface's outward normal in the wall frame, with half-angle atan(μ), μ = 0.72. A new diagnosis says when a sloper is too steep to hold.
 
 User stories:
-- I press "Try the start position" on B1-03. The climber stands on the two holds above the mats, the panel says "Balanced", and it shows four percentages.
+- I press "Try the start position" on the earlier sample route. The climber stands on the two holds above the mats, the panel says "Balanced", and it shows four percentages.
 - I can switch "Feet: Any feet / Follow hands". With Follow hands, feet use only the route's holds, as on a strict "feet follow hands" problem.
 - Each foot's hold list includes "Wall foothold 1–4", so I can move a foot to another hold the app found.
 - When a sloper can't be held, I'm told so in climbing words, and how to fix a wrong guess.
 
 **Not in this amendment:**
-- **The smear cone 35° → 40°.** It isn't on the capability map, and it would widen a cone. It needs its own approved amendment (Spot-Check row 3 holds the evidence). The spike shows it doesn't change B1-03.
+- **The smear cone 35° → 40°.** It isn't on the capability map, and it would widen a cone. It needs its own approved amendment (Spot-Check row 3 holds the evidence). The spike shows it doesn't change the earlier sample route.
 - trunk rotation (see **Deferred: Trunk Rotation**);
 - per-blob depth normals ("up-facing fraction") and per-blob hold types;
 - checking candidate foot pairs with the physics solver;
@@ -379,7 +384,7 @@ User stories:
 - `useWallMask` asks the worker for it only when the Route or 3D view opens.
 - `climber-stance` may not import `route-compositor`, because SPEC-climber-stance's "Depends on" line names only `hold-segmentation` and `hold-geometry`. The worker (`src/workers/`, which is not a module) wires the two together.
 
-**Spike timings** on the sample photo (`public/samples/routemake-g2-b1.jpg` at 1536 × 1152), in Node on the M1 dev laptop. The spike script is not committed; task 8 re-measures these.
+**Spike timings** on the earlier sample photo (1536 × 1152), in Node on the M1 dev laptop. The spike script is not committed; task 8 re-measures these.
 
 | Step | Time |
 |---|---|
@@ -398,7 +403,7 @@ At 4× CPU throttle, the labelling and summary would take an *estimated* ~150 ms
   - a volume with no reliable surface uses the assumed sloper surface;
   - the `sloper-steep` diagnosis.
 - The surface's source (`measured`, `user` or `assumed`) comes straight from `Force.source`, which the app already passes in. So climber-stance doesn't copy hold-geometry's private 20° / 0.4 gate.
-- **The sloper cone alone does not rescue B1-03** (simulation below). Real footholds do.
+- **The sloper cone alone does not rescue the earlier sample route** (simulation below). Real footholds do.
 
 **The worker transfers response buffers.** `host.ts` `transferables()` transfers every typed array in a response, including the `wall:segment` mask. A worker-side mask cache must therefore keep its own copy, or the second request reads a detached, empty buffer.
 
@@ -412,7 +417,7 @@ At 4× CPU throttle, the labelling and summary would take an *estimated* ~150 ms
 
 | # | Claim | Result | What this spec uses |
 |---|---|---|---|
-| 1 | **MoonBoardRNN BetaMove foot regions** ([preprocessing_helper.py](https://github.com/jrchang612/MoonBoardRNN/blob/master/preprocessing/preprocessing_helper.py), `moveGenerator`) | **Partly confirmed.** 7 regions below the remaining hand, in rows 2–3, 4–6 and 7–9 below it. Column half-widths 2–4, 2–5 and ±2. `scoreFromfoot = 0.5` when no region has a hold. The grid pitch (~20 cm) that turns rows into metres is **not confirmed** by an official MoonBoard source. | The gates are anchored on **our own 12 measured starts** (`tests/fixtures/real/zone-scale/lat.json`, `startGeometry`): drop 0.27–1.03 H, \|side\| ≤ 0.60 H. The two deepest feet (0.92 and 1.03 H) are both within 0.21 H sideways. BetaMove only corroborates: at ~20 cm per row its bands are 0.24–0.35, 0.47–0.71 and 0.82–1.06 H, and its widths ≤ 0.59 H (≤ 0.24 H in the lowest band). |
+| 1 | **MoonBoardRNN BetaMove foot regions** ([preprocessing_helper.py](https://github.com/jrchang612/MoonBoardRNN/blob/master/preprocessing/preprocessing_helper.py), `moveGenerator`) | **Partly confirmed.** 7 regions below the remaining hand, in rows 2–3, 4–6 and 7–9 below it. Column half-widths 2–4, 2–5 and ±2. `scoreFromfoot = 0.5` when no region has a hold. The grid pitch (~20 cm) that turns rows into metres is **not confirmed** by an official MoonBoard source. | The gates are anchored on **our own 12 measured starts** (the private scale study, `startGeometry`): drop 0.27–1.03 H, \|side\| ≤ 0.60 H. The two deepest feet (0.92 and 1.03 H) are both within 0.21 H sideways. BetaMove only corroborates: at ~20 cm per row its bands are 0.24–0.35, 0.47–0.71 and 0.82–1.06 H, and its widths ≤ 0.59 H (≤ 0.24 H in the lowest band). |
 | 2 | **Fuss et al. 2020**, skin on hold ≈ 0.72 ([Front. Psychol. 11:252](https://pmc.ncbi.nlm.nih.gov/articles/PMC7088443/)) | **Confirmed, as a lower bound.** 14 flat surfaces, 22 climbers. Average COF 0.529 (Teflon) to 0.841 (rubber); translucent plastic 0.718. The surfaces were inclined −29°, which needs ≥ tan 29° = 0.554. The values are "substatic" ratios *applied before impending slip*, not the slip limit. Flat plates, open hand, no chalk. | μ = 0.72, so the half-angle is **atan(0.72) = 35.75° = 0.6240 rad**. Because applied ratios are below the slip limit, this is a lower bound. Real textured, chalked holds are untested. |
 | 3 | **Elkington et al. 2024**, shoe rubber ≈ 1 ([Sports Eng. 27:30](https://eprints.whiterose.ac.uk/id/eprint/217285/)) | **Confirmed**, from Table 6. μs 0.97–1.21 at 30 and 60 N; μk 0.76–1.14; a 1.7–26.4 % drop at slip onset. Tested against a **granite** pin, not gym plastic or plywood. | **Not used here.** It is the evidence for a later smear 40° amendment. |
 | 4 | **Horizon Zero Dawn, GDC 2017**, "free-hang vs braced" ([van Grinsven slides](https://www.guerrilla-games.com/media/News/Files/GDC2017_VanGrinsven_PlayerTraversalMechanics.pdf), "Climbing: Guiding Limbs") | **Partly confirmed.** The slides say "Feet: against geometry if possible, otherwise dangling" and "Collision probes … two sets for the feet". They give **no wall-angle threshold**, and the words "braced / free-hang" are not in this deck. | Hold first, dangle otherwise, is HZD's logic (logic only; no art, code or assets). The **20° threshold is ours**, from a spike on our own solver: with jugs, smears carried 1–2 % each at 20° and 0 % at 35°. That run is not in the table below, so AC 31 pins it. Check Results 2026-10-30 also showed 0 % at 35°. |
@@ -607,11 +612,11 @@ Nothing here uses browser storage. Blocked storage changes nothing in this modul
    | Shape: not a solid rectangle | reject when fill = area ÷ (w·h) ≥ **0.92** and both w and h ≥ **0.06 H** | signs and stickers are filled rectangles; real holds are rounder. A game guess |
    | Shape: not a strip | reject when max(w, h) ÷ min(w, h) > **6** | tape lines and edge strips; a game guess |
 
-   - The three shape gates apply to blobs only. **Check:** the route sign above the mats on B1, which the spike ranked 2nd for the right foot, must fail at least one shape gate (Task 4 verifies this on the sample photo). If it doesn't, adjust the values in the amendment before merging, and record the change.
-   - **Check run 2026-11-01** (review fix; real `segmentWall` on the sample at 1536 × 1152, B1-03 hands, H 424; the foot band's blobs are pinned in `tests/fixtures/b1-foot-band.blobs.json`):
+   - The three shape gates apply to blobs only. **Check:** the route sign above the mats on the earlier sample wall, which the spike ranked 2nd for the right foot, must fail at least one shape gate (Task 4 verifies this on the earlier sample photo). If it doesn't, adjust the values in the amendment before merging, and record the change.
+   - **Check run 2026-11-01** (review fix; real `segmentWall` on the earlier sample photo at 1536 × 1152, the earlier sample route's hands, H 424; the foot band's blobs are pinned, private):
      - With "not too big" at 0.25 H, the black foothold the simulation stands on (`blob:81`, 84 × 125 px, 0.30 H tall) was rejected, and the right foot went to the route sign (`blob:91`, 63 × 23 px, fill 0.66, aspect 2.7). The pink hold (0.25 H) only just passed, and failed at climber size 95 %.
-     - **Changed:** "not too big" 0.25 H → **0.40 H**. B1-03's feet are now the pink and black holds at climber sizes 100 % and 95 % (`anyFeet.test.ts`).
-     - **Still failing: the sign passes every shape gate**, and stays in the right foot's menu as "Wall foothold 2". No values of the three gates separate it: it is a small, tilted rectangle (fill 0.66, aspect 2.7, smaller side 0.054 H). A survey of the blobs at aspect 2.2–6 on the 8 local routemake photos and the sample found signs at aspect 2.3–3.4 and fill 0.57–0.69, and real footholds at the same values (a red edge at aspect 2.44, a white hold at 2.91). Catching it needs a new cue, for example the fill of a rotated bounding rectangle, or the blob's colour or texture from the worker. **Open: the user's decision.**
+     - **Changed:** "not too big" 0.25 H → **0.40 H**. The earlier sample route's feet are now the pink and black holds at climber sizes 100 % and 95 % (`anyFeet.test.ts`).
+     - **Still failing: the sign passes every shape gate**, and stays in the right foot's menu as "Wall foothold 2". No values of the three gates separate it: it is a small, tilted rectangle (fill 0.66, aspect 2.7, smaller side 0.054 H). A survey of the blobs at aspect 2.2–6 on the 8 private real photos and the earlier sample photo found signs at aspect 2.3–3.4 and fill 0.57–0.69, and real footholds at the same values (a red edge at aspect 2.44, a white hold at 2.91). Catching it needs a new cue, for example the fill of a rotated bounding rectangle, or the blob's colour or texture from the worker. **Open: the user's decision.**
    - "Wall foothold 1–4" in each foot's menu remains the user's manual fix.
 
    - `segmentWall` already drops specks under 0.02 % of the image and regions over 8 %.
@@ -655,7 +660,7 @@ Nothing here uses browser storage. Blocked storage changes nothing in this modul
     What changes in production:
     - For a sloper, all three cases give today's axis. Only the half-angle changes.
     - A volume with no reliable surface changes from "up, 40°" to the assumed surface.
-    - The widening from 30° to 35.75° is sourced (Spot-Check 2), and the spike shows it doesn't change B1-03's verdict.
+    - The widening from 30° to 35.75° is sourced (Spot-Check 2), and the spike shows it doesn't change the earlier sample route's verdict.
 12. **Steepness** = the angle between `surface.normal` and true up, −`gravityFor(α)`. So the same sloper gets steeper on an overhang.
 13. **Diagnosis "sloper too steep"** sits inside the slip rule, and the rule order is unchanged. If the slip test's limb is a sloper or volume hand with a `surface`, and its steepness is greater than `SLOPER_HALF_ANGLE`, the kind is `'sloper-steep'`. The text depends on the source:
     - measured or user: "Right hand: this sloper is too steep to hold here — get a foot on a hold under it";
@@ -754,7 +759,7 @@ Nothing here uses browser storage. Blocked storage changes nothing in this modul
 
     ACs 1–11 still pass, with their existing assertions apart from this row.
 31. **Dangle is honest.** Jugs plus two smears at the AC 28 foot points: each smear's share is ≤ 3 % at Overhang 20°, and 0 % (rounded) at 35°.
-32. **B1-03 fixture (pure).**
+32. **The earlier sample route fixture (pure).**
     - Contacts from the simulation: H 424; LH crimp at (906, 584) with `dir` unit(1, 0, −0.3); RH sloper at (1106, 626) with the type-rule `dir` and an assumed surface; foothold contacts at (960, 840) and (1131, 847).
     - Vertical: feasible; four rounded shares add to 100; feet together ≥ 50 %.
     - Slab: feasible.
@@ -764,7 +769,7 @@ Nothing here uses browser storage. Blocked storage changes nothing in this modul
     - `footCandidates` costs are unchanged (± 1e-9) when every point, every bounding box and H are scaled by 3.
     - `purity.test.ts` greps `wallFootholds.ts`, `anyFeet.ts`, `cones.ts`, `diagnose.ts` and `assign.ts`, and finds no `Math.random`, `setTimeout`, `setInterval` or `Date.now`.
 
-**Performance.** All times are on the M1 dev laptop. They are measured with `spike/loop-timing.mjs` and a Node timing script, not asserted in Vitest, where timing flakes.
+**Performance.** All times are on the M1 dev laptop. They are measured with the real-model timing runner (private) and a Node timing script, not asserted in Vitest, where timing flakes.
 
 34. Targets:
     - `wallFootholds` on a 1536 × 1152 mask: ≤ 60 ms in Node (spike: 37 ms). It runs in the worker only.
@@ -789,9 +794,9 @@ Nothing here uses browser storage. Blocked storage changes nothing in this modul
     - `e2e/stance.spec.ts` (AC 13–16) passes unchanged.
     - A new case uses `wall-landscape.jpg` with only start and finish tagged. After "Try the start position", the foot selects list the number of "Wall foothold" options pinned from a one-off run of `wallFootholds` on that fixture. The run is deterministic, so a change to `segmentWall` shows up as a diff. At least one foot is assigned one of them.
 
-**Real-model check** (the recorded session, `spike/pro-session.mjs`):
+**Real-model check** (the recorded session; the session script, private):
 
-38. **B1-03 on the sample wall** (Wanhua B1): 7 holds, hold 1 Start, hold 7 Finish, default climber size, Any feet.
+38. **The earlier sample route on the earlier sample wall**: 7 holds, hold 1 Start, hold 7 Finish, default climber size, Any feet.
     - **Vertical**: the status is "Balanced: this position can be held"; four numeric shares add to 100 ± 1; both feet are on "Wall foothold" options; the feet together carry ≥ 50 %.
     - **Slab**: Balanced.
     - **Overhang 20°**: a `slip` diagnosis naming the left hand (the spike gives "left hand crimp"), or Balanced.
@@ -799,11 +804,11 @@ Nothing here uses browser storage. Blocked storage changes nothing in this modul
     - No console errors.
 
     The results go in a new Check Results table, next to the baseline (Vertical: "Right hand: a sloper can't take this pull", all shares "—").
-39. **The five routemake fixtures** (Check Results 2026-10-30, re-run with a new `spike/stance-real.mjs`):
-    - mingde-S #2 and g4-SW #2 either balance or fail with `sloper-steep`, on Vertical.
+39. **The five private real routes** (Check Results 2026-10-30, re-run with a new session script, private):
+    - heldout #2 and real-3 #2 either balance or fail with `sloper-steep`, on Vertical.
     - The three that balanced still balance on Vertical and on Overhang 35°.
 40. **Foot choice against real climbers** (recorded, not gating).
-    - Data: the g2-B1 starts in `tests/fixtures/real/zone-scale/export.json` (the sample photo's zone), with the hands at the real wrist points.
+    - Data: the earlier sample wall's starts in the private scale study's export, with the hands at the real wrist points.
     - Measure: the median distance from the chosen feet to the MediaPipe toes (`real.lToe` / `real.rToe`), in the export's frame and H.
     - Target ≤ 0.12 H (the research report's target).
     - These are the same starts the gates came from, so this is an in-sample check. A miss is recorded, never tuned away without review.
@@ -830,9 +835,9 @@ Nothing here uses browser storage. Blocked storage changes nothing in this modul
   - `useStance.test.tsx` (no solve while pending; a solve on error; existing cases unchanged with no hook mounted).
 - **E2E:** `e2e/stance.spec.ts` (AC 37), on desktop and Pixel 7.
 - **Real-model:**
-  - `spike/pro-session.mjs`, copied from the session scratchpad and reading `tests/fixtures/real/b1-03-holds.json` (AC 38);
-  - `spike/stance-real.mjs`, new (AC 39, 40);
-  - `spike/loop-timing.mjs`, which gains the footholds wait (AC 34).
+  - the session script (private), reading a private holds file (AC 38);
+  - a second session script (private), new (AC 39, 40);
+  - the real-model timing runner (private), which gains the footholds wait (AC 34).
 
   Results are recorded in this spec.
 
@@ -858,7 +863,7 @@ Nothing here uses browser storage. Blocked storage changes nothing in this modul
   - moving the solve into the worker;
   - any new dependency.
 - **Never:**
-  - widen a cone or skip a check to make B1-03 or an AC pass;
+  - widen a cone or skip a check to make the earlier sample route or an AC pass;
   - present a wall foothold as a hold the user tagged;
   - show degrees or metric forces;
   - upload the photo or make any network request;
@@ -928,19 +933,17 @@ Nothing here uses browser storage. Blocked storage changes nothing in this modul
      - `src/modules/climber-stance/StancePanel.test.tsx`
 8. **E2E, real-model check, timing and sources.**
    - Acceptance: AC 34, 37–40; Check Results recorded in this spec.
-   - Verify: `npm run e2e`; `node spike/pro-session.mjs <url> <out> desktop|phone`; `node spike/stance-real.mjs`; `node spike/loop-timing.mjs <out.json>`.
+   - Verify: `npm run e2e`; the two session scripts and the real-model timing runner (all private).
    - Files:
      - `e2e/stance.spec.ts`
-     - `spike/pro-session.mjs`
-     - `spike/stance-real.mjs`
-     - `spike/loop-timing.mjs`
-     - `tasks/research-climbing-re.md` and `tasks/research-climbing-re-techniques.json`
+     - the session scripts and the timing runner (private)
+     - the research notes (private)
      - `SPEC-climber-stance.md`
-     - **Changed (review):** `tests/fixtures/real/b1-03-holds.json` is not committed. `tests/fixtures/real/` is gitignored and holds routemake-derived data that must stay local. The session scripts read it from a local path, so they stay local too.
+     - **Changed (review):** the holds file is not committed. `tests/fixtures/real/` is gitignored and holds data from private real photos that must stay local. The session scripts read it from a local path, so they stay local too.
 
 ### Check Results (2026-11-01, Task 8)
 
-Real models, B1-03 on the sample wall. Run on the dev server with the recorded session: tap the 7 route holds, tag start and finish, Show route, then "Try the start position". The machine was under heavy unrelated load (load average 8–40).
+Real models, the earlier sample route on the earlier sample wall. Run on the dev server with the recorded session: tap the 7 route holds, tag start and finish, Show route, then "Try the start position". The machine was under heavy unrelated load (load average 8–40).
 
 | Check | Result |
 |---|---|
@@ -948,9 +951,9 @@ Real models, B1-03 on the sample wall. Run on the dev server with the recorded s
 | **Real shares** | ✅ Numbers, not "—". **LH 0 % · RH 0 % · LF 98 % · RF 2 %** on Vertical, and the same on Slab. The hands only pull the body in (S10 least effort; Open Question 1). |
 | Overhang 35° | ❌ as expected: "Right hand: this sloper may be too steep — if its top faces up, set its pull to Down" (rule 13). |
 | **The figure** | ✅ The overlay's recorded canvas strokes match the solver: both knees bend, and the thigh and shin stay within leg length (0.24 + 0.28 H and 0.24 + 0.29 H). The long line past the left foot is its 98 % force arrow. |
-| Posture | ⚠️ The hips sit 0.09 H below the right hand. The 12 measured starts have a median of 0.275 H. This comes from `main`'s posture prior, which this amendment doesn't change. The book-based prior on the unmerged `book-stance` branch addresses it. **Decided 2026-11-01 (user): the book-based posture prior is ported onto step 1** (Amendment: Book-Based Stance › Ported onto step 1). It doesn't raise B1-03's hips: they sit 0.051 H below the right hand, because B1-03's feet are only 0.50–0.52 H down; `anyFeet.test.ts` pins that floor. **Accepted 2026-11-01 (user).** |
+| Posture | ⚠️ The hips sit 0.09 H below the right hand. The 12 measured starts have a median of 0.275 H. This comes from `main`'s posture prior, which this amendment doesn't change. The book-based prior on the unmerged `book-stance` branch addresses it. **Decided 2026-11-01 (user): the book-based posture prior is ported onto step 1** (Amendment: Book-Based Stance › Ported onto step 1). It doesn't raise the earlier sample route's hips: they sit 0.051 H below the right hand, because the earlier sample route's feet are only 0.50–0.52 H down; `anyFeet.test.ts` pins that floor. **Accepted 2026-11-01 (user).** |
 | **AC 34: time to a stance** | ✅ 0.3 s on desktop, 0.4 s on Pixel 7, and 0.4 s with the Pixel 7 CPU throttled 4×. The target is ≤ 2 s. The wall mask is already cached from Route view, so only the labelling runs. |
-| Rule 4 sign check | ⚠️ The route sign (`blob:91`) still passes every shape gate. It is no longer auto-picked, but it is "Wall foothold 2" for the right foot. Measured on the real mask: its fill against its smallest rotated rectangle (with holes filled) is **0.85**. The nearest real candidates score 0.82 (`blob:92`) and 0.80 (`blob:87`), and B1-03's footholds 0.70 and 0.63. A gate between 0.82 and 0.85 is too thin a margin, and it would reject rectangular rails on other walls. **Decided 2026-11-01 (user):** the sign stays a manual "Wall foothold" option, and there is no rotated-rectangle gate, because the margin is too thin. A later idea: ask CLIP whether a candidate is a hold at all. |
+| Rule 4 sign check | ⚠️ The route sign (`blob:91`) still passes every shape gate. It is no longer auto-picked, but it is "Wall foothold 2" for the right foot. Measured on the real mask: its fill against its smallest rotated rectangle (with holes filled) is **0.85**. The nearest real candidates score 0.82 (`blob:92`) and 0.80 (`blob:87`), and the earlier sample route's footholds 0.70 and 0.63. A gate between 0.82 and 0.85 is too thin a margin, and it would reject rectangular rails on other walls. **Decided 2026-11-01 (user):** the sign stays a manual "Wall foothold" option, and there is no rotated-rectangle gate, because the margin is too thin. A later idea: ask CLIP whether a candidate is a hold at all. |
 | E2E (local, under load) | 31 of 34 passed in `stance`, `stable-canvas`, `layout` and `route-view`. Rerun alone: "the climber also stands in front of the wall in 3D" passes. `segmentWall … in ≤ 1 s` took 1043 ms at load 20. `segmentWall` is unchanged on this branch, and the same tests failed on `main` under the same load. CI is the reference. |
 
 ### Deferred: Trunk Rotation (a later amendment)
@@ -966,7 +969,7 @@ Trunk rotation is **not** part of this amendment, and S8 still keeps the trunk p
 
 ### Open Questions
 
-1. **Shares on a vertical wall.** In the simulation, the B1-03 Vertical shares are LH 0 · RH 0 · LF 94 · RF 6.
+1. **Shares on a vertical wall.** In the simulation, the earlier sample route's Vertical shares are LH 0 · RH 0 · LF 94 · RF 6.
    - The hands only pull in toward the wall, and the least-effort rule (S10) puts all the weight on the feet, unevenly.
    - This is honest physics within S10's known limit, but it may read oddly to a climber.
    - Should the panel also say "hands pull in", or is this for the pro-climber review?
@@ -982,7 +985,7 @@ Trunk rotation is **not** part of this amendment, and S8 still keeps the trunk p
 6. **Checking candidate pairs with the solver** (the top 3 pairs). Deferred until the Bretl–Lall region frees enough of the time budget.
 7. **Smear 40°** (Spot-Check row 3) as its own amendment.
 8. **Resolved 2026-11-01 (user): the book-based posture prior is ported** onto step 1 (Check Results › Posture; Amendment: Book-Based Stance › Ported onto step 1). Trunk rotation (**Deferred**) is still the next posture step.
-9. **Start shares on uncorrected holds** (from SPEC-beta-moves Task 8, 2026-11-01). On B1-03 with CLIP's types, the start balances with LF 99–100 % and hands about 0 %, while the hands pull 52–57 % of bodyweight inward. The vertical pinches typed as "crimp" become sideways pulls, and the 1S sloper gets the type rule's surface. With a setter's corrections (1S and 7F pulled down, 2/3/4 pinches) it reads LH 10 · RH 21 · LF 26 · RF 43. Should the solver flag such a start, which "the hands only pull the body in" already notes, as low-confidence, or prompt a hold-type check?
+9. **Start shares on uncorrected holds** (from SPEC-beta-moves Task 8, 2026-11-01). On the earlier sample route with CLIP's types, the start balances with LF 99–100 % and hands about 0 %, while the hands pull 52–57 % of bodyweight inward. The vertical pinches typed as "crimp" become sideways pulls, and the 1S sloper gets the type rule's surface. With a setter's corrections (1S and 7F pulled down, 2/3/4 pinches) it reads LH 10 · RH 21 · LF 26 · RF 43. Should the solver flag such a start, which "the hands only pull the body in" already notes, as low-confidence, or prompt a hold-type check?
 
 ## Amendment 2026-11-01 (c): Picked Footholds Use the Foothold Cone
 
@@ -993,7 +996,7 @@ Trunk rotation is **not** part of this amendment, and S8 still keeps the trunk p
 **Why.**
 - A foot stands on top of a hold whatever its hand type, and this cone is already the spec's foot model.
 - The hand type describes how a *hand* grips it: a sloper for the hand can be a fine foothold.
-- Found in SPEC-beta-moves Task 8. On B1-03 a setter tags the big pink footholds as part of the route. CLIP types them `sloper`, so the old rule made the left foot smear on hold 8 and the start infeasible: "Left hand: a crimp can't take this pull".
+- Found in SPEC-beta-moves Task 8. On the earlier sample route a setter tags the big pink footholds as part of the route. CLIP types them `sloper`, so the old rule made the left foot smear on hold 8 and the start infeasible: "Left hand: a crimp can't take this pull".
 - With this rule that start holds: LH −0.2 · RH 0 · LF 98.2 · RF 1.9 (Node, the recorded 9-hold level).
 
 **Honest limit.** A truly slopey foothold (a big volume's sloping face) is now as good as an edge. Per-blob or per-hold foot surfaces (Open Question 2) would refine it.
@@ -1006,7 +1009,7 @@ Trunk rotation is **not** part of this amendment, and S8 still keeps the trunk p
   - `stance.test.ts`: a foot on a sloper- or volume-typed hold solves exactly as on an untyped foothold.
   - `diagnose.test.ts` "names a slipping foot" now uses smearing feet. Its sloper-typed feet stand on their holds now, so it needed the smear it used to get implicitly.
 
-**The 59 real stances (`spike/zone-scale/baseline.eval.ts`) are unchanged by construction.** Every contact there has `type: null`, so every foot already had the foothold cone. The check wasn't re-run, because it writes into the shared, local-only data folder. No other climber-stance or beta-moves expectation changed.
+**The 59 real stances (the private scale study) are unchanged by construction.** Every contact there has `type: null`, so every foot already had the foothold cone. The check wasn't re-run, because it writes into the shared, local-only data folder. No other climber-stance or beta-moves expectation changed.
 
 ## Amendment 2026-11-02: Grip Point as the Contact Point (SPEC-play-shell E1)
 
@@ -1034,23 +1037,23 @@ The referee should stop being wrong in ways a climber notices:
 - a heel hook takes weight off the arms on steep walls (today the game can't express one);
 - an upright edge with no known type is not a jug you pull down.
 
-Every other stance stays byte-identical, and the B1-03 reference beta still tops out at move 16. **Corrected after the PR #18 review:** not byte-identical. M2 changes the pose (and so the shares) of the stances whose knee or hip was past range, and rejects stances that stand on a foot at or above hand height (Check Results › Review).
+Every other stance stays byte-identical, and the earlier sample route's reference beta still tops out at move 16. **Corrected after the PR #18 review:** not byte-identical. M2 changes the pose (and so the shares) of the stances whose knee or hip was past range, and rejects stances that stand on a foot at or above hand height (Check Results › Review).
 
 ### Spike (2026-11-04)
 
-A throwaway copy of the solver behind environment flags (diff kept in the session scratchpad as `r1-spike.diff`, not committed). H = 1000 px unless stated; B1-03 is the pinned level (`tests/fixtures/beta/`).
+A throwaway copy of the solver behind environment flags (a throwaway diff, not committed). H = 1000 px unless stated; the earlier sample route is the pinned level (the recorded level, private).
 
 | Fix | Probe | Today | With the fix |
 |---|---|---|---|
 | M1 body on the wall | Feet cut, two jugs ±0.1 H, Vertical | Can't hold | Holds: LH 48 · RH 48 · body 17 % |
 | | Feet cut, one jug, Vertical | Can't hold | Holds: LH 95 · body 19 % |
 | | Feet cut, 20° / 35° / 45° | Holds 50 / 50 | Unchanged (the pelvis sits 0.14–0.24 H off the wall, so the body doesn't touch) |
-| | B1-03, 9 betas | — | Reference tops at 16; **`cut-feet` (pinch 2 + sloper 1S) no longer falls** |
+| | The earlier sample route, 9 betas | — | Reference tops at 16; **`cut-feet` (pinch 2 + sloper 1S) no longer falls** |
 | M2 joint ranges | Reach check, foot 0.15–0.30 H below the hands | Smallest foot ratio 0.151 | 0.35 (knee ≤ 140°) |
-| | B1-03, 9 betas; climber-stance + beta-moves suites | — | Every verdict unchanged; 485 / 485 tests pass |
+| | The earlier sample route, 9 betas; climber-stance + beta-moves suites | — | Every verdict unchanged; 485 / 485 tests pass |
 | M3 heel hook | Hands on jugs, right foot on an edge, left foot on a jug at hand height 0.45 H out left | Standing on it: hands 73 % (35°), 98 % (45°) | Heel-hooking it: hands 45 % (35°), 47 % (45°); the heel carries 54–56 % |
 | M3 toe hook | Left sloper hand and left smear on one line, right toe hook 0.35 H out | — | 35°: the toe takes 44 %. 45°: still fails ("slip"). **Weak evidence** |
-| M4 as the map words it | B1-03 pinches 2 and 3 (slim, upright) become sidepulls toward the route's middle | Reference tops at 16 | **Reference falls at move 6**: "Left hand: a pinch can't take this pull" |
+| M4 as the map words it | The earlier sample route's pinches 2 and 3 (slim, upright) become sidepulls toward the route's middle | Reference tops at 16 | **Reference falls at move 6**: "Left hand: a pinch can't take this pull" |
 
 **Why M4 fails as worded.** A sidepull's side comes from the route's middle (`bodyX`, SPEC-hold-geometry). At move 6 the climber's body is under the pinches, not beside them. A pinch has two faces, and a climber uses whichever one fits where their body is. That is what "no single pull" means, and the video's climbers climb this line.
 
@@ -1129,7 +1132,7 @@ No force measurements exist for either hook. The research found only hamstring-i
 2. **Pinches stay two-sided.** "Squeeze; no single pull", cone up the wall, 60°. Squeeze strength is a `stance-odds` question (R2), not a cone.
 3. **A pinch with a pull set keeps 60°.** This is a bug fix. Today a user or setter pull on a pinch drops its cone to the 40° default, because `HAND_ANGLE` has no `pinch`.
 
-B1-03 is unchanged by construction: it has no untyped holds, and its pinches have no pull. User walls with untyped upright holds change; Task 5 re-checks Wall 1 and Wall 2 (orange). A hold is also untyped until the classifier answers, so an upright hold reads as a sidepull until then, as it read "no single pull" before (PR #17's `carryPlan` handles late types).
+The earlier sample route is unchanged by construction: it has no untyped holds, and its pinches have no pull. User walls with untyped upright holds change; Task 5 re-checks Wall 1 and Wall 2 (orange). A hold is also untyped until the classifier answers, so an upright hold reads as a sidepull until then, as it read "no single pull" before (PR #17's `carryPlan` handles late types).
 
 **If approved,** SPEC-game's map row reads: "a sidepull axis for untyped upright holds; pinches stay two-sided".
 
@@ -1164,7 +1167,7 @@ Unit (Vitest, H = 1000 px):
     - Feet cut at 20°, 35° and 45° give `body` null and 50 / 50.
 44. **Minimum reach.** `minReach` is 0.185 H ± 0.001 for legs and 0.117 H ± 0.001 for arms. A foot target that can't be farther than 0.15 H from its hip at any allowed pelvis is unreachable, and the stance text reads "Too cramped: …".
 45. **Hip limit.** A fixture whose only reaching knees put the thigh more than 130° from the trunk's down line is unreachable in both `solveStance` and `reachRatios` (the same verdict).
-46. **B1-03 under M2.** All 9 betas keep their recorded verdicts (`b1-03.test.ts`, unchanged).
+46. **The earlier sample route under M2.** All 9 betas keep their recorded verdicts (the recorded-level suite (private), unchanged).
 47. **Heel hook.** Hands on jugs (±100, 0), right foot on an edge at (100, 550), left foot on a jug at (−450, 50):
     - at 35° and at 45°, a heel hook puts the hands' combined share at ≤ 55 % (the spike gave 45 and 47);
     - standing on the same hold puts it at ≥ 70 % (the spike gave 73 and 98).
@@ -1183,25 +1186,25 @@ UI and manual:
 
 ### Pinned Expectations That Change
 
-- **`tests/fixtures/beta/b1-03.betas.json` › `cut-feet`.** Its prediction (fall at move 1, "Your feet would cut loose — find a foothold") was written before running, and M1 flips it: hanging on pinch 2 + sloper 1S with the hips on a vertical wall is physically possible, though hard (Decision D1). Under D1-A the entry gets a new prediction (no fall) and a note. The pivot text stays for feet-off stances that still fail, pinned by a new unit fixture: one sloper hand, feet cut, Vertical.
-- ~~Nothing else.~~ **Corrected at Task 2 (2026-11-04):** the spike replayed only B1-03, not the beta-moves suite. Two SPEC-beta-moves unit checks pinned the same old physics on the ladder's jugs, and they flip with the same decision (D1-A):
+- **The recorded betas (private) › `cut-feet`.** Its prediction (fall at move 1, "Your feet would cut loose — find a foothold") was written before running, and M1 flips it: hanging on pinch 2 + sloper 1S with the hips on a vertical wall is physically possible, though hard (Decision D1). Under D1-A the entry gets a new prediction (no fall) and a note. The pivot text stays for feet-off stances that still fail, pinned by a new unit fixture: one sloper hand, feet cut, Vertical.
+- ~~Nothing else.~~ **Corrected at Task 2 (2026-11-04):** the spike replayed only the earlier sample route, not the beta-moves suite. Two SPEC-beta-moves unit checks pinned the same old physics on the ladder's jugs, and they flip with the same decision (D1-A):
   - **AC 9** (cut feet on Vertical is a fall): the ladder's jugs now **hold** on Vertical, hips on the wall. The "feet cut loose" fall is pinned on the sloper ladder (start holds pulled into the wall).
   - **AC 10** (moving the only foot on Vertical): re-pinned on the sloper ladder, with the same text.
-- The B1-03 entry keeps its persona prediction and gains an `amended` record citing D1-A (the fixture's `about` says predictions are never re-recorded).
+- The earlier sample route's entry keeps its persona prediction and gains an `amended` record citing D1-A (the fixture's `about` says predictions are never re-recorded).
 - The reference beta, the drafts, `straight-to-finish` and `three-limbs` are unchanged.
 - **Play (builder's call, overriding "Play shows nothing new"):** Numbers mode lists each limb's share, and with the hips on the wall those add up to ~83 %. `MoveCheck.bodyLoad` (0.1, as `loads`) and a "Body on the wall share" row keep the rows adding up to 100.
 
 ### Testing
 
 - Unit: `ik.test.ts` (minReach, legPole), `stance.test.ts` (M1, hooks), `reach.test.ts` (cramped, hip parity), `cones.test.ts` (new; hook and pinch cones), `force.test.ts` (M4), `diagnose.test.ts` (texts).
-- Pinned: `b1-03.test.ts` runs in every task.
+- Pinned: the recorded-level suite (private) runs in every task.
 - Component: `StancePanel.test.tsx` (body row, hook select).
 - E2E: AC 52.
-- Timing: `spike/loop-timing.mjs` (AC 51).
+- Timing: the real-model timing runner (private; AC 51).
 
 ### Boundaries
 
-- **Always:** the B1-03 replay green after each task; one shared function for any rule that `reach.ts` and the solver both apply; sources cited beside each constant.
+- **Always:** the earlier sample route's replay green after each task; one shared function for any rule that `reach.ts` and the solver both apply; sources cited beside each constant.
 - **Ask first:** changing `hipFloor`, the search box, any cone not listed here, or any pinned beta other than `cut-feet`.
 - **Never:** hooks or the body contact in Play's tray before the beta-moves amendment (D3); a hook on a smear or a wall-foothold chip; calling a builder's-call constant measured.
 
@@ -1217,7 +1220,7 @@ UI and manual:
 
 **Decided 2026-11-04 (user: "approve"): D1-A, D2-A, D3-A.**
 
-- **D1. Cutting feet on B1-03.** With the body on the wall, cutting both feet from pinch 2 + sloper 1S holds.
+- **D1. Cutting feet on the earlier sample route.** With the body on the wall, cutting both feet from pinch 2 + sloper 1S holds.
   - **A (recommended):** accept it. The physics is right on jugs, and R2's `stance-odds` will band this one "unlikely".
   - **B:** ship M1 together with R2, so a feet-off hang never shows as plainly "holds".
 - **D2. Upright holds.**
@@ -1245,7 +1248,7 @@ Branch `redesign-r1-stance`:
   - So "cramped" is pinned two ways: in `reach.ts` with a small pinned box (a foot at the knee's fold, and a foot 0.46 H above the hip that only the hip limit stops), and on `diagnose`'s rule directly.
   - Parity between the solver and the reach check holds by construction: both call `minReach`, `legPole` and `hipFits`.
   - A property test checks that every shown high-step pose keeps knee ≤ 140°, elbow ≤ 145°, hip ≤ 130°.
-- **AC 46:** all 9 B1-03 betas keep their verdicts, except `cut-feet` (D1-A, amended).
+- **AC 46:** all 9 betas on the earlier sample route keep their verdicts, except `cut-feet` (D1-A, amended).
 - **AC 47:** a heel hook drops the hands' share from 73 % to 45 % at 35°, and from 98 % to 47 % at 45°.
 - **AC 48 (toe-hook gate): passed.**
   - At 45°: left edge hand and left edge foot on one line is a barn door; standing on a jug at (350, 300) slips; toe-hooking it holds.
@@ -1256,7 +1259,7 @@ Branch `redesign-r1-stance`:
   |---|---|---|
   | Four-contact stance | 30.6–31.1 ms | 30.6–33.3 ms |
   | Feet cut | 12.8–13.2 ms | 15.9–17.4 ms (one more contact) |
-  | B1-03 reference replay | 312–317 ms | 315–317 ms |
+  | The earlier sample route's reference replay | 312–317 ms | 315–317 ms |
 
 - **AC 52 (E2E).**
   - The new Setting Room test passes 6 / 6 (repeat × 3, desktop and 375 px). It sets the start hold to a jug first: the fake classifier types it a sloper, which can't hold a feet-off hang, so the test would otherwise depend on timing.

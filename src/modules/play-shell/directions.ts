@@ -36,7 +36,7 @@ export function applyEdits(wall: PlayWall, edits: Edits): PlayWall {
 /**
  * SPEC-play-shell › Amendment 2026-11-03 R0-3 (b): the Down preset, straight down the photo, as
  * the Studio's hold inspector has it (hold-geometry's PRESET_DIR.down). The setter's fix for a
- * sloper whose top faces up (B1-03's 1S).
+ * sloper whose top faces up (the earlier sample route's 1S).
  */
 export const DOWN_PULL: Vec3 = [0, 1, 0];
 

@@ -421,9 +421,9 @@ describe('stance shape (book model)', () => {
     expect(angleAt(j.lHip, j.lKnee, j.lFoot)).toBeGreaterThan(150);
   });
 
-  // B1-03's hips rest on the search's floor (`anyFeet.test.ts`), where no prior can move them. With
-  // deeper feet the posture prior sets the hip height instead, so a prior change shows up here
-  // (real starts: median 0.275 H below the hands). Pinned to ±0.005 H: a leg reach of 0.85 instead
+  // On the earlier sample route the hips rest on the search's floor (`anyFeet.test.ts`), where no
+  // prior can move them. With deeper feet the posture prior sets the hip height instead, so a prior
+  // change shows up here (real starts: median 0.275 H below the hands). Pinned to ±0.005 H: a leg reach of 0.85 instead
   // of 0.97 moves the hips only 0.03 H (to 0.390), and 1.0 moves them 0.007 H (to 0.367).
   it('hangs the hips off the floor when the feet are 0.72 H down (B1)', () => {
     const deep: StanceContacts = {

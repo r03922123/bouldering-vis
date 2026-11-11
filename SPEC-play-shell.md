@@ -2,9 +2,14 @@
 
 Status: **APPROVED 2026-11-01** (user, "approve both"). Open questions settled the same day:
 - **1, the shared hook:** yes. `useRouteHolds` moves out of `App.tsx`, with behaviour pinned by a test.
-- **2, the licence:** yes. Our own tagging of B1-03 ships as a baked level, with no scraped route data.
+- **2, the licence:** yes. Our own tagging of the earlier sample route ships as a baked level, with no scraped route data.
 - **3 and 4:** as proposed. The Studio's badges stay as the route markers, and the new map arrows are approved.
-Parent: [SPEC-game.md](SPEC-game.md) › Amendment 2026-11-01 (b) (approved). Build step 3, tasks C5–C8 in [tasks/game-todo.md](tasks/game-todo.md). Depends on `beta-moves` and `pixel-kit` (step 2).
+Parent: [SPEC-game.md](SPEC-game.md) › Amendment 2026-11-01 (b) (approved). Build step 3, tasks C5–C8. Depends on `beta-moves` and `pixel-kit` (step 2).
+
+Results dated before 2026-11-06 that mention the earlier sample wall or the earlier sample route
+were measured on an earlier sample photo that the project no longer ships
+([ADR-0003](docs/adr/0003-public-repo.md)). Their verdicts, timings and ratios stand as recorded;
+points, foothold ids and heights measured on that photo are given as labels.
 
 Items taken from the design-pillars amendment (still PROPOSED, SPEC-game Q4) are marked **[if pillars]**. Step 3 builds without them, and they are added only if the user approves the pillars.
 
@@ -38,7 +43,7 @@ User stories:
 | S6 | Planning a move | Tap a limb (DOM toggle buttons LH · RH · LF · RF), then tap the photo. `targetAt` turns the tap into a `Target` (a route hold, a wall foothold or a smear). `applyStep` → `MoveCheck`.<br>• **Legal** (`hold` or `top`): it's committed to the plan, and the climber is shown in the new stance.<br>• **Fall:** a **preview only**. The ghost climber (pixel-kit's fail mood) shows with the reason, and the plan is unchanged (user decision: preview a failing move before committing it).<br>• **Shape rejection:** the rejection text; nothing moves.<br>• **2-limb moves:** pick a second limb before the tap, when the tray tier allows it (S8). | Uses beta-moves as-is. "Falling is free" without needing the pillars. |
 | S7 | Undo / redo | `undo` / `redo` on the plan, with buttons enabled by `canUndo` / `canRedo`. Undo always restores the previous stance exactly (old SC 2). | — |
 | S8 | Level presets | From the profile (`gym-hub`'s `Profile`).<br>• **beginner:** 1 limb per move, verdict words plus the plumb line **[if pillars]**, Numbers off.<br>• **gym:** 1–2 limbs, Numbers off.<br>• **pro:** 1–2 limbs, Numbers on.<br>Every aid has a toggle in a small "Aids" menu at every level. Presets change only the tray and what is shown, **never `MoveRules`**. | Amendment (b) table, and "no grade gate". |
-| S9 | Sample walls | A wall with a **baked level** (task A2's B1-03 level JSON, served as static data) opens straight into Plan. A wall without one opens in Tag. Shipping the baked B1-03 route depends on the licence question (OQ 2). Until it is answered, Wall 1 opens in Tag like any photo. | No scraped route data ships without the user's yes. |
+| S9 | Sample walls | A wall with a **baked level** (task A2's level JSON for the earlier sample route, served as static data) opens straight into Plan. A wall without one opens in Tag. Shipping the baked earlier sample route depends on the licence question (OQ 2). Until it is answered, Wall 1 opens in Tag like any photo. | No scraped route data ships without the user's yes. |
 | S10 | Numbers mode | A panel under the verdict, showing only values in the current `MoveCheck`:<br>• **share** % per limb (`loads`, 0.1);<br>• **reach ratio** per moved limb against `STATIC_REACH` (1.000) and `DEADPOINT_REACH` (1.100), labelled static or deadpoint;<br>• **effort**;<br>• **style**;<br>• **contacts kept**.<br>Formatting only, with no arithmetic beyond rounding. | Amendment (b): "Show a number the referee didn't compute" is a Never. |
 | S11 | Pixel layer contents | The climber (stance joints → `PixelJoints`; mood `ok`, `strain` for a deadpoint, `fail` for a preview), the `target` marker on the tapped target, a reach gap for an out-of-reach preview, and chalk puffs on a grab. Route roles are **not** drawn as pixel markers in step 3, because `SelectionCanvas` already draws its badges and outlines there (OQ 3). | No doubled markers, and no Studio change. |
 | S12 | Accessible path | A DOM list of targets: the route holds by label, then "Wall foothold n", then "Smear". The limb buttons and this list complete any move without the canvas. Verdicts go to an `aria-live="polite"` region. | SPEC-game › Boundaries, and pillars §4's DOM path adopted as a requirement. |
@@ -78,7 +83,7 @@ e2e/play.spec.ts  e2e/own-wall.spec.ts
 2. **Legal move:** limb, then a reachable hold → the plan grows by one step, the climber is drawn in `check.stance`, and the verdict line shows the hold.
 3. **Fall preview:** limb, then a target `checkMove` calls a fall → the plan is unchanged, the ghost and `check.reason` show, and the live region announces the reason.
 4. **Undo:** after any sequence of moves and previews, Undo restores the previous step's assignment and stance exactly (deep-equal to the earlier `MoveCheck.stance`).
-5. **Three moves on B1-03** (E2E, fake models, hub → Wall 1 → plan 3 moves) with real verdicts from beta-moves.
+5. **Three moves on the earlier sample route** (E2E, fake models, hub → Wall 1 → plan 3 moves) with real verdicts from beta-moves.
 6. **Same referee** (amendment (b) SC 6): one beta checked under `trayFor` of all three profiles gives deep-equal `MoveCheck`s, because `trayFor` never yields rules (unit).
 7. **Numbers exactness:** every value `numbersFor` returns equals the matching `MoveCheck` field rounded as shown (unit, over the beta-moves fixtures).
 8. **No invented numbers:** Numbers mode renders only rows from `numbersFor` (component).
@@ -95,18 +100,18 @@ e2e/play.spec.ts  e2e/own-wall.spec.ts
 | Unit | `numbersFor`, `trayFor`, `toPixelJoints`, `viewFrom`, the same-referee test (AC 6, 7), `useRouteHolds` against the Studio's current output (S3) |
 | Component | Tray state (limb → target → verdict), preview vs commit, Undo/Redo enabling, Aids toggles, Numbers panel (AC 2–4, 8) |
 | E2E (desktop + Pixel 7, fake models) | `play.spec.ts` (AC 1–5, 11, 12), `own-wall.spec.ts` (AC 9, 10) |
-| Real-model check | B1-03 from the hub with real models: start holds, 3 legal moves, recorded like the step-1 check |
+| Real-model check | The earlier sample route from the hub with real models: start holds, 3 legal moves, recorded like the step-1 check |
 
 ## Boundaries
 
 - **Always:** verdicts come only from beta-moves. A fall is a preview. Rules are the same for every level. Phone first. Sound muted by default.
-- **Ask first:** S3's hook extraction (it touches `App.tsx`); new capability-map arrows (OQ 4); any `SelectionCanvas` prop (OQ 3); shipping the B1-03 route data (OQ 2).
+- **Ask first:** S3's hook extraction (it touches `App.tsx`); new capability-map arrows (OQ 4); any `SelectionCanvas` prop (OQ 3); shipping the earlier sample route's data (OQ 2).
 - **Never:** compute or show a number the referee didn't return; change `MoveRules` by level; upload a photo.
 
 ## Open Questions
 
 1. **S3, the shared `useRouteHolds` hook.** May the Studio's route-to-force derivation move out of `App.tsx` into a shared hook, with behaviour unchanged and pinned by a test? Proposed: yes. The alternative is a duplicated copy with a pinning test.
-2. **Licence (S9, = pillars Q4).** May our own tagging of B1-03 (taps made in this app, not scraped data) ship as a baked level beside the already-public sample photo? If not, Wall 1 opens in Tag, and SC 4's 3-minute target includes tagging.
+2. **Licence (S9, = pillars Q4).** May our own tagging of the earlier sample route (taps made in this app, not scraped data) ship as a baked level beside the earlier sample photo, which the app then shipped? If not, Wall 1 opens in Tag, and SC 4's 3-minute target includes tagging.
 3. **Doubled markers (S11).** In step 3, keep the Studio's badges as the route markers (proposed). Or, later, add an ask-first `SelectionCanvas` prop that hides them so pixel markers can take over?
 4. **Map arrows.** Approve `play-shell → gym-hub` (for `Profile`) and `play-shell → hold-segmentation / climber-stance / image-input` (to compose the Studio's pieces)? This settles pixel-kit OQ 7's third part.
 
@@ -120,7 +125,7 @@ e2e/play.spec.ts  e2e/own-wall.spec.ts
 - **Load on demand** (technical director; PRPL). On a baked level Play draws the photo with its own `PlanPhoto`, with the same box and `drawExtras` contract as `SelectionCanvas`, and never starts the ML worker. SAM is prepared only in Tag. This also keeps a route tagged in the Setting Room on the same photo from doubling the level's badges.
 - **Baked-level badges** are the Studio's own (`drawBadge`), above each hold. Without masks, a hold's box is 0.05 × climber height, and pixel-kit's frame clamps it.
 - **`trayFor`'s `plumb` is false** until the pillars are approved. Hints show one coaching line for now.
-- **A baked level carries its own wall angle** (B1-03: Vertical, as recorded). A tagged route uses the Studio's angle.
+- **A baked level carries its own wall angle** (the earlier sample route: Vertical, as recorded). A tagged route uses the Studio's angle.
 - **"Play this wall"** goes to a sample's own bay when it has no baked level, otherwise to `#/wall/mine` (your route on that photo).
 
 - **Import exception: the ML worker's client type.** `PlayScreen.tsx` imports `type MlClient` from `src/workers/client`, type only, to hand it to `SelectionCanvas`. The Studio's modules already import it the same way: `hold-segmentation` (`SelectionCanvas`, `session`, `useSamSession`), `climber-stance` (`useWallFootholds`), `depth-estimation` (`useDepth`), `hold-classification` (`useClassification`) and `route-compositor` (`useWallMask`). `src/workers` is not a capability-map module, so this adds no map arrow. On a baked level `PlayScreen` gets no client, and the worker never starts.
@@ -128,7 +133,7 @@ e2e/play.spec.ts  e2e/own-wall.spec.ts
 
 ## Check Results (2026-11-02, C9)
 
-### Real models, B1-03 from the hub
+### Real models, the earlier sample route from the hub
 
 Run on `npx vite --port 5174` without `VITE_FAKE_ML` (the real ML worker), headless Chromium, desktop and Pixel 7 (375 × 740). As a pro (Numbers on): `/` → "I climb hard, set or coach" → Wall 1 → LF, RF, LH tapped on the photo at the reference beta's first three targets. Load average 4.5–7.8.
 
@@ -148,7 +153,7 @@ Run on `npx vite --port 5174` without `VITE_FAKE_ML` (the real ML worker), headl
 | Page | Mobile | Desktop |
 |---|---|---|
 | `/` (the gym, level question open) | **100** | **100** |
-| `#/wall/routemake-g2-b1` (Play, start shown) | **100** | **100** |
+| Wall 1's Play URL (Play, start shown) | **100** | **100** |
 
 ### E2E, fake models, desktop and Pixel 7
 
@@ -160,7 +165,7 @@ Run on `npx vite --port 5174` without `VITE_FAKE_ML` (the real ML worker), headl
 |---|---|
 | **1. Opens into the gym** | `hub.spec` AC 2: the gym paints within 2 s at 4× CPU throttle, without the Studio bundle. A wall door is tappable then. |
 | **2. Studio unchanged** | `App.tsx` and every Studio module are unchanged since step 2 (`git diff ea77ceb..HEAD`: only one added export in `beta-moves/index.ts`). The whole Studio E2E suite passes at `#/studio` (above). The Setting Room is 2 taps from the hub (`hub.spec` AC 6). |
-| **5. Pro** | `own-wall.spec` AC 9 counts real taps with a capture-phase `pointerdown` listener. **Updated 2026-11-02:** since gym-hub W3 removed the level question, the first verdict on your own photo takes **2 in-app taps**, New wall and Plan this route, plus the OS photo picker and the tagging taps (`own-wall.spec` expects exactly these 2). If the picker is one tap that makes 3; phone pickers often take two (a source, then the photo), which makes 4. The tagging is 3 hold taps and 2 role taps (Start, Finish). Counting the role taps as in-app taps gives 4. The first verdict shows with E1's direction map open, so "Start planning" comes after it and isn't counted. At C9, before W3, it was 3 in-app taps, with "I climb hard, set or coach" first. S2's "a route that is ready moves you to Plan" would remove the Plan tap; it isn't built. Numbers values equal the referee's (`numbers.test.ts`, every check of every B1-03 beta). |
+| **5. Pro** | `own-wall.spec` AC 9 counts real taps with a capture-phase `pointerdown` listener. **Updated 2026-11-02:** since gym-hub W3 removed the level question, the first verdict on your own photo takes **2 in-app taps**, New wall and Plan this route, plus the OS photo picker and the tagging taps (`own-wall.spec` expects exactly these 2). If the picker is one tap that makes 3; phone pickers often take two (a source, then the photo), which makes 4. The tagging is 3 hold taps and 2 role taps (Start, Finish). Counting the role taps as in-app taps gives 4. The first verdict shows with E1's direction map open, so "Start planning" comes after it and isn't counted. At C9, before W3, it was 3 in-app taps, with "I climb hard, set or coach" first. S2's "a route that is ready moves you to Plan" would remove the Plan tap; it isn't built. Numbers values equal the referee's (`numbers.test.ts`, every check of every recorded beta on the earlier sample route). |
 | **6. Same referee** | `sameReferee.test.tsx`: `PlayScreen` under the beginner, gym and pro profiles, with the reference beta (16 moves to the top) plus a fall preview and a shape rejection played through the limb buttons and the target list. Assignment, shares, move count and verdict text are equal after every step. A mutation that leaks the profile into the wall makes it fail. `trayFor` returns only `maxLimbs`, `numbers` and `plumb`. |
 | **Old SC 2. Undo** | `moves.test.ts`: after moves, rejections and fall previews, Undo restores the previous step's assignment and stance, deep-equal with a fresh cache. `play.spec` AC 4 on desktop and Pixel 7. |
 
@@ -193,7 +198,7 @@ Status: **APPROVED 2026-11-02** (user: "approve"), from the user's play-test fee
 | H3 | **Hint 3, the plausible holds view** (user decision 2026-11-02). After a limb is picked, the referee runs `checkMove` on every candidate target for that limb: route holds, plus wall feet and smear for a foot. Each candidate is marked "holds" (static), "holds as a deadpoint" or "falls", with a count line such as "7 targets: 3 hold · 1 deadpoint · 3 fall". It's computed in small idle chunks through the stance cache and can be cancelled. It never commits. It's toggled as "Plausible holds" in Aids and is **off by default**. | Pro climber and technical director. The referee is deterministic, so these are yes/no verdicts, not probabilities, and nothing is called a "rate". A Monte Carlo success rate over input uncertainty was offered and not chosen. The design-pass cut list called this an answer key; the user asked for it, so it's opt-in. |
 | D1 | **The coach window.** Analysis and explanations appear in an **original** 8-bit RPG-style text box at the bottom of the screen:<br>• a pixel-bordered frame with a 5×7 pixel-font name tag ("COACH");<br>• the body in the system font, so it stays readable and translatable (pixel-kit's font rule);<br>• the text reveals letter by letter, skippable with a tap or Enter, and appears at once under reduced motion;<br>• an advance arrow on longer explanations.<br>It shows the solver's own words: the start verdict, `fail.text` and `move.tip`, and with Numbers on, a one-line breakdown. It never copies Pokémon's or Mega Man's frame, font or sounds, and an originality review is needed before merge. | Game designer, world. A bottom text box is the classic turn-based RPG convention, which suits a think-then-act planning game better than an action game's cut-in dialogue. |
 | E1 | **Check the hold directions before planning** (user request 2026-11-02). Whenever a wall goes into Plan, whether a route the player just tagged or a baked level like Wall 1, a **direction map** opens first: an arrow on every route hold showing the pull direction the referee will use. It asks: "Do these directions look right?" with **"Edit directions"** and **"Start planning"**. In edit mode, with the mouse (and touch):<br>• **Rotate:** drag an arrow's head to turn the pull direction. Only the in-plane angle changes; the out-of-wall part stays.<br>• **Translate:** drag the arrow's base dot to move the **grip point** where the hand or foot holds the hold. It's clamped to the hold's box (the mask when there is one).<br>• **Reset** returns a hold to the referee's default.<br>Arrows are ≥ 44 px to grab, and there's a keyboard path: the hold list plus the arrow keys rotate and move the point. "Start planning" (or "Done") goes to Plan. A changed direction or point restarts the plan from the start, because the referee's input changed. | Pro climber. Reading how each hold pulls is the first read of a route. **Rotation** reuses the approved user override, the Studio's custom pull `{ custom: Vec3 }`, with `forceSource: 'user'`. **Translation** adds one referee input, an optional per-hold **grip point** that replaces the centroid as the contact point. It's carried in `RouteHold` and the context key. That's a `beta-moves` / `climber-stance` input change, approved by the user's request. Edits are in memory only (step 5 saves), and the baked level file never changes. |
-| V1 | **Beta videos.** On a wall whose sample has routemake videos, the header shows "Watch beta videos on routemake ↗", opening in a new tab with `noopener`. The link goes to the route's own page when a verified routemake route URL exists for it, and to the wall's zone page otherwise. **Only the URL ships**: videos stay on routemake, never bundled or embedded. | Technical director. This follows the existing image-input policy (videos are "linked, never bundled") and the licence answer (no scraped route data ships). |
+| V1 | **Beta videos.** On a wall whose sample has videos on the photo's source site, the header shows "Watch beta videos ↗", opening in a new tab with `noopener`. The link goes to the route's own page when a verified route URL exists for it, and to the wall's page otherwise. **Only the URL ships**: videos stay on the source site, never bundled or embedded. | Technical director. This follows the existing image-input policy (videos are "linked, never bundled") and the licence answer (no scraped route data ships). |
 
 Acceptance:
 1. Q/W/A/S and 1–4 pick limbs, and Esc clears.
@@ -302,7 +307,7 @@ Acceptance:
 2. **Reason (R0-2).** At 1280×800 and 375×740, a fall preview shows its reason on the first visible page with no click. Arming another limb keeps it; the next move, Undo, Redo or Esc replace it.
 3. **Advice (R0-3).** Play never shows "make the climber bigger". The Setting Room's text is unchanged (its tests unchanged). With a sloper start that can't be held, the banner names the diagnosis and shows Edit route and Edit directions; the Down preset sets that hold's pull to straight down; afterwards "set its pull to Down" no longer appears for that hold.
 4. **Goal (R0-4).** On Wall 1, before any move, "both hands on 7F" is visible at both sizes, and a screen reader hears it first.
-5. **Referee unchanged.** `checkMove` verdicts on B1-03's recorded betas are identical before and after (the existing sameReferee and B1-03 tests pass unchanged).
+5. **Referee unchanged.** `checkMove` verdicts on the earlier sample route's recorded betas are identical before and after (the existing sameReferee and recorded-level (private) tests pass unchanged).
 6. **Gate.** `npm test`, `npm run lint`, `npm run build`, `npm run e2e` pass; GitHub CI green.
 7. **Panel replay.** The UX/UI, researcher (beginner persona on a phone), game developer and game designer roles replay Wall 1 on the PR's build. None reports a limb that adds instead of switching or a hidden fall reason.
 
@@ -333,7 +338,7 @@ Acceptance:
 - **The COACH's fold control** (game designer, PR #17 review 2). On a phone it has the box's right-hand column to itself (the 52 px the text never takes), at the top, with the advance arrow at the column's foot, so neither covers a word. It says what it does: expanded it reads "Fold ▴" ("Fold the coach to one line"); folded, ▾ ("Show the whole coach line").
 - **The folded strip's words** (researcher, PR #17 review 9). A folded COACH strip wraps to a second line before it clips, so a short line such as "Goal: both hands on 7F" is never cut (the researcher's phone, with larger system text, showed "…on 7"). Longer words are clamped at two lines, the whole text one tap away. This relaxes amendment (b) U3's "one-line strip" to "one or two lines".
 - **The direction check answers** (game developer, PR #17 review 11). While "Do these directions look right?" is open, a limb key or a tap on the wall is no longer swallowed: the banner says "Press Start planning to climb" (a status line, so it is announced). Nothing is armed or moved, the K1 rule stands (the tray's keys work only in Plan), and edit mode keeps its own keys and drags.
-- **R0-3 (a), where the Play text lives** (technical director). climber-stance's `Diagnosis` gains an optional `playText`, set only where the Studio's advice names a control Play lacks (reach, and the steep sloper below). `text` stays the Studio's and the referee's: beta-moves' `reason` and `fail.text` are unchanged (its tests and B1-03 unchanged). Play's `reasonText` swaps the diagnosis inside the reason, alone or after "While your … moves:".
+- **R0-3 (a), where the Play text lives** (technical director). climber-stance's `Diagnosis` gains an optional `playText`, set only where the Studio's advice names a control Play lacks (reach, and the steep sloper below). `text` stays the Studio's and the referee's: beta-moves' `reason` and `fail.text` are unchanged (its tests and the recorded-level suite (private) unchanged). Play's `reasonText` swaps the diagnosis inside the reason, alone or after "While your … moves:".
 - **R0-3 (b), which slip text** (pro climber). Once the player has set the pull (`forceSource: 'user'`), the advice is climber-stance's own slip text for that hold type: for a sloper "get your hips lower and under it" (the amendment's "move your hips under it" is the same table's line for other holds). A measured surface keeps the Studio's "get a foot on a hold under it": Play can do that.
 - **R0-3 (b), the Down advice by hold** (game designer, PR #17 review 6). The advice is given only when Down would change the hold's pull (not already within the editor's 12° snap of straight down, the Studio's SNAP_DEG); then it is the slip text. It names the hold, its pull and why, and the button: "Right hand: hold 4 pulls mostly into the wall, which a sloper can't take — if its top faces up, press Down for it in Edit directions". climber-stance's table owns the words (`playSteepText`, `playSlipText`); Play fills in the label and the pull in words, with no degree numbers. Without the route (no hold to name) the diagnosis's own Play text says "press Down for it in Edit directions". This supersedes the amendment's "set its pull to Down in Edit directions".
 - **R0-3 (a), who is blamed** (game designer, PR #17 review 7). When the stance a move makes leaves a limb that didn't move out of reach, the reason says the move: "Right hand to 6: you'd fall. With your right hand on 6, your left foot can't reach — pick a closer foothold". Out of reach alone stays "Out of reach: left foot — pick a closer foothold". Feet pick a foothold, hands a hold. climber-stance's table owns both forms (`playReachText`); Play fills in the move.
@@ -342,7 +347,7 @@ Acceptance:
 - **R0-4, what a screen reader hears first** (accessibility). The live region keeps the referee's verdict exactly (S12, and the E2E suites that read it). The goal reaches a screen reader through the header, which comes before every control in the reading order: "Goal: both hands on 7F" (the "·" is drawn, a colon is read).
 - **R0-4, when the goal page shows** (game designer). While the plan is at its start: on entering Plan and after Undo back to it. A fall preview or a rejection from the start shows its own words first.
 - **A plan never resets silently** (game designer and technical director, PR #17 review 8). Root cause of the Wall 2 report: on a tagged route Plan opens once depth and the wall footholds are in (PlayRoute's `settled`), but the hold types (CLIP) can land later; each type is in the route's context key, and a plan belongs to one context, so it started again at defaultStart with no word. Now, when the same route (the same hold ids) gets a new context, the plan is replayed on it (`carryPlan`): the start, then each move while the referee still holds it and its shape is still legal, committed one by one so Undo walks back through them. The hint line says what happened: "The wall’s analysis finished: your 2 moves were checked again and still hold", or "…: move 3 no longer holds (<reason>), so your plan is back to move 2". A route edit and an E1 direction change still restart the plan on purpose (the player asked). **Re-review 1:** the session memory also keeps the latest plan per wall and route (its hold ids) with the context key it was made on, so the carry works after a return to the wall too (the plan restored under the old key, then the types landing; or the types landing while the wall was closed), and leaving before any action keeps it. A restart on purpose forgets it. **Re-review 5:** if the old start isn't a legal start on the new context (a foothold it stands on is gone), the plan goes back to the default start and the line says so: "The wall’s analysis finished: your start no longer fits this wall — it was reset to the default start".
-- **Existing tests** (QA). Assertions changed only where R0 reverses the old behaviour, each with an R0 comment: K1's toggle-off and add-by-default steps (keys.test, play.spec K1), the 2-limb tray test (Shift + click), K2's hover equality (a smear is never a tap), D1's coach pages (the reason on page 1; play.spec D1 pages to the Numbers line instead), the COACH-fit E2E (the Numbers page is now page 3) and beta-moves' start text (plan.test). sameReferee and B1-03 are unchanged.
+- **Existing tests** (QA). Assertions changed only where R0 reverses the old behaviour, each with an R0 comment: K1's toggle-off and add-by-default steps (keys.test, play.spec K1), the 2-limb tray test (Shift + click), K2's hover equality (a smear is never a tap), D1's coach pages (the reason on page 1; play.spec D1 pages to the Numbers line instead), the COACH-fit E2E (the Numbers page is now page 3) and beta-moves' start text (plan.test). sameReferee and the recorded-level suite (private) are unchanged.
 
 ## Amendment 2026-11-04: L1, a Phone on Its Side (the iPhone check)
 
@@ -361,18 +366,18 @@ Acceptance:
 - **After.** On an upright iPad Air the photo fills the width (788 × 591). On a phone the photo's width binds first, so nothing changes (a 4:3 photo at 375 px is 281 px tall, under both limits).
 - **Test.** `e2e/hud.spec.ts` › L2: at 820 × 1106, U3 with the photo ≥ 570 px tall, and the COACH in view and clear of the bar.
 
-## Amendment 2026-11-06: V1 retired (ADR-0002 (c))
+## Amendment 2026-11-06: V1 retired (ADR-0003 (c), (d))
 
 **V1 is retired.** No wall shows a beta-video link. The `videoUrl` prop, the header link and the route-page table (`ROUTE_PAGES` and `videoUrlFor` in `src/app/playWall.ts`) are removed, and acceptance 7 of the 2026-11-02 amendment is dropped.
 
-- **Why.** [ADR-0002](docs/adr/0002-replacement-photos.md) (c): the photo that had beta videos is being replaced, and the owner's video shows a different wall. A link would show moves on holds that aren't in the photo, and no link is better than a wrong one.
+- **Why.** [ADR-0003](docs/adr/0003-public-repo.md) (c), (d): the photo that had beta videos is being replaced, and the owner's video shows a different wall. A link would show moves on holds that aren't in the photo, and no link is better than a wrong one.
 - **Test.** `src/app/Root.test.tsx` checks that Wall 1's baked level shows no beta-video link. V1's own tests (`PlayScreen.videos.test.tsx`, the V1 block of `playWall.test.ts` and e2e AC 7) are deleted with it.
 
-## Amendment 2026-11-06 (b): No Baked Level Ships (ADR-0002)
+## Amendment 2026-11-06 (b): No Baked Level Ships (ADR-0003)
 
-**S9, for now.** No level ships, so Wall 1 opens in Tag like any photo, which S9 already allowed. `LEVELS` in `src/app/playWall.ts` is empty in the app, and no level is in `public/`. Wall 1 gets a level again on photo A ([ADR-0002](docs/adr/0002-replacement-photos.md), Which photo goes where).
+**S9, for now.** No level ships, so Wall 1 opens in Tag like any photo, which S9 already allowed. `LEVELS` in `src/app/playWall.ts` is empty in the app, and no level is in `public/`. Wall 1 gets a level again on the owner's photo ([ADR-0003](docs/adr/0003-public-repo.md) (f)).
 
-- **Why.** The old level is data from a photo the release keeps private (`docs/adr/0001-open-source-release.md:50-53`), and the deployed site still served it (follow-up 21 in `docs/ARCHITECTURE.md`).
+- **Why.** The old level is data from a photo the release keeps private ([ADR-0003](docs/adr/0003-public-repo.md) (d)), and the deployed site still served it (follow-up 21 in `docs/ARCHITECTURE.md`).
 - **The E2E test level.** The Play E2E suite keeps running on the old level, now a private test fixture: `tests/fixtures/e2e/wall-1.level.json`. `playwright.config.ts` starts the dev server with `VITE_E2E_WALL1_LEVEL=/levels/e2e-wall-1.json`, which puts that URL in `LEVELS` for Wall 1, and `e2e/wall1Level.ts` answers the URL from the fixture on every page. The env value is the URL itself, so a build without it has no level and no test path. PR 9 of the photo-replacement series moves the suite onto the level that ships and removes the fixture, the env var and `e2e/wall1Level.ts`.
 - **Test.** `src/app/playWall.test.ts` › baked levels: `LEVELS` is empty, and with the env var set Wall 1 maps to its URL. "Play this wall" with your own route on Wall 1 now goes to Wall 1's bay (S14), because that wall has no level.
 

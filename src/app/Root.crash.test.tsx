@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { Root } from './Root';
 
-// PR #44 review: Root gives the crash screen the same way back as the Play header, so the
+// Private PR #44 review: Root gives the crash screen the same way back as the Play header, so the
 // front-door wall's crash screen never leads to the gym (SPEC-launch-wall-2 R3). Its own file,
 // since it mocks the whole Play screen to throw.
 vi.mock('./PlayRoute', () => ({

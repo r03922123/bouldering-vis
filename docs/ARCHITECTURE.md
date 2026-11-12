@@ -109,7 +109,7 @@ then what runs.
    (`src/modules/depth-estimation/DepthView.tsx:6`).
 7. **Arrows and a climber appear.** `useRouteHolds` (`src/app/App.tsx:56`) combines each hold's
    surface, its type and any direction you set into one pull direction
-   (`src/app/useRouteHolds.ts:34`). `useStance` (`src/app/App.tsx:57`) solves a start position on
+   (`src/app/useRouteHolds.ts:34`). `useStance` (`src/app/App.tsx:56`) solves a start position on
    the main thread after a short wait (`src/modules/climber-stance/useStance.ts:101`, `solveStance`
    at `src/modules/climber-stance/stance.ts:454`). Both are drawn over the Route picture
    (`src/app/App.tsx:63-69`).

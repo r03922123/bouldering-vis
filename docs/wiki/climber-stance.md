@@ -45,7 +45,7 @@ the photo is the only scale input.
 
 | Layer | Files | Pure? | Source |
 |---|---|---|---|
-| Public entry | `index.ts`, plus `worker.ts` for the ML worker | yes | [index.ts:1-62](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/index.ts#L1-L62), [worker.ts:1-2](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/worker.ts#L1-L2) |
+| Public entry | `index.ts`, plus `worker.ts` for the ML worker | `worker.ts` only; `index.ts` re-exports the React parts too | [index.ts:1-62](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/index.ts#L1-L62), [worker.ts:1-2](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/worker.ts#L1-L2) |
 | Which limb on which hold | `assign.ts`, `anyFeet.ts`, `wallFootholds.ts` | yes | [assign.ts:56-87](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/assign.ts#L56-L87) |
 | Body and reach | `body.ts`, `ik.ts`, `reach.ts` | yes | [body.ts:68-82](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/body.ts#L68-L82) |
 | Physics | `cones.ts`, `equilibrium.ts`, `nnls.ts`, `vec.ts` | yes | [equilibrium.ts:80](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/equilibrium.ts#L80) |
@@ -86,6 +86,10 @@ graph TD
     RC[reach.ts]:::n
   end
   US --> AS
+  AS --> ST
+  AS --> WF
+  DG --> CN
+  RC --> BD
   US --> AF
   US --> ST
   AS --> AF
@@ -102,7 +106,7 @@ graph TD
   RC --> ST
   RC --> IK
 ```
-<!-- Sources: src/modules/climber-stance/useStance.ts:1-6, src/modules/climber-stance/stance.ts:1-8, src/modules/climber-stance/equilibrium.ts:1-4, src/modules/climber-stance/diagnose.ts:1-6, src/modules/climber-stance/reach.ts:1-14 -->
+<!-- Sources: src/modules/climber-stance/useStance.ts:1-6, src/modules/climber-stance/assign.ts:1-7, src/modules/climber-stance/anyFeet.ts:1-6, src/modules/climber-stance/stance.ts:1-8, src/modules/climber-stance/equilibrium.ts:1-4, src/modules/climber-stance/diagnose.ts:1-6, src/modules/climber-stance/reach.ts:1-14 -->
 
 ### Who calls it
 
@@ -255,8 +259,9 @@ the hold pushes back against the pull
 | Hand on a jug | −pull | 55° | [cones.ts:29-37](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/cones.ts#L29-L37) |
 | Hand on a pocket / edge / crimp | −pull | 45° / 40° / 35° | same |
 | Hand on a pinch | −pull, or up | 60° | [cones.ts:26-27](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/cones.ts#L26-L27) |
-| Hand on a sloper or volume | the grip surface's outward normal | atan(0.72) ≈ 35.75° | [cones.ts:22-24](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/cones.ts#L22-L24), [cones.ts:65-67](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/cones.ts#L65-L67) |
-| Hand, unknown type or no pull | up | 40° | [cones.ts:38-39](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/cones.ts#L38-L39), [cones.ts:68](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/cones.ts#L68) |
+| Hand on a sloper or volume, with a grip surface | the grip surface's outward normal | atan(0.72) ≈ 35.75° | [cones.ts:22-24](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/cones.ts#L22-L24), [cones.ts:65-67](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/cones.ts#L65-L67) |
+| Hand with no pull (any type but pinch) | up | 40° | [cones.ts:38-39](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/cones.ts#L38-L39), [cones.ts:68](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/cones.ts#L68) |
+| Hand with a pull, unknown type | −pull | 40° | [cones.ts:69](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/cones.ts#L69) |
 | Foot on any hold | up and out, unit(0, −1, 0.6) | 45° | [cones.ts:40-41](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/cones.ts#L40-L41) |
 | Foot smearing the bare wall | straight out of the wall | 35° | [cones.ts:42](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/cones.ts#L42), [cones.ts:60-63](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/cones.ts#L60-L63) |
 | Heel hook / toe hook | the hand cone's axis / toward the far side and the wall | 45° / 40° | [cones.ts:80-98](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/cones.ts#L80-L98) |
@@ -348,7 +353,7 @@ function solveStance(input, { height: H, wallAngleDeg, prior, region }) {
   const diagnosis = feasible ? null : diagnose(...);
   const shown = feasible ? best : natural(grid);    // a failing stance gets a natural pose
   const load = feasible ? sharesOf(best.sol) : {};  // no numbers for an impossible position
-  const hull = region !== false ? feasibleRegion(...) : [];
+  const hull = region !== false && best.sol ? feasibleRegion(...) : [];  // no region if nothing reached
   return { joints, com, load, body, reach, feasible, diagnosis, region: hull, gravity };
 }
 ```
@@ -368,7 +373,7 @@ its hold. So the search is over 3 numbers
 | Box | holds ± 0.5 H sideways, up to 0.6 H below; top = `hipFloor` | [stance.ts:392-402](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/stance.ts#L392-L402) |
 | Hip floor | 0.15 H below the highest hand (no mantles) | [stance.ts:376-382](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/stance.ts#L376-L382) |
 | Refinement | ±x, ±y, ±z steps from 0.5 × grid step, halved until 0.003 H; z clamped to 0.08–0.45 H | [stance.ts:421-442](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/stance.ts#L421-L442) |
-| Tie-break | costs within 1e-9 are a tie; the pelvis further left wins | [stance.ts:164-174](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/stance.ts#L164-L174) |
+| Tie-break (grid only) | costs within 1e-9 are a tie; the pelvis further left wins. The refinement takes strict improvements only | [stance.ts:164-174](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/stance.ts#L164-L174) |
 
 The grid is centred on the holds' mean x, so mirrored holds get a mirrored grid and a mirrored
 answer
@@ -395,7 +400,7 @@ flowchart TD
   F --> G[solveForces with<br>optional hip contact]:::n
   G --> H{residual force and torque<br>both 2 % or less?}:::n
   H -- yes --> I[cost = posture + 0.05 x load cost]:::n
-  H -- no --> J[cost = 100 x 1 + residuals]:::n
+  H -- no --> J["cost = 100 × (1 + residuals)"]:::n
 ```
 <!-- Sources: src/modules/climber-stance/stance.ts:274-292, src/modules/climber-stance/stance.ts:294-340, src/modules/climber-stance/stance.ts:140-143, src/modules/climber-stance/equilibrium.ts:150-158 -->
 
@@ -410,7 +415,7 @@ The unreachable band adds "how far off" so the pattern search still has a slope 
 pose that minimised the load cost, and "made every vertical 4-point stance split 17/17/33/33
 (just the cost weights), whatever the feet did"
 ([stance.ts:113-117](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/stance.ts#L113-L117)).
-Now `place` scores how natural the pose looks, and the load cost (weight 0.05) only breaks ties
+Now `place` scores how natural the pose looks, and the load cost (weight 0.05) only nudges the pose
 ([stance.ts:336-338](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/stance.ts#L336-L338)):
 
 | Posture term | Target | Source |
@@ -459,7 +464,7 @@ repeat up to 3n times:
     s = solve M[P,P] s = v[P]        // unconstrained least squares on the passive set
     if singular: drop j for good; break
     if all s > tol: x[P] = s; break
-    step x toward s until the first column hits 0; drop that column from passive
+    step x toward s until the first column hits 0; drop every column now at 0
 return x
 ```
 
@@ -473,8 +478,8 @@ singular is `blocked` and never tried again, and both loops stop after `3n` pass
 climber; the panel shows the opposite, what the limb applies to the hold. `percent` is its size,
 and `share` its part along gravity, so the shares add up to 100 and an undercling's is negative
 ([stance.ts:489-505](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/stance.ts#L489-L505)).
-`roundShares` rounds them with the largest-remainder method, so the panel's rows always read
-100 % together
+`roundShares` rounds them with the largest-remainder method, so the panel's rows read 100 %
+together (up to the solve's 2 % tolerance)
 ([shares.ts:3-23](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/shares.ts#L3-L23)).
 
 > **Honest limit (SPEC S10).** On a vertical wall the hand-versus-foot split is statically
@@ -491,7 +496,7 @@ So `feasibleRegion` samples an 18 × 18 grid of CoM positions on the wall plane,
 ([region.ts:1-2](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/region.ts#L1-L2),
 [region.ts:25-45](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/region.ts#L25-L45),
 [stance.ts:507-523](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/stance.ts#L507-L523)).
-That is up to 324 extra force solves, the main cost of a solve. `beta-moves` skips it with
+That is up to 324 extra force solves; the SPEC names it as the next thing to speed up (see Performance). `beta-moves` skips it with
 `region: false`
 ([stance.ts:38-39](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/stance.ts#L38-L39)).
 
@@ -559,11 +564,12 @@ line).
 |---|---|---|
 | S8: trunk leans "halfway" toward the hands | `lean: 0.25` | [SPEC-climber-stance.md:40](https://github.com/r03922123/bouldering-vis/blob/29aca10/SPEC-climber-stance.md#L40), [stance.ts:127](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/stance.ts#L127) |
 | S10: arms near 90 % reach, legs 45–90 %, pelvis 0.2 H off the wall | arms 0.8, loaded legs 0.97–1.0, pelvis 0.10 H (Book-Based Stance amendment) | [SPEC-climber-stance.md:42](https://github.com/r03922123/bouldering-vis/blob/29aca10/SPEC-climber-stance.md#L42), [stance.ts:118-129](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/stance.ts#L118-L129) |
+| S10: pelvis "over the middle of its holds" | `centred: 0, overFeet: 1`: over the middle of its feet | [SPEC-climber-stance.md:42](https://github.com/r03922123/bouldering-vis/blob/29aca10/SPEC-climber-stance.md#L42), [stance.ts:124-125](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/stance.ts#L124-L125) |
 | How It Works: pattern search "4 halvings" | halves until the step is below 0.003 H | [SPEC-climber-stance.md:93](https://github.com/r03922123/bouldering-vis/blob/29aca10/SPEC-climber-stance.md#L93), [stance.ts:422](https://github.com/r03922123/bouldering-vis/blob/29aca10/src/modules/climber-stance/stance.ts#L422) |
 
 ## Tests
 
-Every pure file has a test next to it. A few worth reading first:
+Almost every pure file has a test next to it (the cones are tested in `equilibrium.test.ts`). A few worth reading first:
 
 | Test | What it pins | Source |
 |---|---|---|
@@ -591,7 +597,7 @@ Run them with `npm test -- src/modules/climber-stance`.
 | Page | Relationship |
 |---|---|
 | [Architecture: a top-down tour](../ARCHITECTURE.md) | The module map this module sits in; step 7 of its photo trace runs `useStance` |
-| [ML runtime](../ml-runtime.md) | Why the stance solve stays on the main thread while the models run in the worker |
+| [ML runtime](../ml-runtime.md) | Where the ML models run (the worker); the stance solve is not one of them and runs on the main thread |
 | [SPEC-climber-stance.md](../../SPEC-climber-stance.md) | What the module should do, with every amendment and its measurements |
 | [SPEC-beta-moves.md](../../SPEC-beta-moves.md) | Play's referee, which calls `solveStance` and `reachRatios` for every move |
 | [SPEC-hold-geometry.md](../../SPEC-hold-geometry.md) | Where each hand's pull direction and grip surface come from |

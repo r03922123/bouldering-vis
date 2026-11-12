@@ -34,7 +34,7 @@ this, and also allows a second entry, `worker.ts`, for pure functions the ML wor
 | `hold-geometry` | Each hold's surface direction → the one direction to pull, drawn as an arrow | `index.ts` | [hold-geometry](../SPEC-hold-geometry.md) (approved) |
 | `hold-classification` | Hold type and confidence (CLIP plus a trained probe); the hold card | `index.ts` | [hold-classification](../SPEC-hold-classification.md) (approved) |
 | `point-cloud-view` | The 3D view: depth → colored points in three.js, with arrows and the climber | `index.ts` | [point-cloud-view](../SPEC-point-cloud-view.md) (approved) |
-| `climber-stance` | A stick climber on your holds: reach, balance, each limb's load, why a position fails | `index.ts` | [climber-stance](../SPEC-climber-stance.md) (approved) |
+| `climber-stance` | A stick climber on your holds: reach, balance, each limb's load, why a position fails ([deep-dive](wiki/climber-stance.md)) | `index.ts` | [climber-stance](../SPEC-climber-stance.md) (approved) |
 | `beta-moves` | Play's referee: checks each move, explains a fall, undo and redo. Pure logic, no React | `index.ts` | [beta-moves](../SPEC-beta-moves.md) (**draft**) |
 | `pixel-kit` | The 8-bit layer: pixel climber, hold markers, font, HUD, chiptune sounds | `index.ts` | [pixel-kit](../SPEC-pixel-kit.md) (**draft**) |
 | `gym-hub` | The walkable gym at `#/gym` | `index.ts` | [gym-hub](../SPEC-gym-hub.md) (approved) |
